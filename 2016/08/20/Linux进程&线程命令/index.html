@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Linux命令】照看好咱们的进程和线程 | zzzvvvxxxd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 查找占CPU最多的线程步骤1： 查找出占用CPU最高的java线程pid1top -Hp 18207   #查看运行进程18207内所有线程的CPU消耗情况
+可以找到%CPU项最高的一个pid，就是该线程，假设pid是18250，将其转换为16进制：0x474a    
+步骤2： jstack查看各个线程栈1jstack 18207
+找到nid为0x474a的线程栈信息，其中包含了该线程的n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Linux命令】照看好咱们的进程和线程">
+<meta property="og:url" content="http://yoursite.com/2016/08/20/Linux进程&线程命令/index.html">
+<meta property="og:site_name" content="zzzvvvxxxd">
+<meta property="og:description" content="1. 查找占CPU最多的线程步骤1： 查找出占用CPU最高的java线程pid1top -Hp 18207   #查看运行进程18207内所有线程的CPU消耗情况
+可以找到%CPU项最高的一个pid，就是该线程，假设pid是18250，将其转换为16进制：0x474a    
+步骤2： jstack查看各个线程栈1jstack 18207
+找到nid为0x474a的线程栈信息，其中包含了该线程的n">
+<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Linux命令】照看好咱们的进程和线程">
+<meta name="twitter:description" content="1. 查找占CPU最多的线程步骤1： 查找出占用CPU最高的java线程pid1top -Hp 18207   #查看运行进程18207内所有线程的CPU消耗情况
+可以找到%CPU项最高的一个pid，就是该线程，假设pid是18250，将其转换为16进制：0x474a    
+步骤2： jstack查看各个线程栈1jstack 18207
+找到nid为0x474a的线程栈信息，其中包含了该线程的n">
+  
+    <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">zzzvvvxxxd</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">最快的外卖小哥</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Linux进程&amp;线程命令" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/20/Linux进程&线程命令/" class="article-date">
+  <time datetime="2016-08-20T09:36:53.000Z" itemprop="datePublished">2016-08-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【Linux命令】照看好咱们的进程和线程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-查找占CPU最多的线程"><a href="#1-查找占CPU最多的线程" class="headerlink" title="1. 查找占CPU最多的线程"></a>1. 查找占CPU最多的线程</h3><p>步骤1： 查找出占用CPU最高的java线程pid<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">top -Hp 18207   #查看运行进程18207内所有线程的CPU消耗情况</div></pre></td></tr></table></figure></p>
+<p>可以找到<code>%CPU</code>项最高的一个pid，就是该线程，假设pid是18250，将其转换为16进制：0x474a    </p>
+<p>步骤2： jstack查看各个线程栈<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstack 18207</div></pre></td></tr></table></figure></p>
+<p>找到nid为0x474a的线程栈信息，其中包含了该线程的name，OK定位到了   </p>
+<h3 id="2-查看一个进程运行了多久"><a href="#2-查看一个进程运行了多久" class="headerlink" title="2. 查看一个进程运行了多久"></a>2. 查看一个进程运行了多久</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ps -p &#123;PID-HERE&#125; -o etime</div><div class="line">ps -p &#123;PID-HERE&#125; -o etimes</div><div class="line">ps -p &#123;PID-HERE&#125; -o etime=</div><div class="line">ps -p &#123;PID-HERE&#125; -o etimes=</div></pre></td></tr></table></figure>
+<p>实际上可以打印的信息有很多：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -p 6176 -o pid,cmd,etime,uid,gid</div></pre></td></tr></table></figure></p>
+<h3 id="3-统计一个进程的线程数"><a href="#3-统计一个进程的线程数" class="headerlink" title="3. 统计一个进程的线程数"></a>3. 统计一个进程的线程数</h3><p>方法1： <code>ps</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps hH p &lt;pid&gt; | wc -l</div></pre></td></tr></table></figure></p>
+<p>方法2：<code>/proc</code><br>proc 伪文件系统，它驻留在 /proc 目录，这是最简单的方法来查看任何活动进程的线程数。 /proc 目录以可读文本文件形式输出，提供现有进程和系统硬件相关的信息如 CPU、中断、内存、磁盘等等<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat /proc/&lt;pid&gt;/status</div></pre></td></tr></table></figure></p>
+<p>上面的命令将显示进程 <pid> 的详细信息，包括过程状态（例如, sleeping, running)，父进程 PID，UID，GID，使用的文件描述符的数量，以及上下文切换的数量</pid></p>
+<h3 id="4-查看某个进程的线程"><a href="#4-查看某个进程的线程" class="headerlink" title="4. 查看某个进程的线程"></a>4. 查看某个进程的线程</h3><p>方法1：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -T -p &lt;pid&gt;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><code>SID</code>栏表示线程ID，而<code>CMD</code>栏则显示了线程名称</p>
+</blockquote>
+<p>方法2：<br><code>top</code>可以使用<code>-H</code>开启线程查看模式，如果要查看特定进程的线程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">top -H -p &lt;pid&gt;</div></pre></td></tr></table></figure></p>
+<p>方法3：<br>要在<code>htop</code>中启用线程查看，请开启<code>htop</code>，然后按<code>&lt;F2&gt;</code>来进入<code>htop</code>的设置菜单。选择“设置”栏下面的“显示选项”，然后开启<code>树状视图</code>和<code>显示自定义线程名</code>选项。按<code>&lt;F10&gt;</code>退出设置<br>Htop的具体使用后续会专门写一篇记录一下。  </p>
+<h3 id="5-查看进程被运行在哪个CPU上"><a href="#5-查看进程被运行在哪个CPU上" class="headerlink" title="5. 查看进程被运行在哪个CPU上"></a>5. 查看进程被运行在哪个CPU上</h3><p>方法1：<code>taskset</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">taskset -c -p &lt;pid&gt;</div></pre></td></tr></table></figure></p>
+<p>方法2：<code>ps</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -o pid,psr,comm -p pid</div></pre></td></tr></table></figure></p>
+<p>方法3：<code>top</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">top -p &lt;pid&gt; # 好处是可以持续观察</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/20/Linux进程&线程命令/" data-id="cizp5ffy6000bvrf954ng2ml9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/22/ZAB2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【一致性协议05】 ZAB协议详细介绍
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/09/ZAB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【一致性协议04】 ZAB协议概述</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/atomic/">atomic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/中间件/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程系列/">多线程系列</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔试/">笔试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中间件/">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日记/">日记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试/">笔试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/一致性协议/" style="font-size: 14px;">一致性协议</a> <a href="/tags/中间件/" style="font-size: 10px;">中间件</a> <a href="/tags/分布式/" style="font-size: 14px;">分布式</a> <a href="/tags/多线程/" style="font-size: 18px;">多线程</a> <a href="/tags/并发/" style="font-size: 18px;">并发</a> <a href="/tags/数据库/" style="font-size: 12px;">数据库</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/日记/" style="font-size: 10px;">日记</a> <a href="/tags/笔试/" style="font-size: 10px;">笔试</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/28/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/TSharding/">TSharding试用</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/ZAB2/">【一致性协议05】 ZAB协议详细介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/20/Linux进程&线程命令/">【Linux命令】照看好咱们的进程和线程</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/ZAB/">【一致性协议04】 ZAB协议概述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 zzzvvvxxxd<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

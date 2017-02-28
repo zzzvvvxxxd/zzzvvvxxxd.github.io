@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>False Sharing问题 | zzzvvvxxxd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景Cache对着多核的发展，CPU cache分成了三个级别：L1、L2、L3。L1是最接近CPU的cache，容量也是最小的，但是速度最快。  
+
+
+
+从CPU到
+大约需要的CPU周期
+大约需要的时间（单位ns）
+
+
+
+
+寄存器
+1 cycle
+NA
+
+
+L1 Cache
+约3~4 cycles
+约0.5~1ns
+
+
+L2 Cache
+约10~20 cycles
+约3~7ns
+
+
+L3 Cac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="False Sharing问题">
+<meta property="og:url" content="http://yoursite.com/2016/03/25/false_sharing/index.html">
+<meta property="og:site_name" content="zzzvvvxxxd">
+<meta property="og:description" content="背景Cache对着多核的发展，CPU cache分成了三个级别：L1、L2、L3。L1是最接近CPU的cache，容量也是最小的，但是速度最快。  
+
+
+
+从CPU到
+大约需要的CPU周期
+大约需要的时间（单位ns）
+
+
+
+
+寄存器
+1 cycle
+NA
+
+
+L1 Cache
+约3~4 cycles
+约0.5~1ns
+
+
+L2 Cache
+约10~20 cycles
+约3~7ns
+
+
+L3 Cac">
+<meta property="og:image" content="https://software.intel.com/sites/default/files/m/d/4/1/d/8/5-4-figure-1.gif">
+<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="False Sharing问题">
+<meta name="twitter:description" content="背景Cache对着多核的发展，CPU cache分成了三个级别：L1、L2、L3。L1是最接近CPU的cache，容量也是最小的，但是速度最快。  
+
+
+
+从CPU到
+大约需要的CPU周期
+大约需要的时间（单位ns）
+
+
+
+
+寄存器
+1 cycle
+NA
+
+
+L1 Cache
+约3~4 cycles
+约0.5~1ns
+
+
+L2 Cache
+约10~20 cycles
+约3~7ns
+
+
+L3 Cac">
+<meta name="twitter:image" content="https://software.intel.com/sites/default/files/m/d/4/1/d/8/5-4-figure-1.gif">
+  
+    <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">zzzvvvxxxd</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">最快的外卖小哥</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-false_sharing" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/25/false_sharing/" class="article-date">
+  <time datetime="2016-03-25T06:37:11.000Z" itemprop="datePublished">2016-03-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/多线程/">多线程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      False Sharing问题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h3><p>对着多核的发展，CPU cache分成了三个级别：L1、L2、L3。L1是最接近CPU的cache，容量也是最小的，但是速度最快。  </p>
+<table>
+<thead>
+<tr>
+<th>从CPU到</th>
+<th>大约需要的CPU周期</th>
+<th>大约需要的时间（单位ns）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>寄存器</td>
+<td>1 cycle</td>
+<td>NA</td>
+</tr>
+<tr>
+<td>L1 Cache</td>
+<td>约3~4 cycles</td>
+<td>约0.5~1ns</td>
+</tr>
+<tr>
+<td>L2 Cache</td>
+<td>约10~20 cycles</td>
+<td>约3~7ns</td>
+</tr>
+<tr>
+<td>L3 Cache</td>
+<td>约40~45 cycles</td>
+<td>约15ns</td>
+</tr>
+<tr>
+<td>跨槽传输</td>
+<td>空</td>
+<td>约20ns</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>约120~240 cycles</td>
+<td>约60-120ns</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Cache-line"><a href="#Cache-line" class="headerlink" title="Cache line"></a>Cache line</h3><p>为了高效的存取缓存，不是简单地随意地将单条数据写入缓存，缓存是由Cache line构成存储的最小单位，intel平台一般是64字节<br>可以通过命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size</div></pre></td></tr></table></figure></p>
+<p>Java中long占8个字节，再加上对象头（2字节）或者数组对象头（3字节），则可以获取7个long</p>
+<h3 id="Cache条目"><a href="#Cache条目" class="headerlink" title="Cache条目"></a>Cache条目</h3><p>cache entry： 包含了如下部分</p>
+<ul>
+<li>cache line: 从主存一次copy的数据大小</li>
+<li>tag：标记cache line对应的主存的地址</li>
+<li>falg：标记当前cache是否invalid，如果是数据cache，还有是否dirty</li>
+</ul>
+<h3 id="CPU的cache策略"><a href="#CPU的cache策略" class="headerlink" title="CPU的cache策略"></a>CPU的cache策略</h3><ol>
+<li>cpu从不直接访问主存，通过cache间接访问</li>
+<li>每次需要访问主存时，遍历一遍全部cache line，查找主存的地址是否在某个cache line中</li>
+<li>如果cache中没有找到，则分配一个新的cache entry，把主存copy到cache line中，再从cache line中读取<br>同时，Cache中包含的cache entry有限，所以必须要有合理cache淘汰策略，一般是LRU，这里不再赘述。</li>
+</ol>
+<h2 id="False-Sharing"><a href="#False-Sharing" class="headerlink" title="False Sharing"></a>False Sharing</h2><p>在多处理器，多线程的情况下，如果两个线程分别运行在不同CPU上，而其中某个线程修改了cache line中的元素，由于cache一致性原因，另一个线程的cache的line被宣告无效，在下一次访问时会出现一次cache line miss。  </p>
+<p>如下图所示，thread1修改了memory灰化区域的第[2]个元素，而Thread0只需要读取灰化区域的第[1]个元素，由于这段memory被载入了各自CPU的硬件cache中，虽然在memory的角度这两种的访问时隔离的，但是由于错误的紧凑地放在了一起，而导致了，thread1的修改，在cache一致性的要求下，宣告了运行Thread0的CPU0的cache line非法，从而出现了一次miss，导致从小从memory中读取到cache line中，而一致性的代价付出了，但结果并不是thread0所care的，导致了效率的降低  </p>
+<p><img src="https://software.intel.com/sites/default/files/m/d/4/1/d/8/5-4-figure-1.gif" alt="figure 1"></p>
+<blockquote>
+<p>在做多线程程序的时候,为了避免使用锁,我们通常会采用这样的数据结构:根据线程的数目,安排一个数组, 每个线程一个项,互相不冲突. 从逻辑上看这样的设计无懈可击,但是实践的过程我们会发现这样并没有提高速度. 问题在于cpu的cache line. 我们在读主存的时候,数据同时被读到L1,L2中去,而且在L1中是以cache line(通常64)字节为单位的. 每个Core都有自己的L1,L2,所以每个线程在读取自己的项的时候, 也把别人的项读进去, 所以在更新的时候,为了保持数据的一致性, core之间cache要进行同步, 这个会导致严重的性能问题. 这就是所谓的False sharing问题。</p>
+</blockquote>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>打算分成两篇来写，嘿嘿</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://blog.csdn.net/pennyliang/article/details/5766541" target="_blank" rel="external">False Sharing问题</a><br><a href="http://blog.csdn.net/wdzxl198/article/details/11218765" target="_blank" rel="external">由一道淘宝面试题到False sharing问题</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/25/false_sharing/" data-id="cizp5ffyv0015vrf9t69okkv0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/26/false_sharing2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          False Sharing问题（2）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/24/atomic1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【不简单的Atomic工具】lazySet &amp; set</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/atomic/">atomic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/中间件/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程系列/">多线程系列</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔试/">笔试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中间件/">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日记/">日记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试/">笔试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/一致性协议/" style="font-size: 14px;">一致性协议</a> <a href="/tags/中间件/" style="font-size: 10px;">中间件</a> <a href="/tags/分布式/" style="font-size: 14px;">分布式</a> <a href="/tags/多线程/" style="font-size: 18px;">多线程</a> <a href="/tags/并发/" style="font-size: 18px;">并发</a> <a href="/tags/数据库/" style="font-size: 12px;">数据库</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/日记/" style="font-size: 10px;">日记</a> <a href="/tags/笔试/" style="font-size: 10px;">笔试</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/28/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/TSharding/">TSharding试用</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/ZAB2/">【一致性协议05】 ZAB协议详细介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/20/Linux进程&线程命令/">【Linux命令】照看好咱们的进程和线程</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/ZAB/">【一致性协议04】 ZAB协议概述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 zzzvvvxxxd<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

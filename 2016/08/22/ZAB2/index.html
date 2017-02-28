@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【一致性协议05】 ZAB协议详细介绍 | zzzvvvxxxd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、消息广播1.1 类似二阶段提交的消息广播ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于2PC。针对客户端的事务请求，Leader服务器会为其是生成对应的事务Proposal，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。
+和2PC略有不同，这里的二阶段提交过程移除了中断（abort）逻辑。所有的Follower要么正常反馈，要么就抛弃Leader">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【一致性协议05】 ZAB协议详细介绍">
+<meta property="og:url" content="http://yoursite.com/2016/08/22/ZAB2/index.html">
+<meta property="og:site_name" content="zzzvvvxxxd">
+<meta property="og:description" content="一、消息广播1.1 类似二阶段提交的消息广播ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于2PC。针对客户端的事务请求，Leader服务器会为其是生成对应的事务Proposal，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。
+和2PC略有不同，这里的二阶段提交过程移除了中断（abort）逻辑。所有的Follower要么正常反馈，要么就抛弃Leader">
+<meta property="og:image" content="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD.JPG">
+<meta property="og:image" content="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D1.JPG">
+<meta property="og:image" content="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D2.JPG">
+<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【一致性协议05】 ZAB协议详细介绍">
+<meta name="twitter:description" content="一、消息广播1.1 类似二阶段提交的消息广播ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于2PC。针对客户端的事务请求，Leader服务器会为其是生成对应的事务Proposal，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。
+和2PC略有不同，这里的二阶段提交过程移除了中断（abort）逻辑。所有的Follower要么正常反馈，要么就抛弃Leader">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD.JPG">
+  
+    <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">zzzvvvxxxd</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">最快的外卖小哥</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-ZAB2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/22/ZAB2/" class="article-date">
+  <time datetime="2016-08-21T17:26:47.000Z" itemprop="datePublished">2016-08-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/分布式/">分布式</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【一致性协议05】 ZAB协议详细介绍
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、消息广播"><a href="#一、消息广播" class="headerlink" title="一、消息广播"></a>一、消息广播</h2><h3 id="1-1-类似二阶段提交的消息广播"><a href="#1-1-类似二阶段提交的消息广播" class="headerlink" title="1.1 类似二阶段提交的消息广播"></a>1.1 类似二阶段提交的消息广播</h3><p>ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于<code>2PC</code>。针对客户端的事务请求，Leader服务器会为其是生成对应的事务<code>Proposal</code>，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。<br><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD.JPG" alt="ZAB协议消息广播流程示意图"></p>
+<p>和<code>2PC</code>略有不同，这里的二阶段提交过程移除了中断（abort）逻辑。所有的Follower要么正常反馈，要么就抛弃Leader服务器。同时ZAB协议将二阶段提交中的中断逻辑移除意味着我们可以在过半的Follower服务器已经反馈<code>Ack</code>之后就开始提交<code>Proposal</code>了，而不需要等待集群中的所有Follower服务器都反馈响应。    </p>
+<p>在这种简化的二阶段提交模型下，无法处理Leader服务器崩溃带来的数据不一致问题，因此引入了<strong>崩溃回复模式</strong>。  </p>
+<h3 id="1-2-ZXID"><a href="#1-2-ZXID" class="headerlink" title="1.2 ZXID"></a>1.2 ZXID</h3><p>Leader会为每个事物Proposal分配一个全局唯一的单调递增ID：<code>ZXID</code>（事务ID）。由于ZAB协议要保证每一个消息严格的因果关系，因此必须将每一个事务Proposal按照其<code>ZXID</code>先后顺序来进行排序与处理：</p>
+<h3 id="1-3-具体流程"><a href="#1-3-具体流程" class="headerlink" title="1.3 具体流程"></a>1.3 具体流程</h3><ul>
+<li>Leader为每一个Follower服务器分配一个单独的队列，然后将需要广播的事务Proposal依次放入队列中，并且根据FIFO策略进行消息发送。</li>
+<li>Follower接受到Proposal之后，都会首先将其以事务日志的形式写入到本地磁盘中去，并且在成功写入后反馈给Leader一个Ack</li>
+<li>当接收到超过半数Follower反馈Ack之后，就会广播一个Commit消息给所有Follower来通知事务提交，同时Leader自身提交该事务</li>
+<li>Follower收到<code>commit</code>之后进行事务提交</li>
+</ul>
+<h2 id="二、崩溃恢复"><a href="#二、崩溃恢复" class="headerlink" title="二、崩溃恢复"></a>二、崩溃恢复</h2><h3 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h3><ul>
+<li>Leader崩溃</li>
+<li>网络原因导致Leader失去与过半Follower的联系</li>
+</ul>
+<p>则进入崩溃恢复模式。恢复过程结束后，还需要选举出新的Leader。Leader选举算法满足：</p>
+<ul>
+<li>确保能够快速地选举出新的Leader</li>
+<li>Leader自身知道已经被选举为Leader</li>
+<li>让集群中其他的机器快速感知到新的Leader服务器</li>
+</ul>
+<h3 id="2-2-基本特性"><a href="#2-2-基本特性" class="headerlink" title="2.2 基本特性"></a>2.2 基本特性</h3><p>ZAB协议规定：</p>
+<blockquote>
+<p>如果一个事务Proposal在一台机器上被处理成功，那么应该在所有的机器上都被处理成功，哪怕机器出现故障崩溃。</p>
+</blockquote>
+<p>在崩溃恢复过程中可能会出现两种数据不一致的隐患：</p>
+<h4 id="2-2-1-ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交"><a href="#2-2-1-ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交" class="headerlink" title="2.2.1 ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交"></a>2.2.1 ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交</h4><p><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D1.JPG" alt="崩溃恢复1"><br>Leader(Server1)已经得到过半的<code>Ack</code>反馈，但是在它将<code>Commit</code>消息发送给所有Follower之前，Leader挂了。<br>如上图，ZAB需要确保事务P2最终能够在所有的服务器上都被提交成功，否则将出现不一致。  </p>
+<h4 id="2-2-2-ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务"><a href="#2-2-2-ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务" class="headerlink" title="2.2.2 ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务"></a>2.2.2 ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务</h4><p><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D2.JPG" alt="崩溃恢复2"><br>如果在崩溃恢复过程中出现一个需要被丢弃的提案，那么在崩溃恢复后需要跳过该事物。<br>如上图，Leader(Server1)在提出P3后崩溃退出，其他机器都没有收到P3，于是当Server1恢复后，ZAB需要确保其丢弃事务P3。   </p>
+<h3 id="2-3-选举算法"><a href="#2-3-选举算法" class="headerlink" title="2.3 选举算法"></a>2.3 选举算法</h3><p>以上决定了ZAB需要设计这一个Leader算法：</p>
+<blockquote>
+<p>能够确保提交已经被Leader提交的事务Proposal，丢弃已经被跳过的Proposal</p>
+</blockquote>
+<p>选举出来的Leader具有最高<code>ZXID</code>，保证了新的Leader一定具有所有已经提交的提案，也省去了检查Proposal的提交和丢弃的工作。  </p>
+<h2 id="三、数据同步"><a href="#三、数据同步" class="headerlink" title="三、数据同步"></a>三、数据同步</h2><h3 id="3-1-正常的数据恢复流程"><a href="#3-1-正常的数据恢复流程" class="headerlink" title="3.1 正常的数据恢复流程"></a>3.1 正常的数据恢复流程</h3><p>Leader服务器会为每个Follower服务器准备一个队列，并将那些没有被各Follower服务器同步的事务以Proposal消息的形式逐个发送，并紧跟一个commit消息。等到Follower服务器将所有的尚未同步事务Proposal都从Leader服务器上同步过来并成功应用到内存数据库后，Leader服务器就会将该Follower加入到可用Follower列表中，开始后续流程。  </p>
+<h3 id="3-2-如何处理需要被丢弃的事务Proposal"><a href="#3-2-如何处理需要被丢弃的事务Proposal" class="headerlink" title="3.2 如何处理需要被丢弃的事务Proposal"></a>3.2 如何处理需要被丢弃的事务Proposal</h3><p><code>ZXID</code>:<br>64位数字</p>
+<ul>
+<li>低32位看成是一个简单的递增计数器，针对每一个客户端请求，Leader每生成一个Proposal就会进行加1</li>
+<li>高32位代表Leader周期epoch的编号，每当选举产生一个新的Leader，epoch+1，低32位同时恢复为0</li>
+</ul>
+<p>基于这样的策略，当一个包含了上一个Leader周期中没有提交的事务Proposal的服务器启动时，其肯定无法成为Leader，则以Follower角色连上当前的Leader服务器。Leader会根据自己服务器上最后提交的Proposal和Follower的Proposal进行比较，Leader会要求Follower进行一定的回退操作，回退到最后一个确认已经被过半机器提交的事务。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/22/ZAB2/" data-id="cizp5ffyh000pvrf9ohos9uhz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/22/TSharding/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          TSharding试用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/20/Linux进程&线程命令/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【Linux命令】照看好咱们的进程和线程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/atomic/">atomic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/中间件/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程系列/">多线程系列</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔试/">笔试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中间件/">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日记/">日记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试/">笔试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/一致性协议/" style="font-size: 14px;">一致性协议</a> <a href="/tags/中间件/" style="font-size: 10px;">中间件</a> <a href="/tags/分布式/" style="font-size: 14px;">分布式</a> <a href="/tags/多线程/" style="font-size: 18px;">多线程</a> <a href="/tags/并发/" style="font-size: 18px;">并发</a> <a href="/tags/数据库/" style="font-size: 12px;">数据库</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/日记/" style="font-size: 10px;">日记</a> <a href="/tags/笔试/" style="font-size: 10px;">笔试</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/28/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/TSharding/">TSharding试用</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/ZAB2/">【一致性协议05】 ZAB协议详细介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/20/Linux进程&线程命令/">【Linux命令】照看好咱们的进程和线程</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/ZAB/">【一致性协议04】 ZAB协议概述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 zzzvvvxxxd<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

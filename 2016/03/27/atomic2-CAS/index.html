@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【不简单的Atomic工具】CAS | zzzvvvxxxd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="CAS算法：包含三个参数1CAS(V, E, N)
+
+V 表示要更新的变量
+E 表示预期值
+N 表示新值
+
+仅当V值等于E值时，才会将V的值设置为N。如果V的值和E不同，表示已经有其他线程对其进行了更新，则当前线程什么都不做。最后CAS返回V的真实值。
+CAS是抱着乐观的态度进行的，总认为自己可以成功的完成操作。当多个线程同时使用CAS操作一个变量时，只有一个会胜出。失败的线程不会被挂起，而是返回">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【不简单的Atomic工具】CAS">
+<meta property="og:url" content="http://yoursite.com/2016/03/27/atomic2-CAS/index.html">
+<meta property="og:site_name" content="zzzvvvxxxd">
+<meta property="og:description" content="CAS算法：包含三个参数1CAS(V, E, N)
+
+V 表示要更新的变量
+E 表示预期值
+N 表示新值
+
+仅当V值等于E值时，才会将V的值设置为N。如果V的值和E不同，表示已经有其他线程对其进行了更新，则当前线程什么都不做。最后CAS返回V的真实值。
+CAS是抱着乐观的态度进行的，总认为自己可以成功的完成操作。当多个线程同时使用CAS操作一个变量时，只有一个会胜出。失败的线程不会被挂起，而是返回">
+<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【不简单的Atomic工具】CAS">
+<meta name="twitter:description" content="CAS算法：包含三个参数1CAS(V, E, N)
+
+V 表示要更新的变量
+E 表示预期值
+N 表示新值
+
+仅当V值等于E值时，才会将V的值设置为N。如果V的值和E不同，表示已经有其他线程对其进行了更新，则当前线程什么都不做。最后CAS返回V的真实值。
+CAS是抱着乐观的态度进行的，总认为自己可以成功的完成操作。当多个线程同时使用CAS操作一个变量时，只有一个会胜出。失败的线程不会被挂起，而是返回">
+  
+    <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">zzzvvvxxxd</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">最快的外卖小哥</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-atomic2-CAS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/27/atomic2-CAS/" class="article-date">
+  <time datetime="2016-03-27T13:12:33.000Z" itemprop="datePublished">2016-03-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/atomic/">atomic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【不简单的Atomic工具】CAS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CAS算法："><a href="#CAS算法：" class="headerlink" title="CAS算法："></a>CAS算法：</h2><p>包含三个参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CAS(V, E, N)</div></pre></td></tr></table></figure></p>
+<ul>
+<li>V 表示要更新的变量</li>
+<li>E 表示预期值</li>
+<li>N 表示新值</li>
+</ul>
+<p>仅当V值等于E值时，才会将V的值设置为N。如果V的值和E不同，表示已经有其他线程对其进行了更新，则当前线程什么都不做。最后CAS返回V的真实值。</p>
+<p>CAS是抱着乐观的态度进行的，总认为自己可以成功的完成操作。当多个线程同时使用CAS操作一个变量时，只有一个会胜出。失败的线程不会被挂起，而是返回失败信息，并允许再次尝试。</p>
+<p>CPU指令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cmpxchg</div><div class="line"># accumulator = AL, AX, or EAX, depending on whether a byte, word, or doubleword comparison is being performed</div></pre></td></tr></table></figure></p>
+<p>该指令的基本逻辑如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(accumulator == Destination) &#123;</div><div class="line">    ZF = <span class="number">1</span>;</div><div class="line">    Destination = Source;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    ZF = <span class="number">0</span>;</div><div class="line">    accumulator = Destination;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h2><ol>
+<li><p>ABA问题。</p>
+<blockquote>
+<p>因为 CAS 需要在操作值的时候检查下值有没有发生变化，如果没有发生变化则更新，但是如果一个值原来是A，变成了B，又变成了A，那么使用CAS进行检查时会发现它的值没有发生变化，但是实际上却变化了。ABA问题的解决思路就是使用版本号。在变量前面追加上版本号，每次变量更新的时候把版本号加一，那么A－B－A 就会变成1A-2B－3A。<br>从Java1.5开始JDK的atomic包里提供了一个类 AtomicStampedReference 来解决 ABA 问题。这个类的compareAndSet 方法作用是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式将该引用和该标志的值设置为给定的更新值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span></span></div><div class="line">        <span class="params">(V      expectedReference,//预期引用</span></div><div class="line">         V      newReference,//更新后的引用</div><div class="line">        <span class="keyword">int</span>    expectedStamp, //预期标志</div><div class="line">        <span class="keyword">int</span>    newStamp) <span class="comment">//更新后的标志</span></div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>循环时间长开销大。</p>
+<blockquote>
+<p>自旋 CAS 如果长时间不成功，会给 CPU 带来非常大的执行开销。如果JVM能支持处理器提供的 pause 指令那么效率会有一定的提升，pause 指令有两个作用，第一它可以延迟流水线执行指令（de-pipeline）,使 CPU 不会消耗过多的执行资源，延迟的时间取决于具体实现的版本，在一些处理器上延迟时间是零。第二它可以避免在退出循环的时候因内存顺序冲突（memory order violation：内存顺序冲突一般是由伪/假共享引起，假共享是指多个 CPU 同时修改同一个缓存行的不同部分而引起其中一个CPU的操作无效，当出现这个内存顺序冲突时，CPU必须清空流水线）而引起 CPU 流水线被清空（CPU pipeline flush），从而提高 CPU 的执行效率。</p>
+</blockquote>
+</li>
+<li><p>只能保证一个共享变量的原子操作。</p>
+<blockquote>
+<p>当对一个共享变量执行操作时，我们可以使用循环CAS的方式来保证原子操作，但是对多个共享变量操作时，循环CAS就无法保证操作的原子性，这个时候就可以用锁，或者有一个取巧的办法，就是把多个共享变量合并成一个共享变量来操作。比如有两个共享变量i＝2,j=a，合并一下ij=2a，然后用CAS来操作ij。从Java1.5开始JDK提供了AtomicReference类来保证引用对象之间的原子性，你可以把多个变量放在一个对象里来进行CAS操作。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="AtmoicInteger中的CAS实现"><a href="#AtmoicInteger中的CAS实现" class="headerlink" title="AtmoicInteger中的CAS实现"></a>AtmoicInteger中的CAS实现</h2><p><strong>JDK7</strong>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">for</span> (;;) &#123;</div><div class="line">    <span class="keyword">int</span> current = get();</div><div class="line">    <span class="keyword">int</span> next = current + <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (compareAndSet(current, next))</div><div class="line">      <span class="keyword">return</span> current;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>JDK8</strong>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到JDK8在<code>getAndIncrement()</code>方法的实现上做出了一定的改变，在<a href="http://ashkrit.blogspot.com/2014/02/atomicinteger-java-7-vs-java-8.html" target="_blank" rel="external">AtomicInteger Java 7 vs Java 8</a>中列出了两个版本的benchmark，JDK8的实现大约提升了1.5~2倍的性能，作者也直呼<code>Unsafe</code>变得更加与有用了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/27/atomic2-CAS/" data-id="cizp5ffyo000xvrf9pn3ungyu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/04/02/atomic3-getAndIncrement/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【不简单的Atomic工具】getAndAddInt in getAndIncrement
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/26/算法-两个栈组成的队列/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">两个栈组成队列</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/atomic/">atomic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/中间件/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程系列/">多线程系列</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔试/">笔试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中间件/">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日记/">日记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试/">笔试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/一致性协议/" style="font-size: 14px;">一致性协议</a> <a href="/tags/中间件/" style="font-size: 10px;">中间件</a> <a href="/tags/分布式/" style="font-size: 14px;">分布式</a> <a href="/tags/多线程/" style="font-size: 18px;">多线程</a> <a href="/tags/并发/" style="font-size: 18px;">并发</a> <a href="/tags/数据库/" style="font-size: 12px;">数据库</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/日记/" style="font-size: 10px;">日记</a> <a href="/tags/笔试/" style="font-size: 10px;">笔试</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/28/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/TSharding/">TSharding试用</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/ZAB2/">【一致性协议05】 ZAB协议详细介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/20/Linux进程&线程命令/">【Linux命令】照看好咱们的进程和线程</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/ZAB/">【一致性协议04】 ZAB协议概述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 zzzvvvxxxd<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

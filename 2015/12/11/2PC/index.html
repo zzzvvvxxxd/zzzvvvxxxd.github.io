@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【一致性协议01】 2PC | zzzvvvxxxd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  
+优点原理简单，实现方便
+缺点
+同步阻塞
+
+极大的限制了系统的性能
+
+
+单点问题
+
+协调者在整个二阶段提交过程中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【一致性协议01】 2PC">
+<meta property="og:url" content="http://yoursite.com/2015/12/11/2PC/index.html">
+<meta property="og:site_name" content="zzzvvvxxxd">
+<meta property="og:description" content="Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  
+优点原理简单，实现方便
+缺点
+同步阻塞
+
+极大的限制了系统的性能
+
+
+单点问题
+
+协调者在整个二阶段提交过程中">
+<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【一致性协议01】 2PC">
+<meta name="twitter:description" content="Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  
+优点原理简单，实现方便
+缺点
+同步阻塞
+
+极大的限制了系统的性能
+
+
+单点问题
+
+协调者在整个二阶段提交过程中">
+  
+    <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">zzzvvvxxxd</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">最快的外卖小哥</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2PC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/11/2PC/" class="article-date">
+  <time datetime="2015-12-11T13:43:21.000Z" itemprop="datePublished">2015-12-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/分布式/">分布式</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【一致性协议01】 2PC
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.<br>利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  </p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>原理简单，实现方便</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p>同步阻塞</p>
+<blockquote>
+<p>极大的限制了系统的性能</p>
+</blockquote>
+</li>
+<li><p>单点问题</p>
+<blockquote>
+<p>协调者在整个二阶段提交过程中，一旦出现故障（尤其是在阶段二），都会导致系统无法正常运行</p>
+</blockquote>
+</li>
+<li><p>脑裂</p>
+<blockquote>
+<p>也就是数据不一致<br>在阶段二，即执行事务提交的阶段，当协调者向所有参与者发送commit请求之后，发生了局域网络异常或者是协调者在尚未发送完commit请求之前自身崩溃，导致只有部分的参与者接收到了commit请求，这部分参与者就会进行事务的提交，没有收到commit的参与者则无法进行事务的提交。于是，整个分布式系统出现数据不一致的情况。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程:"></a>流程:</h3><p>阶段1: 提交事务请求(投票阶段):</p>
+<ol>
+<li><p>事务询问.</p>
+<blockquote>
+<p>协调者向所有的参与者发送事务内容,询问是否可以执行事务提交操作,并开始等待各参与者的响应.  </p>
+</blockquote>
+</li>
+<li><p>执行事务.</p>
+<blockquote>
+<p>各参与者节点执行事务操作,并将<code>Undo</code>和<code>Redo</code>信息记入事务日志.</p>
+</blockquote>
+</li>
+<li><p>各参与者向协调者反馈事务询问的响应</p>
+<blockquote>
+<p>如果参与者成功执行了事务操作,那么就反馈给协调者<code>Yes</code>信息,表示事务可以执行; 如果参与者没有成功执行事务就反馈给协调者<code>No</code>响应,表示事务不可以执行.  </p>
+</blockquote>
+</li>
+</ol>
+<p>这个阶段可以看成一种投票阶段,即各个参与者投票表明是否要继续执行接下去的事务提交操作.  </p>
+<p>阶段2: 执行事务提交<br>这个阶段,协调者会根据参与者的反馈情况来决定是否最终进行<code>commit</code>.一般,包含两种可能:  </p>
+<h6 id="1-执行事务提交"><a href="#1-执行事务提交" class="headerlink" title="#1 执行事务提交:"></a>#1 执行事务提交:</h6><ol>
+<li><p>发送提交请求</p>
+<blockquote>
+<p>假如协调者从所有的参与者获得的反馈都是<code>YES</code>,那么就执行提交操作,协调者向参与者发送<code>commit</code>请求</p>
+</blockquote>
+</li>
+<li><p>事务提交</p>
+<blockquote>
+<p>参与者接受到<code>Commit</code>请求后,会正式执行事务提交操作,并在完成后释放整个事务执行期间所占用的资源</p>
+</blockquote>
+</li>
+<li><p>反馈事务提交结果</p>
+<blockquote>
+<p>参与者在完成事务提交之后,向协调者发送<code>Ack</code>信息</p>
+</blockquote>
+</li>
+<li><p>完成事务</p>
+<blockquote>
+<p>协调者收到所有参与者的<code>Ack</code>消息后,完成事务</p>
+</blockquote>
+</li>
+</ol>
+<h6 id="2-中断事务"><a href="#2-中断事务" class="headerlink" title="#2 中断事务:"></a>#2 中断事务:</h6><p>如果任何一个参与者返回了<code>No</code>信息，或者等待超时之后，协调者尚无法接受到所有的参与者反馈信息，就会中断事务。  </p>
+<ol>
+<li><p>发送回滚请求</p>
+<blockquote>
+<p>协调者向所有参与者发出Rollback请求</p>
+</blockquote>
+</li>
+<li><p>事务回滚</p>
+<blockquote>
+<p>参与者接收到Rollback请求后，会利用其在阶段一种记录的Undo信息来执行回滚操作，并在完成回滚之后释放在整个事务执行期间占用的资源。  </p>
+</blockquote>
+</li>
+<li><p>反馈事务回滚结果</p>
+<blockquote>
+<p>参与者在完成事务回滚之后，向协调者发送<code>Ack</code>消息</p>
+</blockquote>
+</li>
+<li><p>中断事务</p>
+<blockquote>
+<p>协调者收到所有参与者反馈的<code>Ack</code>消息之后，完成事务中断</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/11/2PC/" data-id="cizp5ffxo0000vrf97tkefc98" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/12/13/3PC/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【一致性协议02】 3PC
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/06/14/zmalloc1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【Redis源码】zmalloc</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/atomic/">atomic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/中间件/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程系列/">多线程系列</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔试/">笔试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中间件/">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日记/">日记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试/">笔试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/一致性协议/" style="font-size: 14px;">一致性协议</a> <a href="/tags/中间件/" style="font-size: 10px;">中间件</a> <a href="/tags/分布式/" style="font-size: 14px;">分布式</a> <a href="/tags/多线程/" style="font-size: 18px;">多线程</a> <a href="/tags/并发/" style="font-size: 18px;">并发</a> <a href="/tags/数据库/" style="font-size: 12px;">数据库</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/日记/" style="font-size: 10px;">日记</a> <a href="/tags/笔试/" style="font-size: 10px;">笔试</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/28/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/TSharding/">TSharding试用</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/ZAB2/">【一致性协议05】 ZAB协议详细介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/20/Linux进程&线程命令/">【Linux命令】照看好咱们的进程和线程</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/ZAB/">【一致性协议04】 ZAB协议概述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 zzzvvvxxxd<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

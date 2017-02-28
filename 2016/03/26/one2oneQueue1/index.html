@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>OneToOneQueue —— 终极性能的无锁队列算法 | zzzvvvxxxd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基本的队列设计1234567891011121314151617181920212223242526272829303132333435public class OneToOneConcurrentArrayQueue&amp;lt;E&amp;gt; implements Queue&amp;lt;E&amp;gt;&amp;#123;	private final E[] buffer;	private volatile long t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OneToOneQueue —— 终极性能的无锁队列算法">
+<meta property="og:url" content="http://yoursite.com/2016/03/26/one2oneQueue1/index.html">
+<meta property="og:site_name" content="zzzvvvxxxd">
+<meta property="og:description" content="基本的队列设计1234567891011121314151617181920212223242526272829303132333435public class OneToOneConcurrentArrayQueue&amp;lt;E&amp;gt; implements Queue&amp;lt;E&amp;gt;&amp;#123;	private final E[] buffer;	private volatile long t">
+<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OneToOneQueue —— 终极性能的无锁队列算法">
+<meta name="twitter:description" content="基本的队列设计1234567891011121314151617181920212223242526272829303132333435public class OneToOneConcurrentArrayQueue&amp;lt;E&amp;gt; implements Queue&amp;lt;E&amp;gt;&amp;#123;	private final E[] buffer;	private volatile long t">
+  
+    <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">zzzvvvxxxd</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">最快的外卖小哥</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-one2oneQueue1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/26/one2oneQueue1/" class="article-date">
+  <time datetime="2016-03-26T08:37:41.000Z" itemprop="datePublished">2016-03-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/多线程/">多线程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OneToOneQueue —— 终极性能的无锁队列算法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本的队列设计"><a href="#基本的队列设计" class="headerlink" title="基本的队列设计"></a>基本的队列设计</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> tail = <span class="number">0</span>;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> head = <span class="number">0</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">OneToOneConcurrentArrayQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</div><div class="line">	    buffer = (E[])<span class="keyword">new</span> Object[capacity];</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - buffer.length;  <span class="comment">// tail位置往前移动length个位置</span></div><div class="line">	    <span class="keyword">if</span>(head &lt;= wrapPoint) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	    &#125;</div><div class="line">	    buffer[(<span class="keyword">int</span>)(currentTail % buffer.length)] = e;</div><div class="line">	    tail = currentTail + <span class="number">1</span>;</div><div class="line">	    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span> </span>&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentHead = head;</div><div class="line">	    <span class="keyword">if</span>(currentHead &gt;= tail) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	    &#125;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)(currentHead % buffer.length);</div><div class="line">	    <span class="keyword">final</span> E e = buffer[index];</div><div class="line">	    buffer[index] = <span class="keyword">null</span>;</div><div class="line">	    head = currentHead + <span class="number">1</span>;</div><div class="line">	    <span class="keyword">return</span> e;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样的队列性能损耗主要是一下两点：  </p>
+<ol>
+<li>取余的计算  </li>
+<li>volatile write以及该过程中可能发生的false sharing<br>因为我们探讨的OneToOne队列，那么显然volatile的刷新要求并不是很严格，可以不用每次的写操作都从cache中刷回主存  </li>
+</ol>
+<hr>
+<h1 id="改进-1"><a href="#改进-1" class="headerlink" title="改进 - 1"></a>改进 - 1</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue2</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line">    <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> mask;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicLong tail = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicLong head = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">OneToOneConcurrentArrayQueue2</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</div><div class="line">		<span class="comment">// 确保capacity是2^n</span></div><div class="line">        capacity = findNextPositivePowerOfTwo(capacity);</div><div class="line">        mask = capacity - <span class="number">1</span>;</div><div class="line">        buffer = (E[])<span class="keyword">new</span> Object[capacity];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(<span class="keyword">final</span> E e)</span></span></div><div class="line">	&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail.get();</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - buffer.length;</div><div class="line">	    <span class="keyword">if</span> (head.get() &lt;= wrapPoint) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	    &#125;</div><div class="line">	    <span class="comment">// 替换了： buffer[(int)(currentTail % buffer.length)] = e;</span></div><div class="line">	    <span class="comment">// 优化了&amp;操作</span></div><div class="line">		buffer[(<span class="keyword">int</span>)currentTail &amp; mask] = e; </div><div class="line">		tail.lazySet(currentTail + <span class="number">1</span>);</div><div class="line">	    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentHead = head.get();</div><div class="line">	    <span class="keyword">if</span> (currentHead &gt;= tail.get())</div><div class="line">	    &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	    &#125;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)currentHead &amp; mask; </div><div class="line">		<span class="keyword">final</span> E e = buffer[index];</div><div class="line">		buffer[index] = <span class="keyword">null</span>; </div><div class="line">		head.lazySet(currentHead + <span class="number">1</span>);</div><div class="line">		<span class="keyword">return</span> e; </div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="优化点1"><a href="#优化点1" class="headerlink" title="优化点1"></a>优化点1</h3><p>注意这里使用<code>(int)currentTail &amp; (capacity - 1)</code>优化了<code>buffer[(int)(currentTail % capacity)] = e;</code>的取余操作。<br>不过这样的优化存在一个问题就是capacity必须是2^n   </p>
+<h3 id="优化点2"><a href="#优化点2" class="headerlink" title="优化点2"></a>优化点2</h3><p>head和tail用AtomicLong替代long<br>使用了lazySet来避免了频繁的volatile write在维持内存可见性时的内存损耗  </p>
+<hr>
+<h1 id="改进-2"><a href="#改进-2" class="headerlink" title="改进 - 2"></a>改进 - 2</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue3</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> capacity; </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> mask; </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicLong tail = <span class="keyword">new</span> PaddedAtomicLong(<span class="number">0</span>); </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicLong head = <span class="keyword">new</span> PaddedAtomicLong(<span class="number">0</span>);</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PaddedLong</span> </span>&#123;</div><div class="line">		<span class="keyword">public</span> <span class="keyword">long</span> value = <span class="number">0</span>, p1, p2, p3, p4, p5, p6; </div><div class="line">	&#125;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> PaddedLong tailCache = <span class="keyword">new</span> PaddedLong(); </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> PaddedLong headCache = <span class="keyword">new</span> PaddedLong();</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(<span class="keyword">final</span> E e)</span> </span>&#123;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail.get();</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - capacity; </div><div class="line">		<span class="keyword">if</span> (headCache.value &lt;= wrapPoint) &#123;</div><div class="line">			headCache.value = head.get();</div><div class="line">			<span class="keyword">if</span> (headCache.value &lt;= wrapPoint) &#123;</div><div class="line">				<span class="keyword">return</span> <span class="keyword">false</span>; </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		buffer[(<span class="keyword">int</span>)currentTail &amp; mask] = e;</div><div class="line">		tail.lazySet(currentTail + <span class="number">1</span>); </div><div class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> currentHead = head.get(); </div><div class="line">		<span class="keyword">if</span> (currentHead &gt;= tailCache.value) &#123;</div><div class="line">			tailCache.value = tail.get();</div><div class="line">			<span class="keyword">if</span> (currentHead &gt;= tailCache.value) &#123;</div><div class="line">		        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">		    &#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)currentHead &amp; mask; </div><div class="line">		<span class="keyword">final</span> E e = buffer[index];</div><div class="line">		buffer[index] = <span class="keyword">null</span>; </div><div class="line">		head.lazySet(currentHead + <span class="number">1</span>);</div><div class="line">		<span class="keyword">return</span> e; </div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="优化点："><a href="#优化点：" class="headerlink" title="优化点："></a>优化点：</h3><p>使用tailCache和headCache来避免对head和tail两个AtomicLong的频繁get()，读取普通变量肯定会比Atomic快很多  </p>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><p>贴上参考文章中的实验结果：  </p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Qps/Sec(Millions)</th>
+<th>Mean Latency(ns)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LinkedBlockingQueue</td>
+<td>4.3</td>
+<td>~32000 / ~500</td>
+</tr>
+<tr>
+<td>ArrayBlockingQueue</td>
+<td>3.5</td>
+<td>~32000 / ~600</td>
+</tr>
+<tr>
+<td>ConcurrentLinkedQueue</td>
+<td>13</td>
+<td>NA / ~180</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue</td>
+<td>13</td>
+<td>NA / ~150</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue2</td>
+<td>45</td>
+<td>NA / ~120</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue3</td>
+<td>150</td>
+<td>NA / ~100</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: None of these tests are run with thread affinity set, Sandy Bridge 2.4 GHz Latency: Blocking - put() &amp; take() / Non-Blocking - offer() &amp; poll()</p>
+</blockquote>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.infoq.com/presentations/Lock-Free-Algorithms" target="_blank" rel="external">1. 终极性能的无锁队列算法</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/26/one2oneQueue1/" data-id="cizp5ffzn001zvrf9z3g14v7g" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/03/26/算法-两个栈组成的队列/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          两个栈组成队列
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/03/26/false_sharing2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">False Sharing问题（2）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/atomic/">atomic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/中间件/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程系列/">多线程系列</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔试/">笔试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中间件/">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日记/">日记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试/">笔试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/一致性协议/" style="font-size: 14px;">一致性协议</a> <a href="/tags/中间件/" style="font-size: 10px;">中间件</a> <a href="/tags/分布式/" style="font-size: 14px;">分布式</a> <a href="/tags/多线程/" style="font-size: 18px;">多线程</a> <a href="/tags/并发/" style="font-size: 18px;">并发</a> <a href="/tags/数据库/" style="font-size: 12px;">数据库</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/日记/" style="font-size: 10px;">日记</a> <a href="/tags/笔试/" style="font-size: 10px;">笔试</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/28/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/TSharding/">TSharding试用</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/ZAB2/">【一致性协议05】 ZAB协议详细介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/20/Linux进程&线程命令/">【Linux命令】照看好咱们的进程和线程</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/ZAB/">【一致性协议04】 ZAB协议概述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 zzzvvvxxxd<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

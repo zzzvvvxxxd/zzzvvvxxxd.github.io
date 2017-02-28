@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>【一致性协议03】 Paxos和分布式系统 | zzzvvvxxxd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="资源汇总
+Paxos Made Simple
+使用Basic-Paxos协议的日志同步与恢复
+可靠分布式系统基础 Paxos 的直观解释
+paxos和分布式系统(视频)
+
+Paxos和分布式存储系统（问题定义）Paxos用来确定一个不可变变量的取值
+
+取值可以是任意二进制数据
+一旦确定将不再更改，并且可以被获取到（不可变性、可读取性）
+
+在分布式存储系统中应用Paxos
+
+在分布式存储系统中，数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【一致性协议03】 Paxos和分布式系统">
+<meta property="og:url" content="http://yoursite.com/2016/08/08/Paxos/index.html">
+<meta property="og:site_name" content="zzzvvvxxxd">
+<meta property="og:description" content="资源汇总
+Paxos Made Simple
+使用Basic-Paxos协议的日志同步与恢复
+可靠分布式系统基础 Paxos 的直观解释
+paxos和分布式系统(视频)
+
+Paxos和分布式存储系统（问题定义）Paxos用来确定一个不可变变量的取值
+
+取值可以是任意二进制数据
+一旦确定将不再更改，并且可以被获取到（不可变性、可读取性）
+
+在分布式存储系统中应用Paxos
+
+在分布式存储系统中，数据">
+<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【一致性协议03】 Paxos和分布式系统">
+<meta name="twitter:description" content="资源汇总
+Paxos Made Simple
+使用Basic-Paxos协议的日志同步与恢复
+可靠分布式系统基础 Paxos 的直观解释
+paxos和分布式系统(视频)
+
+Paxos和分布式存储系统（问题定义）Paxos用来确定一个不可变变量的取值
+
+取值可以是任意二进制数据
+一旦确定将不再更改，并且可以被获取到（不可变性、可读取性）
+
+在分布式存储系统中应用Paxos
+
+在分布式存储系统中，数据">
+  
+    <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">zzzvvvxxxd</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">最快的外卖小哥</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Paxos" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/08/Paxos/" class="article-date">
+  <time datetime="2016-08-08T13:43:21.000Z" itemprop="datePublished">2016-08-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/分布式/">分布式</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【一致性协议03】 Paxos和分布式系统
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="资源汇总"><a href="#资源汇总" class="headerlink" title="资源汇总"></a>资源汇总</h2><ul>
+<li><a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/paxos-simple.pdf" target="_blank" rel="external">Paxos Made Simple</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4MzYxMjEwMg==&amp;mid=203432378&amp;idx=1&amp;sn=34d280eb89d6bad352fdbbf856d86c99#rd" target="_blank" rel="external">使用Basic-Paxos协议的日志同步与恢复</a></li>
+<li><a href="http://drmingdrmer.github.io/tech/distributed/2015/11/11/paxos-slide.html" target="_blank" rel="external">可靠分布式系统基础 Paxos 的直观解释</a></li>
+<li><a href="http://www.tudou.com/programs/view/e8zM8dAL6hM/" target="_blank" rel="external">paxos和分布式系统(视频)</a></li>
+</ul>
+<h2 id="Paxos和分布式存储系统（问题定义）"><a href="#Paxos和分布式存储系统（问题定义）" class="headerlink" title="Paxos和分布式存储系统（问题定义）"></a>Paxos和分布式存储系统（问题定义）</h2><p>Paxos用来确定一个不可变变量的取值</p>
+<ul>
+<li>取值可以是任意二进制数据</li>
+<li>一旦确定将不再更改，并且可以被获取到（不可变性、可读取性）</li>
+</ul>
+<p>在分布式存储系统中应用Paxos</p>
+<ul>
+<li>在分布式存储系统中，数据本身可变，采用多部分进行存储</li>
+<li>多个副本的更新操作序列<code>[op1, op2, op3, ... , opn]</code>是相同的、不变的。</li>
+<li>用Paxos依次来确定不可变变量<code>opi</code>的取值（即第i个操作时什么）</li>
+<li>每确定完Opi之后，让各个数据副本执行<code>opi</code></li>
+</ul>
+<p>将问题转换为，设计一个系统，来存储名称为var的变量</p>
+<blockquote>
+<ul>
+<li>系统内部由多个<code>Acceptor</code>组成，负责存储和管理<code>var</code>变量</li>
+<li>外部有多个<code>proposer</code>机器任意并发调用API，向系统提交不同的<code>var</code>取值</li>
+<li>var可以是任意二进制数据</li>
+<li>系统对外的API库接口为：<ul>
+<li><code>propose(var, V)</code>返回<code>&lt;ok, f&gt;</code>或者<code>&lt;error&gt;</code>（f是系统内部已经确定的取值，如果propose设置成功则f为V，否则为其他<code>proposer</code>设置成功的结果）</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>系统要保证var的取值满足一致性</p>
+<ul>
+<li>如果<code>var</code>的取值没有确定，则var的取值为<code>null</code></li>
+<li>一旦<code>var</code>的取值被确定，则不可更改。并且一直可以获取到这个值</li>
+</ul>
+<p>系统要满足一定的容错特性</p>
+<ul>
+<li>可以容忍任意<code>proposer</code>机器出现故障</li>
+<li>可以容忍少数<code>Acceptor</code>故障（半数以下）</li>
+</ul>
+<p>暂时不考虑：</p>
+<ul>
+<li>网络分化</li>
+<li><code>Acceptor</code>故障会丢失<code>var</code></li>
+</ul>
+<h2 id="难点"><a href="#难点" class="headerlink" title="难点"></a>难点</h2><p>分布式环境下确定一个不可变变量的难点有：</p>
+<ul>
+<li>管理多个<code>Proposer</code>的并发执行</li>
+<li>保证<code>var</code>变量的不可变性</li>
+<li>容忍任意<code>Proposer</code>机器故障</li>
+<li>容忍半数以下<code>Acceptor</code>机器故障</li>
+</ul>
+<h2 id="方案1"><a href="#方案1" class="headerlink" title="方案1"></a>方案1</h2><p>先考虑由单个<code>Acceptor</code>组成，通过类似<strong>互斥锁机制</strong>来管理并发的<code>Proposer</code>运行</p>
+<ul>
+<li><code>Proposer</code>首相向<code>Acceptor</code>申请<code>Acceptor</code>的互斥访问权限，然后才能请求<code>Acceptor</code>接受自己的取值</li>
+<li><code>Acceptor</code>给<code>Proposer</code>发放互斥访问权，谁申请到互斥访问权，就接受谁提交的值</li>
+</ul>
+<p>这样就让<code>Proposer</code>按照获取互斥访问权的顺序依次访问<code>Acceptor</code>，一旦<code>Acceptor</code>接收了某个<code>Proposer</code>的取值，则认为<code>var</code>取值被确定<br>，其他<code>Proposer</code>不再更改。</p>
+<p>基于互斥访问权的<code>Acceptor</code>的实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Acceptor保存变量var和一个互斥锁lock</div><div class="line"></div><div class="line">Acceptor::prepare():</div><div class="line">    加互斥锁，给予var的互斥访问权，并返回当前的var取值f</div><div class="line"></div><div class="line">Acceptor::relaese():</div><div class="line">    解互斥锁，收回var的互斥访问权</div><div class="line"></div><div class="line">Acceptor::acceptor(var, V)</div><div class="line">    如果已经加锁，并且var没有取值，则设置var为V，并且释放锁</div></pre></td></tr></table></figure></p>
+<p>Proposer(var, V)的两阶段实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">第一阶段：通过Acceptor::prepare()获取互斥访问权和当前var的取值</div><div class="line">    如果不能，返回&lt;error&gt;（锁被其他Proposer占用）</div><div class="line"></div><div class="line">第二阶段：根据当前var的取值f，选择执行</div><div class="line">    如果f为null，则通过Acceptor::accept(var, V)提交数据V</div><div class="line">    如果f不会null，则通过Acceptor::release()释放访问权，返回&lt;ok,f&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>缺陷</strong>：</p>
+<blockquote>
+<p>如果Proposer在释放互斥锁之前发生故障，会导致系统陷入死锁。（不能容忍任何Proposer机器故障）</p>
+</blockquote>
+<h2 id="方案2"><a href="#方案2" class="headerlink" title="方案2"></a>方案2</h2><p>引入抢占式访问权<br><code>Acceptor</code>可以让某个<code>Proposer</code>获取到的访问权失效，不再接收它的访问。之后，可以将访问权交给其他<code>Proposer</code>，让其他<code>Proposer</code>访问<code>Acceptor</code><br><code>Proposer</code>向<code>Acceptor</code>申请访问权时，指定编号<code>epoch</code>，并认为越大的<code>epoch</code>值越新，获取到访问权后，才能向<code>Acceptor</code>提交值。<br><code>Acceptor</code>采取<strong>喜新厌旧</strong>原则：</p>
+<ul>
+<li>一旦接收到更新的<code>epoch</code>申请，马上让之前的旧<code>epoch</code>访问权限失效，不再接收它们提交的取值</li>
+<li>给新的<code>epoch</code>发放访问权，只接受新<code>epoch</code>提交的取值</li>
+</ul>
+<p>也就是新的<code>epoch</code>可以抢占旧的<code>epoch</code>，为了保持一致性，不同<code>epoch</code>的<code>Proposer</code>之间采<strong><em>后者认同前者</em></strong>的原则。</p>
+<ol>
+<li>肯定旧的<code>epoch</code>无法生成确定性取值时，新的<code>epoch</code>会提交自己的value，不会冲突</li>
+<li>一旦旧<code>epoch</code>形成了确定性取值，新的<code>epoch</code>可以获取到该值，并会认同，而不会破坏</li>
+</ol>
+<p>基于抢占式访问权的<code>Acceptor的实现</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Acceptor保存的状态</div><div class="line">    当前var的取值&lt;accepted_epoch, accepted_value&gt;</div><div class="line">    最新发放访问权的epoch(lastest_prepared_epoch)</div><div class="line"></div><div class="line">Acceptor::prepare(epoch)</div><div class="line">    只接受比latest_prepared_epoch更大的epoch，并给予访问权</div><div class="line">    记录latest_prepared_epoch = epoch；返回当前var取值</div><div class="line"></div><div class="line">Acceptor::accept(vae, prepared_epoch, V)</div><div class="line">    验证latest_prepared_epoch == prepared_epoch,如果不等则说明已经有一个更新的epoch抢占了访问权</div><div class="line">    设置var的取值&lt;accepted_epoch, accepted_value&gt; = &lt;prepared_epoch, V&gt;</div></pre></td></tr></table></figure></p>
+<p>Propose(var, V)的两阶段实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">第一阶段：获取epoch轮次的访问权和当前var的取值</div><div class="line">    简单选取当前时间戳为epoch，通过Acceptor::prepare(epoch)，获取epoch轮次的访问权和当前的var</div><div class="line">    如果不能获取返回&lt;error&gt;，Proposer运行失效</div><div class="line"></div><div class="line">第二阶段：采用&quot;后者认同前者&quot;原则执行</div><div class="line">    1. 如果var的取值为null，则肯定旧epoch无法生成确定性取值，则通过Acceptor::accept(var, epoch, V)提交数据。</div><div class="line">       成功后返回&lt;ok, V&gt;</div><div class="line">       如果accept失败，则返回&lt;error&gt;(被新的epoch抢占，或者Acceptor故障)</div><div class="line">    2. 如果var取值存在，则此确定值肯定是确定性取值，此时认同它不再更改，直接返回&lt;ok, accepted_value&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>总结</strong>：<br>基于抢占式访问权的核心思想让Proposer将epoch递增的顺序抢占式的依次运行，后者会认同前者。<br>【优点】：<br>可以避免方案一种Proposer故障带来的死锁问题，并且仍可以保证var取值的一致性<br>【缺点】：<br>单点问题任然存在</p>
+<h2 id="Paxos"><a href="#Paxos" class="headerlink" title="Paxos"></a>Paxos</h2><p>Paxos就是在方案二的基础上，试图解决<code>Acceptor</code>的单点问题，引入了多<code>Acceptor</code>。仍然采用喜新厌旧的原则，但是<br>因为引入了多个<code>Acceptor</code>，则不再简单地”后者认同前者”，还采用了”少数服从多数”原则：</p>
+<blockquote>
+<p>一旦某个epoch的取值f被半数以上的Acceptor接受，则认为此var的取值确定为f，不再更改。</p>
+</blockquote>
+<p>Paxos中的<code>Acceptor</code>实现相较方案二保持不变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Propose(var, V)第一阶段： 选定epoch，获取epoch访问权和对应的var取值</div><div class="line">    获取半数以上Acceptor的访问权和对应一组var取值</div><div class="line">    和方案二一致</div><div class="line"></div><div class="line">Propse(var, V)第二阶段： 采用后者服从前者的原则</div><div class="line">    # 在肯定旧epoch无法生成确定性取值时，新的epoch会提交自己的取值，不会冲突</div><div class="line">    # 一旦旧epoch形成确定性取值，新的epoch肯定可以获取到此取值，并且会认同此取值，不会破坏</div><div class="line">    1. 如果获取的var都为空，则旧epoch无法形成确定性取值，此时努力使&lt;epoch, V&gt;成为确定性取值</div><div class="line">        * 向epoch对应的所有Acceptor提交取值&lt;epoch, V&gt;</div><div class="line">        * 如果收到半数以上的成功，则返回&lt;ok, V&gt;</div><div class="line">        * 否则返回&lt;error&gt;（新epoch抢占或者Acceptor故障）</div><div class="line">    2. 如果获取的var取值存在，直接认同最大accepted_epoch对应的取值f，努力使&lt;epoch, f&gt;成为确定性取值</div><div class="line">        * 如果f出现半数以上，则说明f已经是确定性取值，直接返回&lt;ok, f&gt;</div><div class="line">        * 否则，向epoch对应的所有Acceptor提交取值&lt;epoch, f&gt;</div></pre></td></tr></table></figure>
+<p><strong>总结</strong>：<br>核心思想：在抢占式访问（方案2）的基础上引入了多Acceptor，保证一个epoch，只有一个Proposer运行，Proposer按照递增的<br>次序运行。<br>新epoch的Proposer采用后者认同前者的思路运行。</p>
+<blockquote>
+<p>Paxos算法可以满足容错性要求。</p>
+<ul>
+<li>半数以下的Acceptor出现故障时，存货的Acceptor依然可以生成var的确定性取值</li>
+<li>一旦var的值被确定，即使出现半数以下的Acceptor故障，此取值可以被获取，且不再被更改。</li>
+</ul>
+</blockquote>
+<h2 id="Paxos算法的Liveness问题"><a href="#Paxos算法的Liveness问题" class="headerlink" title="Paxos算法的Liveness问题"></a>Paxos算法的Liveness问题</h2><p>新轮次的抢占会让旧轮次停止运行，如果每一轮在第二阶段执行成功之前都被新一轮次抢占，则导致活锁。如何解决？</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/08/Paxos/" data-id="cizp5ffyb000evrf9j3ngnw7l" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/09/ZAB/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【一致性协议04】 ZAB协议概述
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/07/22/DirectByteBuffer/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">【天池比赛日记 - 2】MaxDirectMemorySize和堆外内存</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/atomic/">atomic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/中间件/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程系列/">多线程系列</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔试/">笔试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中间件/">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日记/">日记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试/">笔试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/一致性协议/" style="font-size: 14px;">一致性协议</a> <a href="/tags/中间件/" style="font-size: 10px;">中间件</a> <a href="/tags/分布式/" style="font-size: 14px;">分布式</a> <a href="/tags/多线程/" style="font-size: 18px;">多线程</a> <a href="/tags/并发/" style="font-size: 18px;">并发</a> <a href="/tags/数据库/" style="font-size: 12px;">数据库</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/日记/" style="font-size: 10px;">日记</a> <a href="/tags/笔试/" style="font-size: 10px;">笔试</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/28/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/TSharding/">TSharding试用</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/ZAB2/">【一致性协议05】 ZAB协议详细介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/20/Linux进程&线程命令/">【Linux命令】照看好咱们的进程和线程</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/ZAB/">【一致性协议04】 ZAB协议概述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 zzzvvvxxxd<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

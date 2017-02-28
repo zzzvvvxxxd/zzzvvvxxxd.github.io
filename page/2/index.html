@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>zzzvvvxxxd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="zzzvvvxxxd">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="zzzvvvxxxd">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zzzvvvxxxd">
+  
+    <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">zzzvvvxxxd</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">最快的外卖小哥</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-算法-trie树" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/06/算法-trie树/" class="article-date">
+  <time datetime="2016-04-06T05:28:11.000Z" itemprop="datePublished">2016-04-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/多线程系列/">多线程系列</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/06/算法-trie树/">Trie树</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Trie树模板"><a href="#Trie树模板" class="headerlink" title="Trie树模板"></a>Trie树模板</h2><p>题目来源：<a href="http://hihocoder.com/problemset/problem/1014" target="_blank" rel="external">http://hihocoder.com/problemset/problem/1014</a>  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">enum</span> NODE_TYPE &#123;</div><div class="line">    COMPLETED,</div><div class="line">    UNCOMPLETED</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">class</span> TrieNode &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    TrieNode* childNodes[<span class="number">26</span>];</div><div class="line">    <span class="keyword">int</span> freq;</div><div class="line">    <span class="keyword">char</span> nodeChar;</div><div class="line">    <span class="keyword">enum</span> NODE_TYPE type;</div><div class="line">    TrieNode(<span class="keyword">char</span> ch) &#123;</div><div class="line">        <span class="keyword">this</span>-&gt;nodeChar = ch;</div><div class="line">        <span class="keyword">this</span>-&gt;freq = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++) &#123;</div><div class="line">            <span class="keyword">this</span>-&gt;childNodes[i] = <span class="literal">NULL</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>-&gt;type = UNCOMPLETED;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">add_freq</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">set_type</span><span class="params">(<span class="keyword">enum</span> NODE_TYPE)</span></span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">class</span> Trie &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    TrieNode* root;</div><div class="line">    Trie() &#123;</div><div class="line">        root = <span class="keyword">new</span> TrieNode(<span class="string">' '</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="built_in">string</span> str)</span></span>;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(<span class="built_in">string</span> str)</span></span>;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="built_in">string</span> str)</span></span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">charToIndex</span><span class="params">(<span class="keyword">char</span> ch)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> ch - <span class="string">'a'</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> Trie::insert(<span class="built_in">string</span> str) &#123;</div><div class="line">    TrieNode *current_node = <span class="keyword">this</span>-&gt;root;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length(); i++) &#123;</div><div class="line">        <span class="keyword">int</span> index = charToIndex(str[i]);</div><div class="line">        <span class="keyword">char</span> ch = str[i];</div><div class="line">        <span class="keyword">if</span>(current_node-&gt;childNodes[index] == <span class="literal">NULL</span>) &#123;</div><div class="line">            current_node-&gt;childNodes[index] = <span class="keyword">new</span> TrieNode(ch);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        current_node-&gt;childNodes[index]-&gt;add_freq();</div><div class="line"></div><div class="line">        <span class="keyword">if</span>(i == str.length()<span class="number">-1</span>) &#123;</div><div class="line">            current_node-&gt;childNodes[index]-&gt;set_type(COMPLETED);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(current_node-&gt;childNodes[index]-&gt;type != COMPLETED)&#123;</div><div class="line">            current_node-&gt;childNodes[index]-&gt;set_type(UNCOMPLETED);</div><div class="line">        &#125;</div><div class="line">        current_node = current_node-&gt;childNodes[index];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">bool</span> Trie::find(<span class="built_in">string</span> str) &#123;</div><div class="line">    TrieNode *current_node = <span class="keyword">this</span>-&gt;root;</div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(i &lt; str.length()) &#123;</div><div class="line">        <span class="keyword">char</span> ch = str[i];</div><div class="line">        <span class="keyword">int</span> index = charToIndex(ch);</div><div class="line">        <span class="keyword">if</span>(current_node-&gt;childNodes[index] == <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        i++;</div><div class="line">        current_node = current_node-&gt;childNodes[index];</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; current_node-&gt;nodeChar &lt;&lt; <span class="string">" "</span> &lt;&lt; current_node-&gt;type &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">return</span> current_node-&gt;type == COMPLETED &amp;&amp; i == str.length();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">int</span> Trie::query(<span class="built_in">string</span> str) &#123;</div><div class="line">    TrieNode *current_node = <span class="keyword">this</span>-&gt;root;</div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> count;</div><div class="line">    <span class="keyword">while</span>(i &lt; str.length()) &#123;</div><div class="line">        <span class="keyword">char</span> ch = str[i];</div><div class="line">        <span class="keyword">int</span> index = charToIndex(ch);</div><div class="line">        <span class="keyword">if</span>(current_node-&gt;childNodes[index] == <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        i++;</div><div class="line">        current_node = current_node-&gt;childNodes[index];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(i == str.length())&#123;</div><div class="line">        <span class="keyword">return</span> current_node-&gt;freq;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> TrieNode::set_type(<span class="keyword">enum</span> NODE_TYPE t) &#123;</div><div class="line">    <span class="keyword">this</span>-&gt;type = t;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> TrieNode::add_freq() &#123;</div><div class="line">    <span class="keyword">this</span>-&gt;freq++;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    Trie trie;</div><div class="line">    <span class="keyword">int</span> loop;</div><div class="line">    <span class="built_in">cin</span> &gt;&gt; loop;</div><div class="line">    <span class="keyword">while</span>(loop &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="built_in">string</span> str;</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; str;</div><div class="line">        trie.insert(str);</div><div class="line">        loop--;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">cin</span> &gt;&gt; loop;</div><div class="line">    <span class="keyword">while</span>(loop &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="built_in">string</span> str;</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; str;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; trie.query(str) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        loop--;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/06/算法-trie树/" data-id="cizp5ffzw002fvrf95ycqaxdw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-常量池" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/03/常量池/" class="article-date">
+  <time datetime="2016-04-03T13:13:29.000Z" itemprop="datePublished">2016-04-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔试/">笔试</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/03/常量池/">Java包装类与常量池</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> Java的8种基本类型(Byte, Short, Integer, Long, Character, Boolean, Float, Double), 除Float和Double以外, 其它六种都实现了常量池, 但是它们只在大于等于-128并且小于等于127时才使用常量池。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/03/常量池/" data-id="cizp5ffzs0028vrf9n400xw45" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔试/">笔试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-atomic3-getAndIncrement" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/02/atomic3-getAndIncrement/" class="article-date">
+  <time datetime="2016-04-02T03:44:53.000Z" itemprop="datePublished">2016-04-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/atomic/">atomic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/02/atomic3-getAndIncrement/">【不简单的Atomic工具】getAndAddInt in getAndIncrement</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上一篇Atmoic文章中提到，JDK8在<code>AtomicInteger</code>的<code>getAndIncrement</code>方法实现上发生了变化：  </p>
+<h5 id="JDK7"><a href="#JDK7" class="headerlink" title="JDK7"></a>JDK7</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">for</span> (;;) &#123;</div><div class="line">    <span class="keyword">int</span> current = get();</div><div class="line">    <span class="keyword">int</span> next = current + <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (compareAndSet(current, next))</div><div class="line">      <span class="keyword">return</span> current;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="JDK8"><a href="#JDK8" class="headerlink" title="JDK8"></a>JDK8</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>getAndAddInt</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object paramObject, <span class="keyword">long</span> paramLong, <span class="keyword">int</span> paramInt)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> i;</div><div class="line">    <span class="keyword">do</span></div><div class="line">      i = getIntVolatile(paramObject, paramLong);</div><div class="line">    <span class="keyword">while</span> (!(compareAndSwapInt(paramObject, paramLong, i, i + paramInt)));</div><div class="line">    <span class="keyword">return</span> i;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">jint</div><div class="line">sun::misc::Unsafe::getIntVolatile (jobject obj, jlong offset)</div><div class="line">&#123;</div><div class="line">  volatile jint *addr = (jint *) ((char *) obj + offset);</div><div class="line">  jint result = *addr;</div><div class="line">  read_barrier ();</div><div class="line">  return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="汇编之后"><a href="#汇编之后" class="headerlink" title="汇编之后"></a>汇编之后</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">0x0000000002c207f5: lock cmpxchg %r8d,0xc(%rdx)</div><div class="line">0x0000000002c207fb: sete   %r11b</div><div class="line">0x0000000002c207ff: movzbl %r11b,%r11d</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">0x0000000002cf49c7: mov    %rbp,0x10(%rsp)</div><div class="line">0x0000000002cf49cc: mov    $0x1,%eax</div><div class="line">0x0000000002cf49d1: lock xadd %eax,0xc(%rdx)</div></pre></td></tr></table></figure>
+<p>原本的<code>lock cmpxchg</code>被<code>lock xadd</code>所替换，也就是在1.8之后，在硬件支持<code>lock XADD</code>这样的操作情况下，都会用fetch-and-add来替换CAS操作。</p>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul>
+<li><a href="http://javagoo.tk/java/unsafe_getAndAddInt.html?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">unsafe中getAndAddInt性能疑问</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/02/atomic3-getAndIncrement/" data-id="cizp5ffyt0012vrf97fg0d0nf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-atomic2-CAS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/27/atomic2-CAS/" class="article-date">
+  <time datetime="2016-03-27T13:12:33.000Z" itemprop="datePublished">2016-03-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/atomic/">atomic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/27/atomic2-CAS/">【不简单的Atomic工具】CAS</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CAS算法："><a href="#CAS算法：" class="headerlink" title="CAS算法："></a>CAS算法：</h2><p>包含三个参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CAS(V, E, N)</div></pre></td></tr></table></figure></p>
+<ul>
+<li>V 表示要更新的变量</li>
+<li>E 表示预期值</li>
+<li>N 表示新值</li>
+</ul>
+<p>仅当V值等于E值时，才会将V的值设置为N。如果V的值和E不同，表示已经有其他线程对其进行了更新，则当前线程什么都不做。最后CAS返回V的真实值。</p>
+<p>CAS是抱着乐观的态度进行的，总认为自己可以成功的完成操作。当多个线程同时使用CAS操作一个变量时，只有一个会胜出。失败的线程不会被挂起，而是返回失败信息，并允许再次尝试。</p>
+<p>CPU指令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cmpxchg</div><div class="line"># accumulator = AL, AX, or EAX, depending on whether a byte, word, or doubleword comparison is being performed</div></pre></td></tr></table></figure></p>
+<p>该指令的基本逻辑如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(accumulator == Destination) &#123;</div><div class="line">    ZF = <span class="number">1</span>;</div><div class="line">    Destination = Source;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    ZF = <span class="number">0</span>;</div><div class="line">    accumulator = Destination;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h2><ol>
+<li><p>ABA问题。</p>
+<blockquote>
+<p>因为 CAS 需要在操作值的时候检查下值有没有发生变化，如果没有发生变化则更新，但是如果一个值原来是A，变成了B，又变成了A，那么使用CAS进行检查时会发现它的值没有发生变化，但是实际上却变化了。ABA问题的解决思路就是使用版本号。在变量前面追加上版本号，每次变量更新的时候把版本号加一，那么A－B－A 就会变成1A-2B－3A。<br>从Java1.5开始JDK的atomic包里提供了一个类 AtomicStampedReference 来解决 ABA 问题。这个类的compareAndSet 方法作用是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式将该引用和该标志的值设置为给定的更新值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span></span></div><div class="line">        <span class="params">(V      expectedReference,//预期引用</span></div><div class="line">         V      newReference,//更新后的引用</div><div class="line">        <span class="keyword">int</span>    expectedStamp, //预期标志</div><div class="line">        <span class="keyword">int</span>    newStamp) <span class="comment">//更新后的标志</span></div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>循环时间长开销大。</p>
+<blockquote>
+<p>自旋 CAS 如果长时间不成功，会给 CPU 带来非常大的执行开销。如果JVM能支持处理器提供的 pause 指令那么效率会有一定的提升，pause 指令有两个作用，第一它可以延迟流水线执行指令（de-pipeline）,使 CPU 不会消耗过多的执行资源，延迟的时间取决于具体实现的版本，在一些处理器上延迟时间是零。第二它可以避免在退出循环的时候因内存顺序冲突（memory order violation：内存顺序冲突一般是由伪/假共享引起，假共享是指多个 CPU 同时修改同一个缓存行的不同部分而引起其中一个CPU的操作无效，当出现这个内存顺序冲突时，CPU必须清空流水线）而引起 CPU 流水线被清空（CPU pipeline flush），从而提高 CPU 的执行效率。</p>
+</blockquote>
+</li>
+<li><p>只能保证一个共享变量的原子操作。</p>
+<blockquote>
+<p>当对一个共享变量执行操作时，我们可以使用循环CAS的方式来保证原子操作，但是对多个共享变量操作时，循环CAS就无法保证操作的原子性，这个时候就可以用锁，或者有一个取巧的办法，就是把多个共享变量合并成一个共享变量来操作。比如有两个共享变量i＝2,j=a，合并一下ij=2a，然后用CAS来操作ij。从Java1.5开始JDK提供了AtomicReference类来保证引用对象之间的原子性，你可以把多个变量放在一个对象里来进行CAS操作。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="AtmoicInteger中的CAS实现"><a href="#AtmoicInteger中的CAS实现" class="headerlink" title="AtmoicInteger中的CAS实现"></a>AtmoicInteger中的CAS实现</h2><p><strong>JDK7</strong>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">for</span> (;;) &#123;</div><div class="line">    <span class="keyword">int</span> current = get();</div><div class="line">    <span class="keyword">int</span> next = current + <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (compareAndSet(current, next))</div><div class="line">      <span class="keyword">return</span> current;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>JDK8</strong>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到JDK8在<code>getAndIncrement()</code>方法的实现上做出了一定的改变，在<a href="http://ashkrit.blogspot.com/2014/02/atomicinteger-java-7-vs-java-8.html" target="_blank" rel="external">AtomicInteger Java 7 vs Java 8</a>中列出了两个版本的benchmark，JDK8的实现大约提升了1.5~2倍的性能，作者也直呼<code>Unsafe</code>变得更加与有用了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/27/atomic2-CAS/" data-id="cizp5ffyo000xvrf9pn3ungyu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-算法-两个栈组成的队列" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/26/算法-两个栈组成的队列/" class="article-date">
+  <time datetime="2016-03-26T11:12:06.000Z" itemprop="datePublished">2016-03-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/26/算法-两个栈组成的队列/">两个栈组成队列</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="【题目】"><a href="#【题目】" class="headerlink" title="【题目】"></a>【题目】</h2><p>编写一个类，用两个栈实现队列的基本操作：add、poll、peek  </p>
+<h2 id="【解法】"><a href="#【解法】" class="headerlink" title="【解法】"></a>【解法】</h2><p>一个栈作为压入栈，在压入数据时只往这个栈中压入，记为stackPush。另一个栈只作为单出栈，在弹出数据时只从这个栈弹出，记为stackPop。<br>stackPop会将stackPush中的数据整体弹出再压入stackPop作为弹出顺序。<br>需要做到以下两点：  </p>
+<ol>
+<li>如果stackPush要往stackPop中压入数据，那么必须一次性把stackPush中的数据全部压入  </li>
+<li>如果stackPop不为空，stackPush绝对不能向stackPop中压入数据  </li>
+</ol>
+<h2 id="【代码】"><a href="#【代码】" class="headerlink" title="【代码】"></a>【代码】</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TwoStackQueue</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> Stack&lt;Integer&gt; stackPush;</div><div class="line">    <span class="keyword">public</span> Stack&lt;Integer&gt; stackPop;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TwoStackQueue</span><span class="params">()</span> </span>&#123;</div><div class="line">        stackPush = <span class="keyword">new</span> Stack&lt;Integer&gt;();</div><div class="line">        stackPop = <span class="keyword">new</span> Stack&lt;Integer&gt;();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> pushInt)</span> </span>&#123;</div><div class="line">        stackPush.push(pushInt);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">poll</span><span class="params">()</span> </span>&#123;</div><div class="line">        putPushToPop();</div><div class="line">        <span class="keyword">return</span> stackPop.pop();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">peek</span><span class="params">()</span> </span>&#123;</div><div class="line">        putPushToPop();</div><div class="line">        <span class="keyword">return</span> stackPop.peek();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">putPushToPop</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span>(stackPop.empty() &amp;&amp; stackPush.empty()) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Queue is empty"</span>);</div><div class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(stackPop.empty()) &#123;</div><div class="line">            stackPush.stream().forEach(item -&gt; &#123;</div><div class="line">                stackPop.push(item);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/26/算法-两个栈组成的队列/" data-id="cizp5ffzx002ivrf9had9g57y" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-one2oneQueue1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/26/one2oneQueue1/" class="article-date">
+  <time datetime="2016-03-26T08:37:41.000Z" itemprop="datePublished">2016-03-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/多线程/">多线程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/26/one2oneQueue1/">OneToOneQueue —— 终极性能的无锁队列算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本的队列设计"><a href="#基本的队列设计" class="headerlink" title="基本的队列设计"></a>基本的队列设计</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> tail = <span class="number">0</span>;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> head = <span class="number">0</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">OneToOneConcurrentArrayQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</div><div class="line">	    buffer = (E[])<span class="keyword">new</span> Object[capacity];</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - buffer.length;  <span class="comment">// tail位置往前移动length个位置</span></div><div class="line">	    <span class="keyword">if</span>(head &lt;= wrapPoint) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	    &#125;</div><div class="line">	    buffer[(<span class="keyword">int</span>)(currentTail % buffer.length)] = e;</div><div class="line">	    tail = currentTail + <span class="number">1</span>;</div><div class="line">	    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span> </span>&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentHead = head;</div><div class="line">	    <span class="keyword">if</span>(currentHead &gt;= tail) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	    &#125;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)(currentHead % buffer.length);</div><div class="line">	    <span class="keyword">final</span> E e = buffer[index];</div><div class="line">	    buffer[index] = <span class="keyword">null</span>;</div><div class="line">	    head = currentHead + <span class="number">1</span>;</div><div class="line">	    <span class="keyword">return</span> e;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样的队列性能损耗主要是一下两点：  </p>
+<ol>
+<li>取余的计算  </li>
+<li>volatile write以及该过程中可能发生的false sharing<br>因为我们探讨的OneToOne队列，那么显然volatile的刷新要求并不是很严格，可以不用每次的写操作都从cache中刷回主存  </li>
+</ol>
+<hr>
+<h1 id="改进-1"><a href="#改进-1" class="headerlink" title="改进 - 1"></a>改进 - 1</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue2</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line">    <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> mask;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicLong tail = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicLong head = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">OneToOneConcurrentArrayQueue2</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</div><div class="line">		<span class="comment">// 确保capacity是2^n</span></div><div class="line">        capacity = findNextPositivePowerOfTwo(capacity);</div><div class="line">        mask = capacity - <span class="number">1</span>;</div><div class="line">        buffer = (E[])<span class="keyword">new</span> Object[capacity];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(<span class="keyword">final</span> E e)</span></span></div><div class="line">	&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail.get();</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - buffer.length;</div><div class="line">	    <span class="keyword">if</span> (head.get() &lt;= wrapPoint) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	    &#125;</div><div class="line">	    <span class="comment">// 替换了： buffer[(int)(currentTail % buffer.length)] = e;</span></div><div class="line">	    <span class="comment">// 优化了&amp;操作</span></div><div class="line">		buffer[(<span class="keyword">int</span>)currentTail &amp; mask] = e; </div><div class="line">		tail.lazySet(currentTail + <span class="number">1</span>);</div><div class="line">	    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentHead = head.get();</div><div class="line">	    <span class="keyword">if</span> (currentHead &gt;= tail.get())</div><div class="line">	    &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	    &#125;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)currentHead &amp; mask; </div><div class="line">		<span class="keyword">final</span> E e = buffer[index];</div><div class="line">		buffer[index] = <span class="keyword">null</span>; </div><div class="line">		head.lazySet(currentHead + <span class="number">1</span>);</div><div class="line">		<span class="keyword">return</span> e; </div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="优化点1"><a href="#优化点1" class="headerlink" title="优化点1"></a>优化点1</h3><p>注意这里使用<code>(int)currentTail &amp; (capacity - 1)</code>优化了<code>buffer[(int)(currentTail % capacity)] = e;</code>的取余操作。<br>不过这样的优化存在一个问题就是capacity必须是2^n   </p>
+<h3 id="优化点2"><a href="#优化点2" class="headerlink" title="优化点2"></a>优化点2</h3><p>head和tail用AtomicLong替代long<br>使用了lazySet来避免了频繁的volatile write在维持内存可见性时的内存损耗  </p>
+<hr>
+<h1 id="改进-2"><a href="#改进-2" class="headerlink" title="改进 - 2"></a>改进 - 2</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue3</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> capacity; </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> mask; </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicLong tail = <span class="keyword">new</span> PaddedAtomicLong(<span class="number">0</span>); </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicLong head = <span class="keyword">new</span> PaddedAtomicLong(<span class="number">0</span>);</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PaddedLong</span> </span>&#123;</div><div class="line">		<span class="keyword">public</span> <span class="keyword">long</span> value = <span class="number">0</span>, p1, p2, p3, p4, p5, p6; </div><div class="line">	&#125;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> PaddedLong tailCache = <span class="keyword">new</span> PaddedLong(); </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> PaddedLong headCache = <span class="keyword">new</span> PaddedLong();</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(<span class="keyword">final</span> E e)</span> </span>&#123;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail.get();</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - capacity; </div><div class="line">		<span class="keyword">if</span> (headCache.value &lt;= wrapPoint) &#123;</div><div class="line">			headCache.value = head.get();</div><div class="line">			<span class="keyword">if</span> (headCache.value &lt;= wrapPoint) &#123;</div><div class="line">				<span class="keyword">return</span> <span class="keyword">false</span>; </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		buffer[(<span class="keyword">int</span>)currentTail &amp; mask] = e;</div><div class="line">		tail.lazySet(currentTail + <span class="number">1</span>); </div><div class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> currentHead = head.get(); </div><div class="line">		<span class="keyword">if</span> (currentHead &gt;= tailCache.value) &#123;</div><div class="line">			tailCache.value = tail.get();</div><div class="line">			<span class="keyword">if</span> (currentHead &gt;= tailCache.value) &#123;</div><div class="line">		        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">		    &#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)currentHead &amp; mask; </div><div class="line">		<span class="keyword">final</span> E e = buffer[index];</div><div class="line">		buffer[index] = <span class="keyword">null</span>; </div><div class="line">		head.lazySet(currentHead + <span class="number">1</span>);</div><div class="line">		<span class="keyword">return</span> e; </div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="优化点："><a href="#优化点：" class="headerlink" title="优化点："></a>优化点：</h3><p>使用tailCache和headCache来避免对head和tail两个AtomicLong的频繁get()，读取普通变量肯定会比Atomic快很多  </p>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><p>贴上参考文章中的实验结果：  </p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Qps/Sec(Millions)</th>
+<th>Mean Latency(ns)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LinkedBlockingQueue</td>
+<td>4.3</td>
+<td>~32000 / ~500</td>
+</tr>
+<tr>
+<td>ArrayBlockingQueue</td>
+<td>3.5</td>
+<td>~32000 / ~600</td>
+</tr>
+<tr>
+<td>ConcurrentLinkedQueue</td>
+<td>13</td>
+<td>NA / ~180</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue</td>
+<td>13</td>
+<td>NA / ~150</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue2</td>
+<td>45</td>
+<td>NA / ~120</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue3</td>
+<td>150</td>
+<td>NA / ~100</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: None of these tests are run with thread affinity set, Sandy Bridge 2.4 GHz Latency: Blocking - put() &amp; take() / Non-Blocking - offer() &amp; poll()</p>
+</blockquote>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.infoq.com/presentations/Lock-Free-Algorithms" target="_blank" rel="external">1. 终极性能的无锁队列算法</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/26/one2oneQueue1/" data-id="cizp5ffzn001zvrf9z3g14v7g" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-false_sharing2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/26/false_sharing2/" class="article-date">
+  <time datetime="2016-03-26T08:32:38.000Z" itemprop="datePublished">2016-03-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/多线程/">多线程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/26/false_sharing2/">False Sharing问题（2）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="如果避免频繁的false-sharing造成的性能损耗："><a href="#如果避免频繁的false-sharing造成的性能损耗：" class="headerlink" title="如果避免频繁的false sharing造成的性能损耗："></a>如果避免频繁的false sharing造成的性能损耗：</h2><p><strong>PaddedLong</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PaddedLong</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">long</span> value = <span class="number">0</span>, p1, p2, p3, p4, p5, p6; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>PaddedAtomicLong</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PaddedAtomicLong</span> <span class="keyword">extends</span> <span class="title">AtomicLong</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PaddedAtomicLong</span><span class="params">()</span> </span>&#123;</div><div class="line">    	<span class="keyword">super</span>();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PaddedAtomicLong</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> initialValue)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(initialValue);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">long</span> p1, p2, p3, p4, p5, p6 = <span class="number">7</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="为何是插入7个long"><a href="#为何是插入7个long" class="headerlink" title="为何是插入7个long"></a>为何是插入7个long</h2><p>一般而言cache line是64byte，而每个Java对象都有一个2word（2*4byte）的对象头，而long本身是8byte。  </p>
+<h2 id="PaddedLong的应用"><a href="#PaddedLong的应用" class="headerlink" title="PaddedLong的应用"></a>PaddedLong的应用</h2><p>一般是用在频繁读写的情况下，可以参考之后的OneToOne队列的优化文章</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/26/false_sharing2/" data-id="cizp5ffyz001avrf95zah0kns" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-false_sharing" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/25/false_sharing/" class="article-date">
+  <time datetime="2016-03-25T06:37:11.000Z" itemprop="datePublished">2016-03-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/多线程/">多线程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/25/false_sharing/">False Sharing问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h3><p>对着多核的发展，CPU cache分成了三个级别：L1、L2、L3。L1是最接近CPU的cache，容量也是最小的，但是速度最快。  </p>
+<table>
+<thead>
+<tr>
+<th>从CPU到</th>
+<th>大约需要的CPU周期</th>
+<th>大约需要的时间（单位ns）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>寄存器</td>
+<td>1 cycle</td>
+<td>NA</td>
+</tr>
+<tr>
+<td>L1 Cache</td>
+<td>约3~4 cycles</td>
+<td>约0.5~1ns</td>
+</tr>
+<tr>
+<td>L2 Cache</td>
+<td>约10~20 cycles</td>
+<td>约3~7ns</td>
+</tr>
+<tr>
+<td>L3 Cache</td>
+<td>约40~45 cycles</td>
+<td>约15ns</td>
+</tr>
+<tr>
+<td>跨槽传输</td>
+<td>空</td>
+<td>约20ns</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>约120~240 cycles</td>
+<td>约60-120ns</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Cache-line"><a href="#Cache-line" class="headerlink" title="Cache line"></a>Cache line</h3><p>为了高效的存取缓存，不是简单地随意地将单条数据写入缓存，缓存是由Cache line构成存储的最小单位，intel平台一般是64字节<br>可以通过命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size</div></pre></td></tr></table></figure></p>
+<p>Java中long占8个字节，再加上对象头（2字节）或者数组对象头（3字节），则可以获取7个long</p>
+<h3 id="Cache条目"><a href="#Cache条目" class="headerlink" title="Cache条目"></a>Cache条目</h3><p>cache entry： 包含了如下部分</p>
+<ul>
+<li>cache line: 从主存一次copy的数据大小</li>
+<li>tag：标记cache line对应的主存的地址</li>
+<li>falg：标记当前cache是否invalid，如果是数据cache，还有是否dirty</li>
+</ul>
+<h3 id="CPU的cache策略"><a href="#CPU的cache策略" class="headerlink" title="CPU的cache策略"></a>CPU的cache策略</h3><ol>
+<li>cpu从不直接访问主存，通过cache间接访问</li>
+<li>每次需要访问主存时，遍历一遍全部cache line，查找主存的地址是否在某个cache line中</li>
+<li>如果cache中没有找到，则分配一个新的cache entry，把主存copy到cache line中，再从cache line中读取<br>同时，Cache中包含的cache entry有限，所以必须要有合理cache淘汰策略，一般是LRU，这里不再赘述。</li>
+</ol>
+<h2 id="False-Sharing"><a href="#False-Sharing" class="headerlink" title="False Sharing"></a>False Sharing</h2><p>在多处理器，多线程的情况下，如果两个线程分别运行在不同CPU上，而其中某个线程修改了cache line中的元素，由于cache一致性原因，另一个线程的cache的line被宣告无效，在下一次访问时会出现一次cache line miss。  </p>
+<p>如下图所示，thread1修改了memory灰化区域的第[2]个元素，而Thread0只需要读取灰化区域的第[1]个元素，由于这段memory被载入了各自CPU的硬件cache中，虽然在memory的角度这两种的访问时隔离的，但是由于错误的紧凑地放在了一起，而导致了，thread1的修改，在cache一致性的要求下，宣告了运行Thread0的CPU0的cache line非法，从而出现了一次miss，导致从小从memory中读取到cache line中，而一致性的代价付出了，但结果并不是thread0所care的，导致了效率的降低  </p>
+<p><img src="https://software.intel.com/sites/default/files/m/d/4/1/d/8/5-4-figure-1.gif" alt="figure 1"></p>
+<blockquote>
+<p>在做多线程程序的时候,为了避免使用锁,我们通常会采用这样的数据结构:根据线程的数目,安排一个数组, 每个线程一个项,互相不冲突. 从逻辑上看这样的设计无懈可击,但是实践的过程我们会发现这样并没有提高速度. 问题在于cpu的cache line. 我们在读主存的时候,数据同时被读到L1,L2中去,而且在L1中是以cache line(通常64)字节为单位的. 每个Core都有自己的L1,L2,所以每个线程在读取自己的项的时候, 也把别人的项读进去, 所以在更新的时候,为了保持数据的一致性, core之间cache要进行同步, 这个会导致严重的性能问题. 这就是所谓的False sharing问题。</p>
+</blockquote>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>打算分成两篇来写，嘿嘿</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://blog.csdn.net/pennyliang/article/details/5766541" target="_blank" rel="external">False Sharing问题</a><br><a href="http://blog.csdn.net/wdzxl198/article/details/11218765" target="_blank" rel="external">由一道淘宝面试题到False sharing问题</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/25/false_sharing/" data-id="cizp5ffyv0015vrf9t69okkv0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-atomic1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/24/atomic1/" class="article-date">
+  <time datetime="2016-03-24T14:40:11.000Z" itemprop="datePublished">2016-03-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/atomic/">atomic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/24/atomic1/">【不简单的Atomic工具】lazySet &amp; set</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在研究Martin Thompson的演讲<a href="http://www.infoq.com/presentations/Lock-Free-Algorithms" target="_blank" rel="external">终极性能的无锁队列算法</a>时遇到了AtomicLong的lazySet方法，作者用这个方法替代了set。之前在公司设计MulSemaphore类时，我就并没有注意到Atomic类还有这样一个方法。  </p>
+<h2 id="lazySet"><a href="#lazySet" class="headerlink" title="lazySet()"></a>lazySet()</h2><p>经常在维护一个非阻塞的数据结构时，内部显然常常会有volatile成员，而对于通信队列这样的对性能要求极端的数据结构，JMM要维持volatile的内存可见性，在对这样的成员写操作时，会有频繁的cache的读写（save和load？）到主内存。这样的时间耗损队形能而言，其实也十分重要。<br>lazySet()可以让一个线程在没有其他线程volatile写或者synchronized动作发生前，本地缓存的写操作不必刷回主内存。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lazySet</span><span class="params">(<span class="keyword">int</span> newValue)</span> </span>&#123;</div><div class="line">    unsafe.putOrderedInt(<span class="keyword">this</span>, valueOffset, newValue);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>lazySet的本质就是putOrderInt()，该函数是putIntVolatile()方法的延迟实现。  </p>
+<p>正是因为这样的特性，使得lazySet适合于SPSC的数据结构中，对于单Producer单Consumer这样的结构，延迟写并不是什么问题。同时还优化了store-load屏障在性能上的损耗（store-store屏障替代）。 </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/03/24/atomic1/" data-id="cizp5ffyl000uvrf9bdmvbhir" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发/">并发</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-mysql_binlog" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/02/13/mysql_binlog/" class="article-date">
+  <time datetime="2016-02-13T08:11:22.000Z" itemprop="datePublished">2016-02-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据库/">数据库</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/13/mysql_binlog/">【mysql】binlog详解(1)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>The binary log contains “events” that describe database changes such as table creation operations or changes to table data. It also contains events for statements that potentially could have made changes (for example, a DELETE which matched no rows), unless row-based logging is used. The binary log also contains information about how long each statement took that updated data.</p>
+</blockquote>
+<p>binlog是mysql的二进制日志，记录了mysql数据的更新或者潜在的更新记录，同时还包含了每条语句的执行耗时和更新时间。<br>注意： binlog主要有<code>statement-based</code>、<code>row-based logging</code>和<code>mixed logging</code> 三种格式，row-based的记录中不包括潜在更新记录。</p>
+<p>binlog有两个主要的功能：</p>
+<ul>
+<li><p>用于复制</p>
+<blockquote>
+<p>master发送了包含了所有events的binary log给slaves，slaves执行binary log中的event来保证和master之间的数据一致性</p>
+</blockquote>
+</li>
+<li><p>一些特定的数据恢复操作，会使用binlog</p>
+</li>
+</ul>
+<h2 id="1-binlog相关的启动参数"><a href="#1-binlog相关的启动参数" class="headerlink" title="1. binlog相关的启动参数"></a>1. binlog相关的启动参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--binlog-row-event-max-size=N</div></pre></td></tr></table></figure>
+<p>指定行格式复制日志event的最大大小，单位为byte，每一行数据会被切分到多个小于该限制的event包中，必须是256byte的倍数。  </p>
+<ul>
+<li>默认值：8192</li>
+<li>min：256</li>
+<li>max：18446744073709551615（64位平台）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--log-bin[=base_name]</div></pre></td></tr></table></figure>
+<p>开启binary log功能（用于复制和备份），指定日志名称的base name，mysql会使用指定的base name作为前缀，连续的数据作为后缀生成一系列的日志文件。默认会使用<code>host_name</code>作为base name。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--log-bin-trust-function-creators[=&#123;0|1&#125;]</div></pre></td></tr></table></figure>
+<p>指定mysql如何处理函数及存储过程的创建，取决于用户是否认为自己的存储过程及函数是否安全（确定的或者不修改数据），默认对于不安全的存储过程及函数不会写入binlog。这也就是，在开启binlog的时候，如果不设置该参数，使用自定义函数时会出现错误的原因。</p>
+<h2 id="2-Statement-selection-options"><a href="#2-Statement-selection-options" class="headerlink" title="2. Statement selection options"></a>2. Statement selection options</h2><p>下面介绍的选项会影响写入到binary log中的记录语句，因此会控制master发送到slaves中的日志的内容。同样，slaves也有相应的参数，在日志选择哪些命令可以执行。</p>
+<h3 id="2-1-binlog-do-db"><a href="#2-1-binlog-do-db" class="headerlink" title="2.1  --binlog-do-db"></a>2.1  <code>--binlog-do-db</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--binlog-do-db=db_name</div></pre></td></tr></table></figure>
+<p>这个参数的影响取决是使用<code>statement-based</code>还是<code>row-based logging</code>格式的日志。<br><strong>statement-based logging</strong><br>只有操作默认数据库（USE语句指定）的语句才会被记录。如果要指定多个数据库，需要重复使用该参数。但是跨数据库的操作<br>不会因此被记录，因为这里的检查原则，mysql为了尽可能的简单，只会去检查最近的<code>USE</code>语句指定的数据库是否在该参数指定的数据库中。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">USE sales;</div><div class="line">UPDATE prices.discounts SET percentage = percentage + 10;</div></pre></td></tr></table></figure></p>
+<p>该语句在参数为<code>--binlog-do-db=sales</code>的情况下<strong>会</strong>被记录进binlog的，虽然看起来不太能理解。<br>再举个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">USE prices;</div><div class="line">UPDATE sales.january SET amount=amount+1000;</div></pre></td></tr></table></figure></p>
+<p>该语句在参数为<code>--binlog-do-db=sales</code>的情况下是<strong>不会</strong>被记录进binlog的。<br><strong>Row-based logging</strong><br>日志会被严格限定在<code>db_name</code>所指定的数据库上，不再受<code>USE</code>的影响。  </p>
+<p>在跨数据的修改操作上，需要举一个具体的例子来加深说明<code>statement-based</code>和<code>row-based logging</code>两者的区别，假设初始参数为<code>binlog-do-db=db1</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">USE db1;</div><div class="line">UPDATE db1.table1 SET col1 = 10, db2.table2 SET col2 = 20;</div></pre></td></tr></table></figure></p>
+<p>这条操作<code>statement-based</code>的情况下，对两个表的<code>UPDATE</code>操作都被记录，如果是<code>row-based logging</code>，只有针对table1的操作会被记录。<br>现在假设更换默认数据库为db4<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">USE db4;</div><div class="line">UPDATE db1.table1 SET col1 = 10, db2.table2 SET col2 = 20;</div></pre></td></tr></table></figure></p>
+<p><code>statement-based</code>不会记录这条操作，而<code>row-based logging</code>则会记录table1的<code>UPDATE</code>操作日志。</p>
+<h3 id="2-2-binlog-ignore"><a href="#2-2-binlog-ignore" class="headerlink" title="2.2  --binlog-ignore"></a>2.2  <code>--binlog-ignore</code></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--binlog-ignore-db=db_name</div></pre></td></tr></table></figure>
+<p>这个参数看起来很好理解，但是要注意的是，<code>CREATE TABLE</code>和<code>ALTER TABLE</code>不会受其影响都一定会被写入log，一般这个参数影响的是<code>UPDATE</code>操作。  </p>
+<h3 id="2-3-binlog-format"><a href="#2-3-binlog-format" class="headerlink" title="2.3 --binlog-format"></a>2.3 <code>--binlog-format</code></h3><p>指定binlog使用的格式，可选：statement、row、mixed，具体参考下一篇日志</p>
+<blockquote>
+<p>更多的配置参数可以参考[1]中的官方说明。  </p>
+</blockquote>
+<h2 id="相关系统参数和配置"><a href="#相关系统参数和配置" class="headerlink" title="相关系统参数和配置"></a>相关系统参数和配置</h2><h3 id="sync-binlog"><a href="#sync-binlog" class="headerlink" title="sync_binlog"></a><code>sync_binlog</code></h3><p>binlog刷新到磁盘的时机跟sync_binlog参数相关，如果设置为0，则表示MySQL不控制binlog的刷新，由文件系统去控制它缓存的刷新，而如果设置为不为0的值则表示每sync_binlog次事务，MySQL调用文件系统的刷新操作刷新binlog到磁盘中。设为1是最安全的，在系统故障时最多丢失一个事务的更新，但是会对性能有所影响，一般情况下会设置为100或者0，牺牲一定的一致性来获取更好的性能。</p>
+<h3 id="expire-logs-days"><a href="#expire-logs-days" class="headerlink" title="expire_logs_days"></a><code>expire_logs_days</code></h3><p>指定binlog保留时间</p>
+<h3 id="清理binlog"><a href="#清理binlog" class="headerlink" title="清理binlog"></a>清理binlog</h3><p>要手动清理binlog可以通过指定binlog名字或者指定保留的日期  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">purge master logs to BINLOGNAME;</div><div class="line">purge master logs before DATE;</div></pre></td></tr></table></figure>
+<h3 id="查看binlog情况"><a href="#查看binlog情况" class="headerlink" title="查看binlog情况"></a>查看binlog情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SHOW MASTER LOGS;</div><div class="line"></div><div class="line">+------------------+-----------+</div><div class="line">| mysql-bin.000018 |       515 |</div><div class="line">| mysql-bin.000019 |       504 |</div><div class="line">| mysql-bin.000020 |       107 |</div><div class="line">+------------------+-----------+</div></pre></td></tr></table></figure>
+<p>第一列是binlog文件名，第二列是binlog文件大小</p>
+<h2 id="binlog和redo-undo-log的区别"><a href="#binlog和redo-undo-log的区别" class="headerlink" title="binlog和redo/undo log的区别"></a>binlog和redo/undo log的区别</h2><p>两者是完全不同的日志，主要有一下2个区别：</p>
+<ul>
+<li>层次不同。redo/undo log是innodb层维护的，而binlog是mysql server层维护的，跟采用何种引擎没有关系，记录的是所有引擎的更新操作的日志记录。</li>
+<li>记录内容不同。redo/undo日志记录的是每个页的修改情况，属于物理日志+逻辑日志结合的方式，目的是保证数据的一致性。binlog记录的都是事务操作内容，格式是二进制的。</li>
+</ul>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ol>
+<li><a href="http://dev.mysql.com/doc/refman/5.7/en/replication-options-binary-log.html" target="_blank" rel="external">mysql文档 18.1.6.4 Binary Logging Options and Variables</a></li>
+<li><a href="http://dev.mysql.com/doc/refman/5.7/en/binary-log.html" target="_blank" rel="external">mysql文档 6.4.4 The Binary Log</a>  </li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/02/13/mysql_binlog/" data-id="cizp5ffzi001uvrf9usnnvlzy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/">&laquo; __('prev')</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">__('next') &raquo;</a>
+  </nav>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/atomic/">atomic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/中间件/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/分布式/">分布式</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程/">多线程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/多线程系列/">多线程系列</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/日记/">日记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔试/">笔试</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/中间件/">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发/">并发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库/">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/日记/">日记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试/">笔试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔试面试/">笔试面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JVM/" style="font-size: 16px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/mysql/" style="font-size: 12px;">mysql</a> <a href="/tags/一致性协议/" style="font-size: 14px;">一致性协议</a> <a href="/tags/中间件/" style="font-size: 10px;">中间件</a> <a href="/tags/分布式/" style="font-size: 14px;">分布式</a> <a href="/tags/多线程/" style="font-size: 18px;">多线程</a> <a href="/tags/并发/" style="font-size: 18px;">并发</a> <a href="/tags/数据库/" style="font-size: 12px;">数据库</a> <a href="/tags/数据结构/" style="font-size: 12px;">数据结构</a> <a href="/tags/日记/" style="font-size: 10px;">日记</a> <a href="/tags/笔试/" style="font-size: 10px;">笔试</a> <a href="/tags/笔试面试/" style="font-size: 10px;">笔试面试</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/28/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/TSharding/">TSharding试用</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/22/ZAB2/">【一致性协议05】 ZAB协议详细介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/20/Linux进程&线程命令/">【Linux命令】照看好咱们的进程和线程</a>
+          </li>
+        
+          <li>
+            <a href="/2016/08/09/ZAB/">【一致性协议04】 ZAB协议概述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 zzzvvvxxxd<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
