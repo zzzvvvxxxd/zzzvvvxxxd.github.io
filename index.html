@@ -65,42 +65,40 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Future" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/02/28/hello-world/" class="article-date">
-  <time datetime="2017-02-28T03:06:48.000Z" itemprop="datePublished">2017-02-28</time>
+    <a href="/2017/03/03/Future/" class="article-date">
+  <time datetime="2017-03-03T11:16:16.000Z" itemprop="datePublished">2017-03-03</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/28/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <p>title: Future笔记<br>date: 2017-03-02 19:17:21<br>categories: Java,JDK</p>
+<h2 id="tags-Java-JDK"><a href="#tags-Java-JDK" class="headerlink" title="tags: [Java,JDK]"></a>tags: [Java,JDK]</h2><h2 id="1-JDK5"><a href="#1-JDK5" class="headerlink" title="1. JDK5+"></a>1. JDK5+</h2><ul>
+<li><code>Future</code> 只能通过轮询的方式进行查询</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Future</span>&lt;<span class="title">V</span>&gt; </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">cancel</span><span class="params">(<span class="keyword">boolean</span> mayInterruptIfRunning)</span></span>;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isCancelled</span><span class="params">()</span></span>;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isDone</span><span class="params">()</span></span>;</div><div class="line">  <span class="function">V <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-Guava"><a href="#2-Guava" class="headerlink" title="2. Guava"></a>2. Guava</h2><ul>
+<li><code>ListenableFuture</code>提供<code>addListener()</code>和<code>addCallback()</code>的方式进行回调</li>
+</ul>
+<p><code>ListenableFuture</code>继承自<code>Future</code>，可以通过<code>addListener</code>添加Listener</p>
+<p>Guava还提供了一些Util函数：</p>
+<ol>
+<li><code>addCallback</code>在某个<code>ListenableFuture</code>上添加Callback</li>
+<li><code>transform</code>可以把一个<code>ListenerFuture</code>通过一个Function变成另外一个ListenerFuture</li>
+</ol>
+<h2 id="3-JDK8"><a href="#3-JDK8" class="headerlink" title="3. JDK8"></a>3. JDK8</h2><ul>
+<li><code>CompleteableFuture</code>（提供了较为完整的<code>Future</code>支持）</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/28/hello-world/" data-id="cizp5ffz4001cvrf9vt30n4uu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/03/03/Future/" data-id="cj0azz2fz0004bhf95mcnx90v" class="article-share-link">Share</a>
       
       
     </footer>
@@ -152,7 +150,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/22/TSharding/" data-id="cizp5ffyd000hvrf93bko76v0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/22/TSharding/" data-id="cj0azz2gi000hbhf9n83pg0od" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/中间件/">中间件</a></li></ul>
@@ -233,7 +231,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/22/ZAB2/" data-id="cizp5ffyh000pvrf9ohos9uhz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/22/ZAB2/" data-id="cj0azz2gn000lbhf9qcr5wpkx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
@@ -293,7 +291,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/20/Linux进程&线程命令/" data-id="cizp5ffy6000bvrf954ng2ml9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/20/Linux进程&线程命令/" data-id="cj0azz2ga000bbhf9y9h3kcaw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
@@ -350,7 +348,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/09/ZAB/" data-id="cizp5ffyg000mvrf9bxk289iy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/09/ZAB/" data-id="cj0azz2h10011bhf9u2rprg4z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
@@ -484,7 +482,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/08/08/Paxos/" data-id="cizp5ffyb000evrf9j3ngnw7l" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/08/08/Paxos/" data-id="cj0azz2gg000ebhf9gq8lmv2p" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/一致性协议/">一致性协议</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
@@ -540,7 +538,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/07/22/DirectByteBuffer/" data-id="cizp5ffxt0001vrf9ajgbcyv0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/07/22/DirectByteBuffer/" data-id="cj0azz2g10005bhf9z4m3kfkh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
@@ -619,7 +617,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/07/21/稀疏文件和文件空洞/" data-id="cizp5ffzu002bvrf99zmp9pai" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/07/21/稀疏文件和文件空洞/" data-id="cj0azz2hx002abhf959r6b091" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
@@ -679,7 +677,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/06/22/mysql_binlog2/" data-id="cizp5ffzl001wvrf905o10d6i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/06/22/mysql_binlog2/" data-id="cj0azz2hk001qbhf9lplkiet9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
@@ -725,7 +723,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/05/12/霸面/" data-id="cizp5ffzz002nvrf9ctwsxlc9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/05/12/霸面/" data-id="cj0azz2i6002mbhf9whypltiz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日记/">日记</a></li></ul>
@@ -779,7 +777,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
     </div>
   </div>
 
@@ -792,7 +790,7 @@
       <ul>
         
           <li>
-            <a href="/2017/02/28/hello-world/">Hello World</a>
+            <a href="/2017/03/03/Future/">(no title)</a>
           </li>
         
           <li>

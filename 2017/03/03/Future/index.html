@@ -3,21 +3,30 @@
 <head>
   <meta charset="utf-8">
   
-  <title>阿里霸面的事 | zzzvvvxxxd</title>
+  <title>zzzvvvxxxd</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我一定要5年内进入阿里的中间件团队，再做一次infoq讲师今年4月12日的时候，我很郑重的对同学们说过这句话。今天是5月12日，恰好一个月。
-今天是阿里实习校招的上海站。距离我之前实习内推失败也有1月有余。">
+  <meta name="description" content="title: Future笔记date: 2017-03-02 19:17:21categories: Java,JDK
+tags: [Java,JDK]1. JDK5+
+Future 只能通过轮询的方式进行查询
+
+123456interface Future&amp;lt;V&amp;gt; &amp;#123;  boolean cancel(boolean mayInterruptIfRunning);  bool">
 <meta property="og:type" content="article">
-<meta property="og:title" content="阿里霸面的事">
-<meta property="og:url" content="http://yoursite.com/2016/05/12/霸面/index.html">
+<meta property="og:title" content="zzzvvvxxxd">
+<meta property="og:url" content="http://yoursite.com/2017/03/03/Future/index.html">
 <meta property="og:site_name" content="zzzvvvxxxd">
-<meta property="og:description" content="我一定要5年内进入阿里的中间件团队，再做一次infoq讲师今年4月12日的时候，我很郑重的对同学们说过这句话。今天是5月12日，恰好一个月。
-今天是阿里实习校招的上海站。距离我之前实习内推失败也有1月有余。">
-<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta property="og:description" content="title: Future笔记date: 2017-03-02 19:17:21categories: Java,JDK
+tags: [Java,JDK]1. JDK5+
+Future 只能通过轮询的方式进行查询
+
+123456interface Future&amp;lt;V&amp;gt; &amp;#123;  boolean cancel(boolean mayInterruptIfRunning);  bool">
+<meta property="og:updated_time" content="2017-03-03T11:29:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="阿里霸面的事">
-<meta name="twitter:description" content="我一定要5年内进入阿里的中间件团队，再做一次infoq讲师今年4月12日的时候，我很郑重的对同学们说过这句话。今天是5月12日，恰好一个月。
-今天是阿里实习校招的上海站。距离我之前实习内推失败也有1月有余。">
+<meta name="twitter:title" content="zzzvvvxxxd">
+<meta name="twitter:description" content="title: Future笔记date: 2017-03-02 19:17:21categories: Java,JDK
+tags: [Java,JDK]1. JDK5+
+Future 只能通过轮询的方式进行查询
+
+123456interface Future&amp;lt;V&amp;gt; &amp;#123;  boolean cancel(boolean mayInterruptIfRunning);  bool">
   
     <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml">
   
@@ -70,64 +79,52 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-霸面" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Future" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/05/12/霸面/" class="article-date">
-  <time datetime="2016-05-12T08:12:11.000Z" itemprop="datePublished">2016-05-12</time>
+    <a href="/2017/03/03/Future/" class="article-date">
+  <time datetime="2017-03-03T11:16:16.000Z" itemprop="datePublished">2017-03-03</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/日记/">日记</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      阿里霸面的事
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>我一定要5年内进入阿里的中间件团队，再做一次infoq讲师<br>今年4月12日的时候，我很郑重的对同学们说过这句话。今天是5月12日，恰好一个月。</p>
-<p>今天是阿里实习校招的上海站。<br>距离我之前实习内推失败也有1月有余。</p>
-</blockquote>
+        <p>title: Future笔记<br>date: 2017-03-02 19:17:21<br>categories: Java,JDK</p>
+<h2 id="tags-Java-JDK"><a href="#tags-Java-JDK" class="headerlink" title="tags: [Java,JDK]"></a>tags: [Java,JDK]</h2><h2 id="1-JDK5"><a href="#1-JDK5" class="headerlink" title="1. JDK5+"></a>1. JDK5+</h2><ul>
+<li><code>Future</code> 只能通过轮询的方式进行查询</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Future</span>&lt;<span class="title">V</span>&gt; </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">cancel</span><span class="params">(<span class="keyword">boolean</span> mayInterruptIfRunning)</span></span>;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isCancelled</span><span class="params">()</span></span>;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isDone</span><span class="params">()</span></span>;</div><div class="line">  <span class="function">V <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-Guava"><a href="#2-Guava" class="headerlink" title="2. Guava"></a>2. Guava</h2><ul>
+<li><code>ListenableFuture</code>提供<code>addListener()</code>和<code>addCallback()</code>的方式进行回调</li>
+</ul>
+<p><code>ListenableFuture</code>继承自<code>Future</code>，可以通过<code>addListener</code>添加Listener</p>
+<p>Guava还提供了一些Util函数：</p>
+<ol>
+<li><code>addCallback</code>在某个<code>ListenableFuture</code>上添加Callback</li>
+<li><code>transform</code>可以把一个<code>ListenerFuture</code>通过一个Function变成另外一个ListenerFuture</li>
+</ol>
+<h2 id="3-JDK8"><a href="#3-JDK8" class="headerlink" title="3. JDK8"></a>3. JDK8</h2><ul>
+<li><code>CompleteableFuture</code>（提供了较为完整的<code>Future</code>支持）</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/05/12/霸面/" data-id="cj0azz2i6002mbhf9whypltiz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/03/03/Future/" data-id="cj0azz2fz0004bhf95mcnx90v" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日记/">日记</a></li></ul>
-
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2016/06/22/mysql_binlog2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          【mysql】binlog详解(2) binlog格式
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/04/06/算法-trie树/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2016/08/22/TSharding/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Trie树</div>
+      <div class="article-nav-title">TSharding试用</div>
     </a>
   
 </nav>
