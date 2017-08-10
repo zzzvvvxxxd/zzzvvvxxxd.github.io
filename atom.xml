@@ -1,0 +1,1056 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>zzzvvvxxxd</title>
+  <subtitle>最快的外卖小哥</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2017-08-10T03:42:22.000Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>zzzvvvxxxd</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Future笔记</title>
+    <link href="http://yoursite.com/2017/03/02/Future/"/>
+    <id>http://yoursite.com/2017/03/02/Future/</id>
+    <published>2017-03-02T11:17:21.000Z</published>
+    <updated>2017-08-10T03:42:22.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-JDK5"><a href="#1-JDK5" class="headerlink" title="1. JDK5+"></a>1. JDK5+</h2><ul>
+<li><code>Future</code> 只能通过轮询的方式进行查询</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Future</span>&lt;<span class="title">V</span>&gt; </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">cancel</span><span class="params">(<span class="keyword">boolean</span> mayInterruptIfRunning)</span></span>;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isCancelled</span><span class="params">()</span></span>;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isDone</span><span class="params">()</span></span>;</div><div class="line">  <span class="function">V <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-Guava"><a href="#2-Guava" class="headerlink" title="2. Guava"></a>2. Guava</h2><ul>
+<li><code>ListenableFuture</code>提供<code>addListener()</code>和<code>addCallback()</code>的方式进行回调</li>
+</ul>
+<p><code>ListenableFuture</code>继承自<code>Future</code>，可以通过<code>addListener</code>添加Listener</p>
+<p>Guava还提供了一些Util函数：</p>
+<ol>
+<li><code>addCallback</code>在某个<code>ListenableFuture</code>上添加Callback</li>
+<li><code>transform</code>可以把一个<code>ListenerFuture</code>通过一个Function变成另外一个ListenerFuture</li>
+</ol>
+<h2 id="3-JDK8"><a href="#3-JDK8" class="headerlink" title="3. JDK8"></a>3. JDK8</h2><ul>
+<li><code>CompleteableFuture</code>（提供了较为完整的<code>Future</code>支持）</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;1-JDK5&quot;&gt;&lt;a href=&quot;#1-JDK5&quot; class=&quot;headerlink&quot; title=&quot;1. JDK5+&quot;&gt;&lt;/a&gt;1. JDK5+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Future&lt;/code&gt; 只能通过轮询的方式进行查询&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Java,JDK" scheme="http://yoursite.com/categories/Java-JDK/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="JDK" scheme="http://yoursite.com/tags/JDK/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【一致性协议05】 ZAB协议详细介绍</title>
+    <link href="http://yoursite.com/2016/08/22/ZAB2/"/>
+    <id>http://yoursite.com/2016/08/22/ZAB2/</id>
+    <published>2016-08-21T17:26:47.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一、消息广播"><a href="#一、消息广播" class="headerlink" title="一、消息广播"></a>一、消息广播</h2><h3 id="1-1-类似二阶段提交的消息广播"><a href="#1-1-类似二阶段提交的消息广播" class="headerlink" title="1.1 类似二阶段提交的消息广播"></a>1.1 类似二阶段提交的消息广播</h3><p>ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于<code>2PC</code>。针对客户端的事务请求，Leader服务器会为其是生成对应的事务<code>Proposal</code>，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。<br><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD.JPG" alt="ZAB协议消息广播流程示意图"></p>
+<p>和<code>2PC</code>略有不同，这里的二阶段提交过程移除了中断（abort）逻辑。所有的Follower要么正常反馈，要么就抛弃Leader服务器。同时ZAB协议将二阶段提交中的中断逻辑移除意味着我们可以在过半的Follower服务器已经反馈<code>Ack</code>之后就开始提交<code>Proposal</code>了，而不需要等待集群中的所有Follower服务器都反馈响应。    </p>
+<p>在这种简化的二阶段提交模型下，无法处理Leader服务器崩溃带来的数据不一致问题，因此引入了<strong>崩溃回复模式</strong>。  </p>
+<h3 id="1-2-ZXID"><a href="#1-2-ZXID" class="headerlink" title="1.2 ZXID"></a>1.2 ZXID</h3><p>Leader会为每个事物Proposal分配一个全局唯一的单调递增ID：<code>ZXID</code>（事务ID）。由于ZAB协议要保证每一个消息严格的因果关系，因此必须将每一个事务Proposal按照其<code>ZXID</code>先后顺序来进行排序与处理：</p>
+<h3 id="1-3-具体流程"><a href="#1-3-具体流程" class="headerlink" title="1.3 具体流程"></a>1.3 具体流程</h3><ul>
+<li>Leader为每一个Follower服务器分配一个单独的队列，然后将需要广播的事务Proposal依次放入队列中，并且根据FIFO策略进行消息发送。</li>
+<li>Follower接受到Proposal之后，都会首先将其以事务日志的形式写入到本地磁盘中去，并且在成功写入后反馈给Leader一个Ack</li>
+<li>当接收到超过半数Follower反馈Ack之后，就会广播一个Commit消息给所有Follower来通知事务提交，同时Leader自身提交该事务</li>
+<li>Follower收到<code>commit</code>之后进行事务提交</li>
+</ul>
+<h2 id="二、崩溃恢复"><a href="#二、崩溃恢复" class="headerlink" title="二、崩溃恢复"></a>二、崩溃恢复</h2><h3 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h3><ul>
+<li>Leader崩溃</li>
+<li>网络原因导致Leader失去与过半Follower的联系</li>
+</ul>
+<p>则进入崩溃恢复模式。恢复过程结束后，还需要选举出新的Leader。Leader选举算法满足：</p>
+<ul>
+<li>确保能够快速地选举出新的Leader</li>
+<li>Leader自身知道已经被选举为Leader</li>
+<li>让集群中其他的机器快速感知到新的Leader服务器</li>
+</ul>
+<h3 id="2-2-基本特性"><a href="#2-2-基本特性" class="headerlink" title="2.2 基本特性"></a>2.2 基本特性</h3><p>ZAB协议规定：</p>
+<blockquote>
+<p>如果一个事务Proposal在一台机器上被处理成功，那么应该在所有的机器上都被处理成功，哪怕机器出现故障崩溃。</p>
+</blockquote>
+<p>在崩溃恢复过程中可能会出现两种数据不一致的隐患：</p>
+<h4 id="2-2-1-ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交"><a href="#2-2-1-ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交" class="headerlink" title="2.2.1 ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交"></a>2.2.1 ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交</h4><p><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D1.JPG" alt="崩溃恢复1"><br>Leader(Server1)已经得到过半的<code>Ack</code>反馈，但是在它将<code>Commit</code>消息发送给所有Follower之前，Leader挂了。<br>如上图，ZAB需要确保事务P2最终能够在所有的服务器上都被提交成功，否则将出现不一致。  </p>
+<h4 id="2-2-2-ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务"><a href="#2-2-2-ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务" class="headerlink" title="2.2.2 ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务"></a>2.2.2 ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务</h4><p><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D2.JPG" alt="崩溃恢复2"><br>如果在崩溃恢复过程中出现一个需要被丢弃的提案，那么在崩溃恢复后需要跳过该事物。<br>如上图，Leader(Server1)在提出P3后崩溃退出，其他机器都没有收到P3，于是当Server1恢复后，ZAB需要确保其丢弃事务P3。   </p>
+<h3 id="2-3-选举算法"><a href="#2-3-选举算法" class="headerlink" title="2.3 选举算法"></a>2.3 选举算法</h3><p>以上决定了ZAB需要设计这一个Leader算法：</p>
+<blockquote>
+<p>能够确保提交已经被Leader提交的事务Proposal，丢弃已经被跳过的Proposal</p>
+</blockquote>
+<p>选举出来的Leader具有最高<code>ZXID</code>，保证了新的Leader一定具有所有已经提交的提案，也省去了检查Proposal的提交和丢弃的工作。  </p>
+<h2 id="三、数据同步"><a href="#三、数据同步" class="headerlink" title="三、数据同步"></a>三、数据同步</h2><h3 id="3-1-正常的数据恢复流程"><a href="#3-1-正常的数据恢复流程" class="headerlink" title="3.1 正常的数据恢复流程"></a>3.1 正常的数据恢复流程</h3><p>Leader服务器会为每个Follower服务器准备一个队列，并将那些没有被各Follower服务器同步的事务以Proposal消息的形式逐个发送，并紧跟一个commit消息。等到Follower服务器将所有的尚未同步事务Proposal都从Leader服务器上同步过来并成功应用到内存数据库后，Leader服务器就会将该Follower加入到可用Follower列表中，开始后续流程。  </p>
+<h3 id="3-2-如何处理需要被丢弃的事务Proposal"><a href="#3-2-如何处理需要被丢弃的事务Proposal" class="headerlink" title="3.2 如何处理需要被丢弃的事务Proposal"></a>3.2 如何处理需要被丢弃的事务Proposal</h3><p><code>ZXID</code>:<br>64位数字</p>
+<ul>
+<li>低32位看成是一个简单的递增计数器，针对每一个客户端请求，Leader每生成一个Proposal就会进行加1</li>
+<li>高32位代表Leader周期epoch的编号，每当选举产生一个新的Leader，epoch+1，低32位同时恢复为0</li>
+</ul>
+<p>基于这样的策略，当一个包含了上一个Leader周期中没有提交的事务Proposal的服务器启动时，其肯定无法成为Leader，则以Follower角色连上当前的Leader服务器。Leader会根据自己服务器上最后提交的Proposal和Follower的Proposal进行比较，Leader会要求Follower进行一定的回退操作，回退到最后一个确认已经被过半机器提交的事务。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;一、消息广播&quot;&gt;&lt;a href=&quot;#一、消息广播&quot; class=&quot;headerlink&quot; title=&quot;一、消息广播&quot;&gt;&lt;/a&gt;一、消息广播&lt;/h2&gt;&lt;h3 id=&quot;1-1-类似二阶段提交的消息广播&quot;&gt;&lt;a href=&quot;#1-1-类似二阶段提交的消息广播&quot; cla
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【Linux命令】照看好咱们的进程和线程</title>
+    <link href="http://yoursite.com/2016/08/20/Linux%E8%BF%9B%E7%A8%8B&amp;%E7%BA%BF%E7%A8%8B%E5%91%BD%E4%BB%A4/"/>
+    <id>http://yoursite.com/2016/08/20/Linux进程&amp;线程命令/</id>
+    <published>2016-08-20T09:36:53.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="1-查找占CPU最多的线程"><a href="#1-查找占CPU最多的线程" class="headerlink" title="1. 查找占CPU最多的线程"></a>1. 查找占CPU最多的线程</h3><p>步骤1： 查找出占用CPU最高的java线程pid<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">top -Hp 18207   #查看运行进程18207内所有线程的CPU消耗情况</div></pre></td></tr></table></figure></p>
+<p>可以找到<code>%CPU</code>项最高的一个pid，就是该线程，假设pid是18250，将其转换为16进制：0x474a    </p>
+<p>步骤2： jstack查看各个线程栈<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstack 18207</div></pre></td></tr></table></figure></p>
+<p>找到nid为0x474a的线程栈信息，其中包含了该线程的name，OK定位到了   </p>
+<h3 id="2-查看一个进程运行了多久"><a href="#2-查看一个进程运行了多久" class="headerlink" title="2. 查看一个进程运行了多久"></a>2. 查看一个进程运行了多久</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ps -p &#123;PID-HERE&#125; -o etime</div><div class="line">ps -p &#123;PID-HERE&#125; -o etimes</div><div class="line">ps -p &#123;PID-HERE&#125; -o etime=</div><div class="line">ps -p &#123;PID-HERE&#125; -o etimes=</div></pre></td></tr></table></figure>
+<p>实际上可以打印的信息有很多：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -p 6176 -o pid,cmd,etime,uid,gid</div></pre></td></tr></table></figure></p>
+<h3 id="3-统计一个进程的线程数"><a href="#3-统计一个进程的线程数" class="headerlink" title="3. 统计一个进程的线程数"></a>3. 统计一个进程的线程数</h3><p>方法1： <code>ps</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps hH p &lt;pid&gt; | wc -l</div></pre></td></tr></table></figure></p>
+<p>方法2：<code>/proc</code><br>proc 伪文件系统，它驻留在 /proc 目录，这是最简单的方法来查看任何活动进程的线程数。 /proc 目录以可读文本文件形式输出，提供现有进程和系统硬件相关的信息如 CPU、中断、内存、磁盘等等<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat /proc/&lt;pid&gt;/status</div></pre></td></tr></table></figure></p>
+<p>上面的命令将显示进程 <pid> 的详细信息，包括过程状态（例如, sleeping, running)，父进程 PID，UID，GID，使用的文件描述符的数量，以及上下文切换的数量</pid></p>
+<h3 id="4-查看某个进程的线程"><a href="#4-查看某个进程的线程" class="headerlink" title="4. 查看某个进程的线程"></a>4. 查看某个进程的线程</h3><p>方法1：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -T -p &lt;pid&gt;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><code>SID</code>栏表示线程ID，而<code>CMD</code>栏则显示了线程名称</p>
+</blockquote>
+<p>方法2：<br><code>top</code>可以使用<code>-H</code>开启线程查看模式，如果要查看特定进程的线程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">top -H -p &lt;pid&gt;</div></pre></td></tr></table></figure></p>
+<p>方法3：<br>要在<code>htop</code>中启用线程查看，请开启<code>htop</code>，然后按<code>&lt;F2&gt;</code>来进入<code>htop</code>的设置菜单。选择“设置”栏下面的“显示选项”，然后开启<code>树状视图</code>和<code>显示自定义线程名</code>选项。按<code>&lt;F10&gt;</code>退出设置<br>Htop的具体使用后续会专门写一篇记录一下。  </p>
+<h3 id="5-查看进程被运行在哪个CPU上"><a href="#5-查看进程被运行在哪个CPU上" class="headerlink" title="5. 查看进程被运行在哪个CPU上"></a>5. 查看进程被运行在哪个CPU上</h3><p>方法1：<code>taskset</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">taskset -c -p &lt;pid&gt;</div></pre></td></tr></table></figure></p>
+<p>方法2：<code>ps</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ps -o pid,psr,comm -p pid</div></pre></td></tr></table></figure></p>
+<p>方法3：<code>top</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">top -p &lt;pid&gt; # 好处是可以持续观察</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;1-查找占CPU最多的线程&quot;&gt;&lt;a href=&quot;#1-查找占CPU最多的线程&quot; class=&quot;headerlink&quot; title=&quot;1. 查找占CPU最多的线程&quot;&gt;&lt;/a&gt;1. 查找占CPU最多的线程&lt;/h3&gt;&lt;p&gt;步骤1： 查找出占用CPU最高的java线程pi
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【一致性协议04】 ZAB协议概述</title>
+    <link href="http://yoursite.com/2016/08/09/ZAB/"/>
+    <id>http://yoursite.com/2016/08/09/ZAB/</id>
+    <published>2016-08-09T08:34:47.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>所有事务请求必须由一个全局唯一的服务器来协调处理,这样的服务器被成为Leader服务器,而余下的服务器则成为Follower服务器.<br>Leader服务器负责将一个客户端请求转换成一个事务Proposal(提议),并分发给所有的Follower服务器.之后Leader服务器需要等待所有Follower服务器的反馈,一旦超过半数的Follower进行了正确反馈后,那么Leader就会向所有的Follower服务器分发commit消息,要求将前一个Proposal进行提交</p>
+<p>整个ZAB协议主要包括消息广播和崩溃恢复两个过程，进一步可以分为三个阶段，分别是：</p>
+<ul>
+<li>发现 <code>Discovery</code></li>
+<li>同步 <code>Synchronization</code></li>
+<li>广播 <code>Broadcast</code><br>组成ZAB协议的每一个分布式进程，都会循环执行这三个阶段，将这样一个循环称为一个主进程周期。</li>
+</ul>
+<h3 id="整个服务框架在启动过程中"><a href="#整个服务框架在启动过程中" class="headerlink" title="整个服务框架在启动过程中"></a>整个服务框架在启动过程中</h3><h3 id="Leader服务器出现网络中断、崩溃退出与重启等异常情况"><a href="#Leader服务器出现网络中断、崩溃退出与重启等异常情况" class="headerlink" title="Leader服务器出现网络中断、崩溃退出与重启等异常情况"></a>Leader服务器出现网络中断、崩溃退出与重启等异常情况</h3><p>ZAB协议就会进入崩溃恢复模式，选举新的Leader服务器。当选举产生新的Leader服务器，同时集群中已有过半的机器与该Leader完成了状态同步之后，ZAB就会退出恢复模式<br>状态同步是指数据同步，用来保证集群有过半的机器能够和Leader服务器数据状态保持一致。   </p>
+<blockquote>
+<p>集群中有过半的Follower和Leader完成了状态同步，那么服务框架就可以进入消息广播模式。</p>
+</blockquote>
+<h3 id="新加入一台机器"><a href="#新加入一台机器" class="headerlink" title="新加入一台机器"></a>新加入一台机器</h3><p>当一台遵守ZAB协议的服务器启动后加入到集群中，如果此时集群中已经存在一个Leader服务器在负责进行消息广播，那么新加入的服务器会自觉进入数据恢复模式：<br>    找到Leader所在的服务器，与其进行数据同步，然后一起参与到消息广播流程中。</p>
+<h3 id="Leader服务器"><a href="#Leader服务器" class="headerlink" title="Leader服务器"></a>Leader服务器</h3><p>Leader在收到客户端的事务请求后，会生成对应的Proposal并发起一轮广播协议；而如果集群中其他机器接收到客户端的事务请求，那么这些非Leader服务器首先会将这个事务请求转发给Leader服务器。   </p>
+<h3 id="消息广播-–-gt-崩溃恢复模式"><a href="#消息广播-–-gt-崩溃恢复模式" class="headerlink" title="消息广播 –&gt; 崩溃恢复模式"></a>消息广播 –&gt; 崩溃恢复模式</h3><p>（Leader服务器出现崩溃退出或机器重启，亦或时集群中已经不存在过半的服务器与Leader正常通信）<br>这种情况下，在开始新一轮的原子广播事务之前，所有进程需要使用崩溃恢复协议来让彼此达到一致的状态，于是ZAB的流程就会从消息广播模式进入到崩溃恢复模式。</p>
+<h3 id="选举Leader"><a href="#选举Leader" class="headerlink" title="选举Leader"></a>选举Leader</h3><p>一个进程要成为新的Leader，必须获得过半的支持。进入崩溃恢复模式后，只要集群中存在过半的机器能够彼此通信，那么就可以产生一个新的Leader，进入消息广播模式<br>例子：<br>一个由3台机器组成的ZAB服务，通常由一个Leader，2个Follower组成。某一个时刻，其中一个Follower服务器挂了，整个ZAB不会中断服务，因为Leader服务器依然能够获取过半机器（包括自己）的支持</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;所有事务请求必须由一个全局唯一的服务器来协调处理,这样的服务器被成为Leader服务器,而余下的服务器则成为Follower服务器.&lt;br&gt;Leader服务器负责将一个客户端请求转换成一个事务Proposal(提议),并分发给所有的Follower服务器.之后Leader服
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【一致性协议03】 Paxos和分布式系统</title>
+    <link href="http://yoursite.com/2016/08/08/Paxos/"/>
+    <id>http://yoursite.com/2016/08/08/Paxos/</id>
+    <published>2016-08-08T13:43:21.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="资源汇总"><a href="#资源汇总" class="headerlink" title="资源汇总"></a>资源汇总</h2><ul>
+<li><a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/paxos-simple.pdf" target="_blank" rel="external">Paxos Made Simple</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4MzYxMjEwMg==&amp;mid=203432378&amp;idx=1&amp;sn=34d280eb89d6bad352fdbbf856d86c99#rd" target="_blank" rel="external">使用Basic-Paxos协议的日志同步与恢复</a></li>
+<li><a href="http://drmingdrmer.github.io/tech/distributed/2015/11/11/paxos-slide.html" target="_blank" rel="external">可靠分布式系统基础 Paxos 的直观解释</a></li>
+<li><a href="http://www.tudou.com/programs/view/e8zM8dAL6hM/" target="_blank" rel="external">paxos和分布式系统(视频)</a></li>
+</ul>
+<h2 id="Paxos和分布式存储系统（问题定义）"><a href="#Paxos和分布式存储系统（问题定义）" class="headerlink" title="Paxos和分布式存储系统（问题定义）"></a>Paxos和分布式存储系统（问题定义）</h2><p>Paxos用来确定一个不可变变量的取值</p>
+<ul>
+<li>取值可以是任意二进制数据</li>
+<li>一旦确定将不再更改，并且可以被获取到（不可变性、可读取性）</li>
+</ul>
+<p>在分布式存储系统中应用Paxos</p>
+<ul>
+<li>在分布式存储系统中，数据本身可变，采用多部分进行存储</li>
+<li>多个副本的更新操作序列<code>[op1, op2, op3, ... , opn]</code>是相同的、不变的。</li>
+<li>用Paxos依次来确定不可变变量<code>opi</code>的取值（即第i个操作时什么）</li>
+<li>每确定完Opi之后，让各个数据副本执行<code>opi</code></li>
+</ul>
+<p>将问题转换为，设计一个系统，来存储名称为var的变量</p>
+<blockquote>
+<ul>
+<li>系统内部由多个<code>Acceptor</code>组成，负责存储和管理<code>var</code>变量</li>
+<li>外部有多个<code>proposer</code>机器任意并发调用API，向系统提交不同的<code>var</code>取值</li>
+<li>var可以是任意二进制数据</li>
+<li>系统对外的API库接口为：<ul>
+<li><code>propose(var, V)</code>返回<code>&lt;ok, f&gt;</code>或者<code>&lt;error&gt;</code>（f是系统内部已经确定的取值，如果propose设置成功则f为V，否则为其他<code>proposer</code>设置成功的结果）</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>系统要保证var的取值满足一致性</p>
+<ul>
+<li>如果<code>var</code>的取值没有确定，则var的取值为<code>null</code></li>
+<li>一旦<code>var</code>的取值被确定，则不可更改。并且一直可以获取到这个值</li>
+</ul>
+<p>系统要满足一定的容错特性</p>
+<ul>
+<li>可以容忍任意<code>proposer</code>机器出现故障</li>
+<li>可以容忍少数<code>Acceptor</code>故障（半数以下）</li>
+</ul>
+<p>暂时不考虑：</p>
+<ul>
+<li>网络分化</li>
+<li><code>Acceptor</code>故障会丢失<code>var</code></li>
+</ul>
+<h2 id="难点"><a href="#难点" class="headerlink" title="难点"></a>难点</h2><p>分布式环境下确定一个不可变变量的难点有：</p>
+<ul>
+<li>管理多个<code>Proposer</code>的并发执行</li>
+<li>保证<code>var</code>变量的不可变性</li>
+<li>容忍任意<code>Proposer</code>机器故障</li>
+<li>容忍半数以下<code>Acceptor</code>机器故障</li>
+</ul>
+<h2 id="方案1"><a href="#方案1" class="headerlink" title="方案1"></a>方案1</h2><p>先考虑由单个<code>Acceptor</code>组成，通过类似<strong>互斥锁机制</strong>来管理并发的<code>Proposer</code>运行</p>
+<ul>
+<li><code>Proposer</code>首相向<code>Acceptor</code>申请<code>Acceptor</code>的互斥访问权限，然后才能请求<code>Acceptor</code>接受自己的取值</li>
+<li><code>Acceptor</code>给<code>Proposer</code>发放互斥访问权，谁申请到互斥访问权，就接受谁提交的值</li>
+</ul>
+<p>这样就让<code>Proposer</code>按照获取互斥访问权的顺序依次访问<code>Acceptor</code>，一旦<code>Acceptor</code>接收了某个<code>Proposer</code>的取值，则认为<code>var</code>取值被确定<br>，其他<code>Proposer</code>不再更改。</p>
+<p>基于互斥访问权的<code>Acceptor</code>的实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Acceptor保存变量var和一个互斥锁lock</div><div class="line"></div><div class="line">Acceptor::prepare():</div><div class="line">    加互斥锁，给予var的互斥访问权，并返回当前的var取值f</div><div class="line"></div><div class="line">Acceptor::relaese():</div><div class="line">    解互斥锁，收回var的互斥访问权</div><div class="line"></div><div class="line">Acceptor::acceptor(var, V)</div><div class="line">    如果已经加锁，并且var没有取值，则设置var为V，并且释放锁</div></pre></td></tr></table></figure></p>
+<p>Proposer(var, V)的两阶段实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">第一阶段：通过Acceptor::prepare()获取互斥访问权和当前var的取值</div><div class="line">    如果不能，返回&lt;error&gt;（锁被其他Proposer占用）</div><div class="line"></div><div class="line">第二阶段：根据当前var的取值f，选择执行</div><div class="line">    如果f为null，则通过Acceptor::accept(var, V)提交数据V</div><div class="line">    如果f不会null，则通过Acceptor::release()释放访问权，返回&lt;ok,f&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>缺陷</strong>：</p>
+<blockquote>
+<p>如果Proposer在释放互斥锁之前发生故障，会导致系统陷入死锁。（不能容忍任何Proposer机器故障）</p>
+</blockquote>
+<h2 id="方案2"><a href="#方案2" class="headerlink" title="方案2"></a>方案2</h2><p>引入抢占式访问权<br><code>Acceptor</code>可以让某个<code>Proposer</code>获取到的访问权失效，不再接收它的访问。之后，可以将访问权交给其他<code>Proposer</code>，让其他<code>Proposer</code>访问<code>Acceptor</code><br><code>Proposer</code>向<code>Acceptor</code>申请访问权时，指定编号<code>epoch</code>，并认为越大的<code>epoch</code>值越新，获取到访问权后，才能向<code>Acceptor</code>提交值。<br><code>Acceptor</code>采取<strong>喜新厌旧</strong>原则：</p>
+<ul>
+<li>一旦接收到更新的<code>epoch</code>申请，马上让之前的旧<code>epoch</code>访问权限失效，不再接收它们提交的取值</li>
+<li>给新的<code>epoch</code>发放访问权，只接受新<code>epoch</code>提交的取值</li>
+</ul>
+<p>也就是新的<code>epoch</code>可以抢占旧的<code>epoch</code>，为了保持一致性，不同<code>epoch</code>的<code>Proposer</code>之间采<strong><em>后者认同前者</em></strong>的原则。</p>
+<ol>
+<li>肯定旧的<code>epoch</code>无法生成确定性取值时，新的<code>epoch</code>会提交自己的value，不会冲突</li>
+<li>一旦旧<code>epoch</code>形成了确定性取值，新的<code>epoch</code>可以获取到该值，并会认同，而不会破坏</li>
+</ol>
+<p>基于抢占式访问权的<code>Acceptor的实现</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Acceptor保存的状态</div><div class="line">    当前var的取值&lt;accepted_epoch, accepted_value&gt;</div><div class="line">    最新发放访问权的epoch(lastest_prepared_epoch)</div><div class="line"></div><div class="line">Acceptor::prepare(epoch)</div><div class="line">    只接受比latest_prepared_epoch更大的epoch，并给予访问权</div><div class="line">    记录latest_prepared_epoch = epoch；返回当前var取值</div><div class="line"></div><div class="line">Acceptor::accept(vae, prepared_epoch, V)</div><div class="line">    验证latest_prepared_epoch == prepared_epoch,如果不等则说明已经有一个更新的epoch抢占了访问权</div><div class="line">    设置var的取值&lt;accepted_epoch, accepted_value&gt; = &lt;prepared_epoch, V&gt;</div></pre></td></tr></table></figure></p>
+<p>Propose(var, V)的两阶段实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">第一阶段：获取epoch轮次的访问权和当前var的取值</div><div class="line">    简单选取当前时间戳为epoch，通过Acceptor::prepare(epoch)，获取epoch轮次的访问权和当前的var</div><div class="line">    如果不能获取返回&lt;error&gt;，Proposer运行失效</div><div class="line"></div><div class="line">第二阶段：采用&quot;后者认同前者&quot;原则执行</div><div class="line">    1. 如果var的取值为null，则肯定旧epoch无法生成确定性取值，则通过Acceptor::accept(var, epoch, V)提交数据。</div><div class="line">       成功后返回&lt;ok, V&gt;</div><div class="line">       如果accept失败，则返回&lt;error&gt;(被新的epoch抢占，或者Acceptor故障)</div><div class="line">    2. 如果var取值存在，则此确定值肯定是确定性取值，此时认同它不再更改，直接返回&lt;ok, accepted_value&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>总结</strong>：<br>基于抢占式访问权的核心思想让Proposer将epoch递增的顺序抢占式的依次运行，后者会认同前者。<br>【优点】：<br>可以避免方案一种Proposer故障带来的死锁问题，并且仍可以保证var取值的一致性<br>【缺点】：<br>单点问题任然存在</p>
+<h2 id="Paxos"><a href="#Paxos" class="headerlink" title="Paxos"></a>Paxos</h2><p>Paxos就是在方案二的基础上，试图解决<code>Acceptor</code>的单点问题，引入了多<code>Acceptor</code>。仍然采用喜新厌旧的原则，但是<br>因为引入了多个<code>Acceptor</code>，则不再简单地”后者认同前者”，还采用了”少数服从多数”原则：</p>
+<blockquote>
+<p>一旦某个epoch的取值f被半数以上的Acceptor接受，则认为此var的取值确定为f，不再更改。</p>
+</blockquote>
+<p>Paxos中的<code>Acceptor</code>实现相较方案二保持不变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Propose(var, V)第一阶段： 选定epoch，获取epoch访问权和对应的var取值</div><div class="line">    获取半数以上Acceptor的访问权和对应一组var取值</div><div class="line">    和方案二一致</div><div class="line"></div><div class="line">Propse(var, V)第二阶段： 采用后者服从前者的原则</div><div class="line">    # 在肯定旧epoch无法生成确定性取值时，新的epoch会提交自己的取值，不会冲突</div><div class="line">    # 一旦旧epoch形成确定性取值，新的epoch肯定可以获取到此取值，并且会认同此取值，不会破坏</div><div class="line">    1. 如果获取的var都为空，则旧epoch无法形成确定性取值，此时努力使&lt;epoch, V&gt;成为确定性取值</div><div class="line">        * 向epoch对应的所有Acceptor提交取值&lt;epoch, V&gt;</div><div class="line">        * 如果收到半数以上的成功，则返回&lt;ok, V&gt;</div><div class="line">        * 否则返回&lt;error&gt;（新epoch抢占或者Acceptor故障）</div><div class="line">    2. 如果获取的var取值存在，直接认同最大accepted_epoch对应的取值f，努力使&lt;epoch, f&gt;成为确定性取值</div><div class="line">        * 如果f出现半数以上，则说明f已经是确定性取值，直接返回&lt;ok, f&gt;</div><div class="line">        * 否则，向epoch对应的所有Acceptor提交取值&lt;epoch, f&gt;</div></pre></td></tr></table></figure>
+<p><strong>总结</strong>：<br>核心思想：在抢占式访问（方案2）的基础上引入了多Acceptor，保证一个epoch，只有一个Proposer运行，Proposer按照递增的<br>次序运行。<br>新epoch的Proposer采用后者认同前者的思路运行。</p>
+<blockquote>
+<p>Paxos算法可以满足容错性要求。</p>
+<ul>
+<li>半数以下的Acceptor出现故障时，存货的Acceptor依然可以生成var的确定性取值</li>
+<li>一旦var的值被确定，即使出现半数以下的Acceptor故障，此取值可以被获取，且不再被更改。</li>
+</ul>
+</blockquote>
+<h2 id="Paxos算法的Liveness问题"><a href="#Paxos算法的Liveness问题" class="headerlink" title="Paxos算法的Liveness问题"></a>Paxos算法的Liveness问题</h2><p>新轮次的抢占会让旧轮次停止运行，如果每一轮在第二阶段执行成功之前都被新一轮次抢占，则导致活锁。如何解决？</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;资源汇总&quot;&gt;&lt;a href=&quot;#资源汇总&quot; class=&quot;headerlink&quot; title=&quot;资源汇总&quot;&gt;&lt;/a&gt;资源汇总&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://research.microsoft.com/en-us/um/people/l
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【天池比赛日记 - 2】MaxDirectMemorySize和堆外内存</title>
+    <link href="http://yoursite.com/2016/07/22/DirectByteBuffer/"/>
+    <id>http://yoursite.com/2016/07/22/DirectByteBuffer/</id>
+    <published>2016-07-22T13:03:11.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在做阿里的中间件比赛，在第二题的背景下，我们的方案需要一个基于磁盘的map和B+索引，显然IO就成为了瓶颈之一。为了提升IO的速度，我们选择<code>MappedByteBuffer</code>和<code>channel.map()</code>作为我们的IO处理方案。但是这样的方案存在一个问题，堆外内存不受JVM的控制，可能会因为一些原因导致JVM Crash，所以对这个问题做一点必要的研究。</p>
+<h2 id="1-首先"><a href="#1-首先" class="headerlink" title="1. 首先"></a>1. 首先</h2><p>首先，根据JDK中对<code>MappedByteBuffer</code>的说明：  </p>
+<blockquote>
+<p>A direct byte buffer whose content is a memory-mapped region of a file.<br>Mapped byte buffers are created via the FileChannel.map method. This class extends the ByteBuffer class with operations that are specific to memory-mapped file regions.  </p>
+</blockquote>
+<p><code>MappedByteBuffer</code>本质上就一种继承了<code>ByteBuffer</code>的direct byte buffer，是分配在JVM堆外的内存。因而也就不受JVM的控制，也只有在full gc的时候才会被回收。<br>虽然，堆外内存包含了：</p>
+<ul>
+<li>jvm本身在运行过程中分配的内存</li>
+<li>codecache</li>
+<li>jni里分配的内存</li>
+<li>DirectByteBuffer分配的内存</li>
+</ul>
+<p>我们在比赛过程中更关注的是DirectByteBuffer所产生的堆外内存，包括它的配置和回收等操作。  </p>
+<h2 id="2-然后"><a href="#2-然后" class="headerlink" title="2. 然后"></a>2. 然后</h2><p>【比赛陷入僵局，结束了再续写】</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在做阿里的中间件比赛，在第二题的背景下，我们的方案需要一个基于磁盘的map和B+索引，显然IO就成为了瓶颈之一。为了提升IO的速度，我们选择&lt;code&gt;MappedByteBuffer&lt;/code&gt;和&lt;code&gt;channel.map()&lt;/code&gt;作为我们的IO处理
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://yoursite.com/categories/JVM/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="JVM" scheme="http://yoursite.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【天池比赛日记 - 1】稀疏文件和文件空洞</title>
+    <link href="http://yoursite.com/2016/07/21/%E7%A8%80%E7%96%8F%E6%96%87%E4%BB%B6%E5%92%8C%E6%96%87%E4%BB%B6%E7%A9%BA%E6%B4%9E/"/>
+    <id>http://yoursite.com/2016/07/21/稀疏文件和文件空洞/</id>
+    <published>2016-07-21T13:03:11.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="log"><a href="#log" class="headerlink" title="log"></a>log</h4><p>在Linux和Windows下，我们都曾试图通过<code>fileChannel.map</code>来使用稀疏文件构建<code>&lt;Long, Long&gt;</code>和<code>&lt;Long, String&gt;</code>磁盘map方案。发现，在Windows下，系统和JVM对稀疏文件和<code>MappedByteBuffer</code>支持的更好，在Linux下我们使用了6个线程并发插入（我们的方案是模拟ConcurrentHashMap完成的线程安全map）的情况下，才达到Windows下单线程的构建速度。显然，这是操作系统实现决定的。而且，发现在文件大小小于4GB时，Linux速度较为出色，但是大于4GB就远远逊色于Windows。</p>
+<p>另外，我们试图提前构建好空白文件（写入全量的0），但并没有拯救我们的map在Linux下的性能。所以，也导致了后期切换了Map的方案（做到了200s并发插入3亿索引数据）（后面会详细介绍，我们map的实现过程，和实现多线程和Page Cache的思路）。</p>
+<h4 id="文件空洞"><a href="#文件空洞" class="headerlink" title="文件空洞"></a>文件空洞</h4><p>在unix文件操作中，文件位移量可以大于文件的当前长度。这种情况下，对该文件的下一次写将延长该文件，并在该文件中构成一个空洞。位于文件中，但没有写过的字节都被假设为0。</p>
+<blockquote>
+<p>如果offset比文件的长度更大，下一个写操作就会将文件extend，造成文件空洞(hole)。没有实际写入文件的所有自己由重复的0表示，空洞是否占用磁盘由文件系统决定。</p>
+</blockquote>
+<h4 id="稀疏文件-Sparse-File"><a href="#稀疏文件-Sparse-File" class="headerlink" title="稀疏文件 Sparse File"></a>稀疏文件 Sparse File</h4><p>和普通文件基本相同，区别在于文件中的部分数据是全0，这部分数据不需要占用磁盘空间。<br><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/sf1.png" alt="1"></p>
+<h4 id="inode数据块存储"><a href="#inode数据块存储" class="headerlink" title="inode数据块存储"></a>inode数据块存储</h4><p>索引节点采用了多重索引结构，体现在直接指针和三个间接指针，直接指针包含12个直接指针块，直接指向包含文件数据的数据块，紧跟在后面的三个间接指针是为了适应文件的大小变化而设计的</p>
+<blockquote>
+<p>stat命令可以查看某个文件的inode信息</p>
+</blockquote>
+<p>inode会消耗磁盘空间，所以os一般将硬盘分为两个区域，数据区和inode区。每个inode大小一般是128/256byte</p>
+<blockquote>
+<p>sudo dumpe2fs -h /dev/hda | grep “Inode size”  # 查看inode节点大小</p>
+</blockquote>
+<p>由于每个文件都必须有一个inode，所以可能出现inode耗尽，但是磁盘未满的情况，此时已经无法创建新的文件。</p>
+<p><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/sf2.png" alt="2"></p>
+<p>文件系统存储稀疏文件时，inode索引节点中只给出实际占用磁盘空间的Block号，数据全0且不占用磁盘空间的文件Block没有物理磁盘Block号。</p>
+<blockquote>
+<p>文件所占用的磁盘空间仍然是连续的</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/sf3.png" alt="3"></p>
+<h2 id="多重索引"><a href="#多重索引" class="headerlink" title="多重索引"></a>多重索引</h2><p>Linux文件系统数据结构存放采用inode多重索引结构，有直接指针，和3个间接指针。</p>
+<ul>
+<li>直接指针直接指向保存出具的Block<blockquote>
+<p>12个，若Block大小为4096Byte，则可以保存48KB文件</p>
+</blockquote>
+</li>
+<li>一级指针指向一个Block，该Block中的数据是Block指针，指向真正数据Block<blockquote>
+<p> 假设每个指针占用4个字节，则一级指针指向Block可以保存4096/4个指针，即1024个Blocks，算出一级指针可以保存的文件数据大小为4MB</p>
+</blockquote>
+</li>
+<li>二级和三级类推<blockquote>
+<p>二级: <code>(1024*1024)*4096=4GB</code> ; 三级: <code>(1024*1024*1024) * 4096 = 4TB</code></p>
+</blockquote>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;log&quot;&gt;&lt;a href=&quot;#log&quot; class=&quot;headerlink&quot; title=&quot;log&quot;&gt;&lt;/a&gt;log&lt;/h4&gt;&lt;p&gt;在Linux和Windows下，我们都曾试图通过&lt;code&gt;fileChannel.map&lt;/code&gt;来使用稀疏文件构建&lt;code
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://yoursite.com/categories/JVM/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="JVM" scheme="http://yoursite.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【mysql】binlog详解(2) binlog格式</title>
+    <link href="http://yoursite.com/2016/06/22/mysql_binlog2/"/>
+    <id>http://yoursite.com/2016/06/22/mysql_binlog2/</id>
+    <published>2016-06-22T01:44:17.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>可以指定三种binary log的格式（启动时指定）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">--binlog-format=STATEMENT</div><div class="line">--binlog-format=ROW</div><div class="line">--binlog-format=MIXED</div><div class="line">```  </div><div class="line">* `statement-based logging`： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID, LOAD DATA INFILE等在复制过程可能导致数据不一致甚至出错。  </div><div class="line">* `row-based logging`：基于行，记录影响table中每一行的事务，很安全，很安全。但是binlog会比其他两种模式大很多，在一些大表中清除大量数据时在binlog中会生成很多条语句，可能导致从库延迟变大。  </div><div class="line">* `mixed logging`：使用statement-based logging作为默认，但是日志模式可能会在某些情况下自动切换到row-based logging。  </div><div class="line"></div><div class="line">`statement-based logging`可能回带来复制上的安全问题：</div><div class="line">&gt; With statement-based replication, there may be issues with replicating nondeterministic statements. In deciding whether or not a given statement is safe for statement-based replication, MySQL determines whether it can guarantee that the statement can be replicated using statement-based logging. If MySQL cannot make this guarantee, it marks the statement as potentially unreliable and issues the warning, Statement may not be safe to log in statement format.  </div><div class="line">You can avoid these issues by using MySQL&apos;s row-based replication instead.</div><div class="line"></div><div class="line">除了开头提到的启动参数，binlog的格式还可以在运行时切换：</div></pre></td></tr></table></figure></p>
+<h1 id="GLOBAL"><a href="#GLOBAL" class="headerlink" title="GLOBAL"></a>GLOBAL</h1><p>mysql&gt; SET GLOBAL binlog_format = ‘STATEMENT’;<br>mysql&gt; SET GLOBAL binlog_format = ‘ROW’;<br>mysql&gt; SET GLOBAL binlog_format = ‘MIXED’;</p>
+<h1 id="SESSION"><a href="#SESSION" class="headerlink" title="SESSION"></a>SESSION</h1><p>mysql&gt; SET SESSION binlog_format = ‘STATEMENT’;<br>mysql&gt; SET SESSION binlog_format = ‘ROW’;<br>mysql&gt; SET SESSION binlog_format = ‘MIXED’;<br>```</p>
+<p>一般基于以下几个理由会设置<code>SESSION</code>级别的binlog format切换：</p>
+<ul>
+<li>在对数据库做出了很多小的改变时，可能会需要使用 row-based logging  </li>
+<li>在使用<code>WHERE</code>进行更新操作时，可能会影响很多行记录，使用statement-based logging来记录少量的事务语句日志，会比记录很多行的改动有效得多。  </li>
+<li>有些语句可能需要执行很长时间，但是实际只改动几行记录。使用row-based logging会对复制功能比较友好。  </li>
+</ul>
+<p>有些情况切换logging format可能会返回<code>error</code>:</p>
+<ol>
+<li>在使用InnoDB时，如果隔离级别是<code>READ COMMITTED</code>或<code>READ UNCOMMITTED</code>，只有row-based format可以使用。切换到statement-based其实也是可行的，但是很加就会导致错误，因为这种情况下InnoDB就无法插入数据  </li>
+<li>临时表存在时，不推荐切换logging format<blockquote>
+<p>Switching the replication format at runtime is not recommended when any temporary tables exist, because temporary tables are logged only when using statement-based replication, whereas with row-based replication they are not logged. With mixed replication, temporary tables are usually logged; exceptions happen with <code>user-defined functions (UDFs)</code> and with the <code>UUID()</code> function.</p>
+</blockquote>
+</li>
+</ol>
+<p>注意：<br><code>ROW</code>格式下依然会有部分的语句按照<code>STATEMENT</code>格式记录，例如所有的DDL语句：<code>CREATE TABLE</code>, <code>ALTER TABLE</code>和 <code>DROP TABLE</code></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;可以指定三种binary log的格式（启动时指定）：&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;li
+    
+    </summary>
+    
+      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>阿里霸面的事</title>
+    <link href="http://yoursite.com/2016/05/12/%E9%9C%B8%E9%9D%A2/"/>
+    <id>http://yoursite.com/2016/05/12/霸面/</id>
+    <published>2016-05-12T08:12:11.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>我一定要5年内进入阿里的中间件团队，再做一次infoq讲师<br>今年4月12日的时候，我很郑重的对同学们说过这句话。今天是5月12日，恰好一个月。</p>
+<p>今天是阿里实习校招的上海站。<br>距离我之前实习内推失败也有1月有余。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;我一定要5年内进入阿里的中间件团队，再做一次infoq讲师&lt;br&gt;今年4月12日的时候，我很郑重的对同学们说过这句话。今天是5月12日，恰好一个月。&lt;/p&gt;
+&lt;p&gt;今天是阿里实习校招的上海站。&lt;br&gt;距离我之前实习内推失败也有1月有余。&lt;/p&gt;
+&lt;
+    
+    </summary>
+    
+      <category term="日记" scheme="http://yoursite.com/categories/%E6%97%A5%E8%AE%B0/"/>
+    
+    
+      <category term="日记" scheme="http://yoursite.com/tags/%E6%97%A5%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Trie树</title>
+    <link href="http://yoursite.com/2016/04/06/%E7%AE%97%E6%B3%95-trie%E6%A0%91/"/>
+    <id>http://yoursite.com/2016/04/06/算法-trie树/</id>
+    <published>2016-04-06T05:28:11.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Trie树模板"><a href="#Trie树模板" class="headerlink" title="Trie树模板"></a>Trie树模板</h2><p>题目来源：<a href="http://hihocoder.com/problemset/problem/1014" target="_blank" rel="external">http://hihocoder.com/problemset/problem/1014</a>  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">enum</span> NODE_TYPE &#123;</div><div class="line">    COMPLETED,</div><div class="line">    UNCOMPLETED</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">class</span> TrieNode &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    TrieNode* childNodes[<span class="number">26</span>];</div><div class="line">    <span class="keyword">int</span> freq;</div><div class="line">    <span class="keyword">char</span> nodeChar;</div><div class="line">    <span class="keyword">enum</span> NODE_TYPE type;</div><div class="line">    TrieNode(<span class="keyword">char</span> ch) &#123;</div><div class="line">        <span class="keyword">this</span>-&gt;nodeChar = ch;</div><div class="line">        <span class="keyword">this</span>-&gt;freq = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++) &#123;</div><div class="line">            <span class="keyword">this</span>-&gt;childNodes[i] = <span class="literal">NULL</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>-&gt;type = UNCOMPLETED;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">add_freq</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">set_type</span><span class="params">(<span class="keyword">enum</span> NODE_TYPE)</span></span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">class</span> Trie &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    TrieNode* root;</div><div class="line">    Trie() &#123;</div><div class="line">        root = <span class="keyword">new</span> TrieNode(<span class="string">' '</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="built_in">string</span> str)</span></span>;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(<span class="built_in">string</span> str)</span></span>;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="built_in">string</span> str)</span></span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">charToIndex</span><span class="params">(<span class="keyword">char</span> ch)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> ch - <span class="string">'a'</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> Trie::insert(<span class="built_in">string</span> str) &#123;</div><div class="line">    TrieNode *current_node = <span class="keyword">this</span>-&gt;root;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length(); i++) &#123;</div><div class="line">        <span class="keyword">int</span> index = charToIndex(str[i]);</div><div class="line">        <span class="keyword">char</span> ch = str[i];</div><div class="line">        <span class="keyword">if</span>(current_node-&gt;childNodes[index] == <span class="literal">NULL</span>) &#123;</div><div class="line">            current_node-&gt;childNodes[index] = <span class="keyword">new</span> TrieNode(ch);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        current_node-&gt;childNodes[index]-&gt;add_freq();</div><div class="line"></div><div class="line">        <span class="keyword">if</span>(i == str.length()<span class="number">-1</span>) &#123;</div><div class="line">            current_node-&gt;childNodes[index]-&gt;set_type(COMPLETED);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(current_node-&gt;childNodes[index]-&gt;type != COMPLETED)&#123;</div><div class="line">            current_node-&gt;childNodes[index]-&gt;set_type(UNCOMPLETED);</div><div class="line">        &#125;</div><div class="line">        current_node = current_node-&gt;childNodes[index];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">bool</span> Trie::find(<span class="built_in">string</span> str) &#123;</div><div class="line">    TrieNode *current_node = <span class="keyword">this</span>-&gt;root;</div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(i &lt; str.length()) &#123;</div><div class="line">        <span class="keyword">char</span> ch = str[i];</div><div class="line">        <span class="keyword">int</span> index = charToIndex(ch);</div><div class="line">        <span class="keyword">if</span>(current_node-&gt;childNodes[index] == <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        i++;</div><div class="line">        current_node = current_node-&gt;childNodes[index];</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; current_node-&gt;nodeChar &lt;&lt; <span class="string">" "</span> &lt;&lt; current_node-&gt;type &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">return</span> current_node-&gt;type == COMPLETED &amp;&amp; i == str.length();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">int</span> Trie::query(<span class="built_in">string</span> str) &#123;</div><div class="line">    TrieNode *current_node = <span class="keyword">this</span>-&gt;root;</div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> count;</div><div class="line">    <span class="keyword">while</span>(i &lt; str.length()) &#123;</div><div class="line">        <span class="keyword">char</span> ch = str[i];</div><div class="line">        <span class="keyword">int</span> index = charToIndex(ch);</div><div class="line">        <span class="keyword">if</span>(current_node-&gt;childNodes[index] == <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        i++;</div><div class="line">        current_node = current_node-&gt;childNodes[index];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(i == str.length())&#123;</div><div class="line">        <span class="keyword">return</span> current_node-&gt;freq;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> TrieNode::set_type(<span class="keyword">enum</span> NODE_TYPE t) &#123;</div><div class="line">    <span class="keyword">this</span>-&gt;type = t;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> TrieNode::add_freq() &#123;</div><div class="line">    <span class="keyword">this</span>-&gt;freq++;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    Trie trie;</div><div class="line">    <span class="keyword">int</span> loop;</div><div class="line">    <span class="built_in">cin</span> &gt;&gt; loop;</div><div class="line">    <span class="keyword">while</span>(loop &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="built_in">string</span> str;</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; str;</div><div class="line">        trie.insert(str);</div><div class="line">        loop--;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">cin</span> &gt;&gt; loop;</div><div class="line">    <span class="keyword">while</span>(loop &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="built_in">string</span> str;</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; str;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; trie.query(str) &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        loop--;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Trie树模板&quot;&gt;&lt;a href=&quot;#Trie树模板&quot; class=&quot;headerlink&quot; title=&quot;Trie树模板&quot;&gt;&lt;/a&gt;Trie树模板&lt;/h2&gt;&lt;p&gt;题目来源：&lt;a href=&quot;http://hihocoder.com/problemset/prob
+    
+    </summary>
+    
+      <category term="多线程系列" scheme="http://yoursite.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97/"/>
+    
+    
+      <category term="数据结构" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    
+      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java包装类与常量池</title>
+    <link href="http://yoursite.com/2016/04/03/%E5%B8%B8%E9%87%8F%E6%B1%A0/"/>
+    <id>http://yoursite.com/2016/04/03/常量池/</id>
+    <published>2016-04-03T13:13:29.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p> Java的8种基本类型(Byte, Short, Integer, Long, Character, Boolean, Float, Double), 除Float和Double以外, 其它六种都实现了常量池, 但是它们只在大于等于-128并且小于等于127时才使用常量池。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt; Java的8种基本类型(Byte, Short, Integer, Long, Character, Boolean, Float, Double), 除Float和Double以外, 其它六种都实现了常量池, 但是它们只在大于等于-128并且小于等于127时才使用常量池
+    
+    </summary>
+    
+      <category term="笔试" scheme="http://yoursite.com/categories/%E7%AC%94%E8%AF%95/"/>
+    
+    
+      <category term="笔试" scheme="http://yoursite.com/tags/%E7%AC%94%E8%AF%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【不简单的Atomic工具】getAndAddInt in getAndIncrement</title>
+    <link href="http://yoursite.com/2016/04/02/atomic3-getAndIncrement/"/>
+    <id>http://yoursite.com/2016/04/02/atomic3-getAndIncrement/</id>
+    <published>2016-04-02T03:44:53.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>上一篇Atmoic文章中提到，JDK8在<code>AtomicInteger</code>的<code>getAndIncrement</code>方法实现上发生了变化：  </p>
+<h5 id="JDK7"><a href="#JDK7" class="headerlink" title="JDK7"></a>JDK7</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">for</span> (;;) &#123;</div><div class="line">    <span class="keyword">int</span> current = get();</div><div class="line">    <span class="keyword">int</span> next = current + <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (compareAndSet(current, next))</div><div class="line">      <span class="keyword">return</span> current;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="JDK8"><a href="#JDK8" class="headerlink" title="JDK8"></a>JDK8</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>getAndAddInt</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object paramObject, <span class="keyword">long</span> paramLong, <span class="keyword">int</span> paramInt)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> i;</div><div class="line">    <span class="keyword">do</span></div><div class="line">      i = getIntVolatile(paramObject, paramLong);</div><div class="line">    <span class="keyword">while</span> (!(compareAndSwapInt(paramObject, paramLong, i, i + paramInt)));</div><div class="line">    <span class="keyword">return</span> i;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">jint</div><div class="line">sun::misc::Unsafe::getIntVolatile (jobject obj, jlong offset)</div><div class="line">&#123;</div><div class="line">  volatile jint *addr = (jint *) ((char *) obj + offset);</div><div class="line">  jint result = *addr;</div><div class="line">  read_barrier ();</div><div class="line">  return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="汇编之后"><a href="#汇编之后" class="headerlink" title="汇编之后"></a>汇编之后</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">0x0000000002c207f5: lock cmpxchg %r8d,0xc(%rdx)</div><div class="line">0x0000000002c207fb: sete   %r11b</div><div class="line">0x0000000002c207ff: movzbl %r11b,%r11d</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">0x0000000002cf49c7: mov    %rbp,0x10(%rsp)</div><div class="line">0x0000000002cf49cc: mov    $0x1,%eax</div><div class="line">0x0000000002cf49d1: lock xadd %eax,0xc(%rdx)</div></pre></td></tr></table></figure>
+<p>原本的<code>lock cmpxchg</code>被<code>lock xadd</code>所替换，也就是在1.8之后，在硬件支持<code>lock XADD</code>这样的操作情况下，都会用fetch-and-add来替换CAS操作。</p>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul>
+<li><a href="http://javagoo.tk/java/unsafe_getAndAddInt.html?utm_source=tuicool&amp;utm_medium=referral" target="_blank" rel="external">unsafe中getAndAddInt性能疑问</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上一篇Atmoic文章中提到，JDK8在&lt;code&gt;AtomicInteger&lt;/code&gt;的&lt;code&gt;getAndIncrement&lt;/code&gt;方法实现上发生了变化：  &lt;/p&gt;
+&lt;h5 id=&quot;JDK7&quot;&gt;&lt;a href=&quot;#JDK7&quot; class=&quot;headerl
+    
+    </summary>
+    
+      <category term="atomic" scheme="http://yoursite.com/categories/atomic/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【不简单的Atomic工具】CAS</title>
+    <link href="http://yoursite.com/2016/03/27/atomic2-CAS/"/>
+    <id>http://yoursite.com/2016/03/27/atomic2-CAS/</id>
+    <published>2016-03-27T13:12:33.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="CAS算法："><a href="#CAS算法：" class="headerlink" title="CAS算法："></a>CAS算法：</h2><p>包含三个参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CAS(V, E, N)</div></pre></td></tr></table></figure></p>
+<ul>
+<li>V 表示要更新的变量</li>
+<li>E 表示预期值</li>
+<li>N 表示新值</li>
+</ul>
+<p>仅当V值等于E值时，才会将V的值设置为N。如果V的值和E不同，表示已经有其他线程对其进行了更新，则当前线程什么都不做。最后CAS返回V的真实值。</p>
+<p>CAS是抱着乐观的态度进行的，总认为自己可以成功的完成操作。当多个线程同时使用CAS操作一个变量时，只有一个会胜出。失败的线程不会被挂起，而是返回失败信息，并允许再次尝试。</p>
+<p>CPU指令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cmpxchg</div><div class="line"># accumulator = AL, AX, or EAX, depending on whether a byte, word, or doubleword comparison is being performed</div></pre></td></tr></table></figure></p>
+<p>该指令的基本逻辑如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(accumulator == Destination) &#123;</div><div class="line">    ZF = <span class="number">1</span>;</div><div class="line">    Destination = Source;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    ZF = <span class="number">0</span>;</div><div class="line">    accumulator = Destination;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h2><ol>
+<li><p>ABA问题。</p>
+<blockquote>
+<p>因为 CAS 需要在操作值的时候检查下值有没有发生变化，如果没有发生变化则更新，但是如果一个值原来是A，变成了B，又变成了A，那么使用CAS进行检查时会发现它的值没有发生变化，但是实际上却变化了。ABA问题的解决思路就是使用版本号。在变量前面追加上版本号，每次变量更新的时候把版本号加一，那么A－B－A 就会变成1A-2B－3A。<br>从Java1.5开始JDK的atomic包里提供了一个类 AtomicStampedReference 来解决 ABA 问题。这个类的compareAndSet 方法作用是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式将该引用和该标志的值设置为给定的更新值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span></span></div><div class="line">        <span class="params">(V      expectedReference,//预期引用</span></div><div class="line">         V      newReference,//更新后的引用</div><div class="line">        <span class="keyword">int</span>    expectedStamp, //预期标志</div><div class="line">        <span class="keyword">int</span>    newStamp) <span class="comment">//更新后的标志</span></div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>循环时间长开销大。</p>
+<blockquote>
+<p>自旋 CAS 如果长时间不成功，会给 CPU 带来非常大的执行开销。如果JVM能支持处理器提供的 pause 指令那么效率会有一定的提升，pause 指令有两个作用，第一它可以延迟流水线执行指令（de-pipeline）,使 CPU 不会消耗过多的执行资源，延迟的时间取决于具体实现的版本，在一些处理器上延迟时间是零。第二它可以避免在退出循环的时候因内存顺序冲突（memory order violation：内存顺序冲突一般是由伪/假共享引起，假共享是指多个 CPU 同时修改同一个缓存行的不同部分而引起其中一个CPU的操作无效，当出现这个内存顺序冲突时，CPU必须清空流水线）而引起 CPU 流水线被清空（CPU pipeline flush），从而提高 CPU 的执行效率。</p>
+</blockquote>
+</li>
+<li><p>只能保证一个共享变量的原子操作。</p>
+<blockquote>
+<p>当对一个共享变量执行操作时，我们可以使用循环CAS的方式来保证原子操作，但是对多个共享变量操作时，循环CAS就无法保证操作的原子性，这个时候就可以用锁，或者有一个取巧的办法，就是把多个共享变量合并成一个共享变量来操作。比如有两个共享变量i＝2,j=a，合并一下ij=2a，然后用CAS来操作ij。从Java1.5开始JDK提供了AtomicReference类来保证引用对象之间的原子性，你可以把多个变量放在一个对象里来进行CAS操作。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="AtmoicInteger中的CAS实现"><a href="#AtmoicInteger中的CAS实现" class="headerlink" title="AtmoicInteger中的CAS实现"></a>AtmoicInteger中的CAS实现</h2><p><strong>JDK7</strong>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="keyword">for</span> (;;) &#123;</div><div class="line">    <span class="keyword">int</span> current = get();</div><div class="line">    <span class="keyword">int</span> next = current + <span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (compareAndSet(current, next))</div><div class="line">      <span class="keyword">return</span> current;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>JDK8</strong>:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到JDK8在<code>getAndIncrement()</code>方法的实现上做出了一定的改变，在<a href="http://ashkrit.blogspot.com/2014/02/atomicinteger-java-7-vs-java-8.html" target="_blank" rel="external">AtomicInteger Java 7 vs Java 8</a>中列出了两个版本的benchmark，JDK8的实现大约提升了1.5~2倍的性能，作者也直呼<code>Unsafe</code>变得更加与有用了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;CAS算法：&quot;&gt;&lt;a href=&quot;#CAS算法：&quot; class=&quot;headerlink&quot; title=&quot;CAS算法：&quot;&gt;&lt;/a&gt;CAS算法：&lt;/h2&gt;&lt;p&gt;包含三个参数&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;
+    
+    </summary>
+    
+      <category term="atomic" scheme="http://yoursite.com/categories/atomic/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>两个栈组成队列</title>
+    <link href="http://yoursite.com/2016/03/26/%E7%AE%97%E6%B3%95-%E4%B8%A4%E4%B8%AA%E6%A0%88%E7%BB%84%E6%88%90%E7%9A%84%E9%98%9F%E5%88%97/"/>
+    <id>http://yoursite.com/2016/03/26/算法-两个栈组成的队列/</id>
+    <published>2016-03-26T11:12:06.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="【题目】"><a href="#【题目】" class="headerlink" title="【题目】"></a>【题目】</h2><p>编写一个类，用两个栈实现队列的基本操作：add、poll、peek  </p>
+<h2 id="【解法】"><a href="#【解法】" class="headerlink" title="【解法】"></a>【解法】</h2><p>一个栈作为压入栈，在压入数据时只往这个栈中压入，记为stackPush。另一个栈只作为单出栈，在弹出数据时只从这个栈弹出，记为stackPop。<br>stackPop会将stackPush中的数据整体弹出再压入stackPop作为弹出顺序。<br>需要做到以下两点：  </p>
+<ol>
+<li>如果stackPush要往stackPop中压入数据，那么必须一次性把stackPush中的数据全部压入  </li>
+<li>如果stackPop不为空，stackPush绝对不能向stackPop中压入数据  </li>
+</ol>
+<h2 id="【代码】"><a href="#【代码】" class="headerlink" title="【代码】"></a>【代码】</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TwoStackQueue</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> Stack&lt;Integer&gt; stackPush;</div><div class="line">    <span class="keyword">public</span> Stack&lt;Integer&gt; stackPop;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TwoStackQueue</span><span class="params">()</span> </span>&#123;</div><div class="line">        stackPush = <span class="keyword">new</span> Stack&lt;Integer&gt;();</div><div class="line">        stackPop = <span class="keyword">new</span> Stack&lt;Integer&gt;();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> pushInt)</span> </span>&#123;</div><div class="line">        stackPush.push(pushInt);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">poll</span><span class="params">()</span> </span>&#123;</div><div class="line">        putPushToPop();</div><div class="line">        <span class="keyword">return</span> stackPop.pop();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">peek</span><span class="params">()</span> </span>&#123;</div><div class="line">        putPushToPop();</div><div class="line">        <span class="keyword">return</span> stackPop.peek();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">putPushToPop</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span>(stackPop.empty() &amp;&amp; stackPush.empty()) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Queue is empty"</span>);</div><div class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(stackPop.empty()) &#123;</div><div class="line">            stackPush.stream().forEach(item -&gt; &#123;</div><div class="line">                stackPop.push(item);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;【题目】&quot;&gt;&lt;a href=&quot;#【题目】&quot; class=&quot;headerlink&quot; title=&quot;【题目】&quot;&gt;&lt;/a&gt;【题目】&lt;/h2&gt;&lt;p&gt;编写一个类，用两个栈实现队列的基本操作：add、poll、peek  &lt;/p&gt;
+&lt;h2 id=&quot;【解法】&quot;&gt;&lt;a href=
+    
+    </summary>
+    
+      <category term="算法" scheme="http://yoursite.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="数据结构" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    
+      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="笔试面试" scheme="http://yoursite.com/tags/%E7%AC%94%E8%AF%95%E9%9D%A2%E8%AF%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OneToOneQueue —— 终极性能的无锁队列算法</title>
+    <link href="http://yoursite.com/2016/03/26/one2oneQueue1/"/>
+    <id>http://yoursite.com/2016/03/26/one2oneQueue1/</id>
+    <published>2016-03-26T08:37:41.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="基本的队列设计"><a href="#基本的队列设计" class="headerlink" title="基本的队列设计"></a>基本的队列设计</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> tail = <span class="number">0</span>;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> head = <span class="number">0</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">OneToOneConcurrentArrayQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</div><div class="line">	    buffer = (E[])<span class="keyword">new</span> Object[capacity];</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - buffer.length;  <span class="comment">// tail位置往前移动length个位置</span></div><div class="line">	    <span class="keyword">if</span>(head &lt;= wrapPoint) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	    &#125;</div><div class="line">	    buffer[(<span class="keyword">int</span>)(currentTail % buffer.length)] = e;</div><div class="line">	    tail = currentTail + <span class="number">1</span>;</div><div class="line">	    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span> </span>&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentHead = head;</div><div class="line">	    <span class="keyword">if</span>(currentHead &gt;= tail) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	    &#125;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)(currentHead % buffer.length);</div><div class="line">	    <span class="keyword">final</span> E e = buffer[index];</div><div class="line">	    buffer[index] = <span class="keyword">null</span>;</div><div class="line">	    head = currentHead + <span class="number">1</span>;</div><div class="line">	    <span class="keyword">return</span> e;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样的队列性能损耗主要是一下两点：  </p>
+<ol>
+<li>取余的计算  </li>
+<li>volatile write以及该过程中可能发生的false sharing<br>因为我们探讨的OneToOne队列，那么显然volatile的刷新要求并不是很严格，可以不用每次的写操作都从cache中刷回主存  </li>
+</ol>
+<hr>
+<h1 id="改进-1"><a href="#改进-1" class="headerlink" title="改进 - 1"></a>改进 - 1</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue2</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line">    <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> mask;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicLong tail = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicLong head = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">OneToOneConcurrentArrayQueue2</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</div><div class="line">		<span class="comment">// 确保capacity是2^n</span></div><div class="line">        capacity = findNextPositivePowerOfTwo(capacity);</div><div class="line">        mask = capacity - <span class="number">1</span>;</div><div class="line">        buffer = (E[])<span class="keyword">new</span> Object[capacity];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(<span class="keyword">final</span> E e)</span></span></div><div class="line">	&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail.get();</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - buffer.length;</div><div class="line">	    <span class="keyword">if</span> (head.get() &lt;= wrapPoint) &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	    &#125;</div><div class="line">	    <span class="comment">// 替换了： buffer[(int)(currentTail % buffer.length)] = e;</span></div><div class="line">	    <span class="comment">// 优化了&amp;操作</span></div><div class="line">		buffer[(<span class="keyword">int</span>)currentTail &amp; mask] = e; </div><div class="line">		tail.lazySet(currentTail + <span class="number">1</span>);</div><div class="line">	    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">	    <span class="keyword">final</span> <span class="keyword">long</span> currentHead = head.get();</div><div class="line">	    <span class="keyword">if</span> (currentHead &gt;= tail.get())</div><div class="line">	    &#123;</div><div class="line">	        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">	    &#125;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)currentHead &amp; mask; </div><div class="line">		<span class="keyword">final</span> E e = buffer[index];</div><div class="line">		buffer[index] = <span class="keyword">null</span>; </div><div class="line">		head.lazySet(currentHead + <span class="number">1</span>);</div><div class="line">		<span class="keyword">return</span> e; </div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="优化点1"><a href="#优化点1" class="headerlink" title="优化点1"></a>优化点1</h3><p>注意这里使用<code>(int)currentTail &amp; (capacity - 1)</code>优化了<code>buffer[(int)(currentTail % capacity)] = e;</code>的取余操作。<br>不过这样的优化存在一个问题就是capacity必须是2^n   </p>
+<h3 id="优化点2"><a href="#优化点2" class="headerlink" title="优化点2"></a>优化点2</h3><p>head和tail用AtomicLong替代long<br>使用了lazySet来避免了频繁的volatile write在维持内存可见性时的内存损耗  </p>
+<hr>
+<h1 id="改进-2"><a href="#改进-2" class="headerlink" title="改进 - 2"></a>改进 - 2</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToOneConcurrentArrayQueue3</span>&lt;<span class="title">E</span>&gt; <span class="keyword">implements</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> capacity; </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> mask; </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> E[] buffer;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicLong tail = <span class="keyword">new</span> PaddedAtomicLong(<span class="number">0</span>); </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> AtomicLong head = <span class="keyword">new</span> PaddedAtomicLong(<span class="number">0</span>);</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PaddedLong</span> </span>&#123;</div><div class="line">		<span class="keyword">public</span> <span class="keyword">long</span> value = <span class="number">0</span>, p1, p2, p3, p4, p5, p6; </div><div class="line">	&#125;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> PaddedLong tailCache = <span class="keyword">new</span> PaddedLong(); </div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> PaddedLong headCache = <span class="keyword">new</span> PaddedLong();</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(<span class="keyword">final</span> E e)</span> </span>&#123;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> currentTail = tail.get();</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> wrapPoint = currentTail - capacity; </div><div class="line">		<span class="keyword">if</span> (headCache.value &lt;= wrapPoint) &#123;</div><div class="line">			headCache.value = head.get();</div><div class="line">			<span class="keyword">if</span> (headCache.value &lt;= wrapPoint) &#123;</div><div class="line">				<span class="keyword">return</span> <span class="keyword">false</span>; </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		buffer[(<span class="keyword">int</span>)currentTail &amp; mask] = e;</div><div class="line">		tail.lazySet(currentTail + <span class="number">1</span>); </div><div class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">long</span> currentHead = head.get(); </div><div class="line">		<span class="keyword">if</span> (currentHead &gt;= tailCache.value) &#123;</div><div class="line">			tailCache.value = tail.get();</div><div class="line">			<span class="keyword">if</span> (currentHead &gt;= tailCache.value) &#123;</div><div class="line">		        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">		    &#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> index = (<span class="keyword">int</span>)currentHead &amp; mask; </div><div class="line">		<span class="keyword">final</span> E e = buffer[index];</div><div class="line">		buffer[index] = <span class="keyword">null</span>; </div><div class="line">		head.lazySet(currentHead + <span class="number">1</span>);</div><div class="line">		<span class="keyword">return</span> e; </div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="优化点："><a href="#优化点：" class="headerlink" title="优化点："></a>优化点：</h3><p>使用tailCache和headCache来避免对head和tail两个AtomicLong的频繁get()，读取普通变量肯定会比Atomic快很多  </p>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><p>贴上参考文章中的实验结果：  </p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Qps/Sec(Millions)</th>
+<th>Mean Latency(ns)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LinkedBlockingQueue</td>
+<td>4.3</td>
+<td>~32000 / ~500</td>
+</tr>
+<tr>
+<td>ArrayBlockingQueue</td>
+<td>3.5</td>
+<td>~32000 / ~600</td>
+</tr>
+<tr>
+<td>ConcurrentLinkedQueue</td>
+<td>13</td>
+<td>NA / ~180</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue</td>
+<td>13</td>
+<td>NA / ~150</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue2</td>
+<td>45</td>
+<td>NA / ~120</td>
+</tr>
+<tr>
+<td>ConcurrentArrayQueue3</td>
+<td>150</td>
+<td>NA / ~100</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: None of these tests are run with thread affinity set, Sandy Bridge 2.4 GHz Latency: Blocking - put() &amp; take() / Non-Blocking - offer() &amp; poll()</p>
+</blockquote>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.infoq.com/presentations/Lock-Free-Algorithms" target="_blank" rel="external">1. 终极性能的无锁队列算法</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;基本的队列设计&quot;&gt;&lt;a href=&quot;#基本的队列设计&quot; class=&quot;headerlink&quot; title=&quot;基本的队列设计&quot;&gt;&lt;/a&gt;基本的队列设计&lt;/h1&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;
+    
+    </summary>
+    
+      <category term="多线程" scheme="http://yoursite.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>False Sharing问题（2）</title>
+    <link href="http://yoursite.com/2016/03/26/false_sharing2/"/>
+    <id>http://yoursite.com/2016/03/26/false_sharing2/</id>
+    <published>2016-03-26T08:32:38.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="如果避免频繁的false-sharing造成的性能损耗："><a href="#如果避免频繁的false-sharing造成的性能损耗：" class="headerlink" title="如果避免频繁的false sharing造成的性能损耗："></a>如果避免频繁的false sharing造成的性能损耗：</h2><p><strong>PaddedLong</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PaddedLong</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">long</span> value = <span class="number">0</span>, p1, p2, p3, p4, p5, p6; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>PaddedAtomicLong</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PaddedAtomicLong</span> <span class="keyword">extends</span> <span class="title">AtomicLong</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PaddedAtomicLong</span><span class="params">()</span> </span>&#123;</div><div class="line">    	<span class="keyword">super</span>();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PaddedAtomicLong</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> initialValue)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(initialValue);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">long</span> p1, p2, p3, p4, p5, p6 = <span class="number">7</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="为何是插入7个long"><a href="#为何是插入7个long" class="headerlink" title="为何是插入7个long"></a>为何是插入7个long</h2><p>一般而言cache line是64byte，而每个Java对象都有一个2word（2*4byte）的对象头，而long本身是8byte。  </p>
+<h2 id="PaddedLong的应用"><a href="#PaddedLong的应用" class="headerlink" title="PaddedLong的应用"></a>PaddedLong的应用</h2><p>一般是用在频繁读写的情况下，可以参考之后的OneToOne队列的优化文章</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;如果避免频繁的false-sharing造成的性能损耗：&quot;&gt;&lt;a href=&quot;#如果避免频繁的false-sharing造成的性能损耗：&quot; class=&quot;headerlink&quot; title=&quot;如果避免频繁的false sharing造成的性能损耗：&quot;&gt;&lt;/a&gt;如果
+    
+    </summary>
+    
+      <category term="多线程" scheme="http://yoursite.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>False Sharing问题</title>
+    <link href="http://yoursite.com/2016/03/25/false_sharing/"/>
+    <id>http://yoursite.com/2016/03/25/false_sharing/</id>
+    <published>2016-03-25T06:37:11.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h3><p>对着多核的发展，CPU cache分成了三个级别：L1、L2、L3。L1是最接近CPU的cache，容量也是最小的，但是速度最快。  </p>
+<table>
+<thead>
+<tr>
+<th>从CPU到</th>
+<th>大约需要的CPU周期</th>
+<th>大约需要的时间（单位ns）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>寄存器</td>
+<td>1 cycle</td>
+<td>NA</td>
+</tr>
+<tr>
+<td>L1 Cache</td>
+<td>约3~4 cycles</td>
+<td>约0.5~1ns</td>
+</tr>
+<tr>
+<td>L2 Cache</td>
+<td>约10~20 cycles</td>
+<td>约3~7ns</td>
+</tr>
+<tr>
+<td>L3 Cache</td>
+<td>约40~45 cycles</td>
+<td>约15ns</td>
+</tr>
+<tr>
+<td>跨槽传输</td>
+<td>空</td>
+<td>约20ns</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>约120~240 cycles</td>
+<td>约60-120ns</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Cache-line"><a href="#Cache-line" class="headerlink" title="Cache line"></a>Cache line</h3><p>为了高效的存取缓存，不是简单地随意地将单条数据写入缓存，缓存是由Cache line构成存储的最小单位，intel平台一般是64字节<br>可以通过命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size</div></pre></td></tr></table></figure></p>
+<p>Java中long占8个字节，再加上对象头（2字节）或者数组对象头（3字节），则可以获取7个long</p>
+<h3 id="Cache条目"><a href="#Cache条目" class="headerlink" title="Cache条目"></a>Cache条目</h3><p>cache entry： 包含了如下部分</p>
+<ul>
+<li>cache line: 从主存一次copy的数据大小</li>
+<li>tag：标记cache line对应的主存的地址</li>
+<li>falg：标记当前cache是否invalid，如果是数据cache，还有是否dirty</li>
+</ul>
+<h3 id="CPU的cache策略"><a href="#CPU的cache策略" class="headerlink" title="CPU的cache策略"></a>CPU的cache策略</h3><ol>
+<li>cpu从不直接访问主存，通过cache间接访问</li>
+<li>每次需要访问主存时，遍历一遍全部cache line，查找主存的地址是否在某个cache line中</li>
+<li>如果cache中没有找到，则分配一个新的cache entry，把主存copy到cache line中，再从cache line中读取<br>同时，Cache中包含的cache entry有限，所以必须要有合理cache淘汰策略，一般是LRU，这里不再赘述。</li>
+</ol>
+<h2 id="False-Sharing"><a href="#False-Sharing" class="headerlink" title="False Sharing"></a>False Sharing</h2><p>在多处理器，多线程的情况下，如果两个线程分别运行在不同CPU上，而其中某个线程修改了cache line中的元素，由于cache一致性原因，另一个线程的cache的line被宣告无效，在下一次访问时会出现一次cache line miss。  </p>
+<p>如下图所示，thread1修改了memory灰化区域的第[2]个元素，而Thread0只需要读取灰化区域的第[1]个元素，由于这段memory被载入了各自CPU的硬件cache中，虽然在memory的角度这两种的访问时隔离的，但是由于错误的紧凑地放在了一起，而导致了，thread1的修改，在cache一致性的要求下，宣告了运行Thread0的CPU0的cache line非法，从而出现了一次miss，导致从小从memory中读取到cache line中，而一致性的代价付出了，但结果并不是thread0所care的，导致了效率的降低  </p>
+<p><img src="https://software.intel.com/sites/default/files/m/d/4/1/d/8/5-4-figure-1.gif" alt="figure 1"></p>
+<blockquote>
+<p>在做多线程程序的时候,为了避免使用锁,我们通常会采用这样的数据结构:根据线程的数目,安排一个数组, 每个线程一个项,互相不冲突. 从逻辑上看这样的设计无懈可击,但是实践的过程我们会发现这样并没有提高速度. 问题在于cpu的cache line. 我们在读主存的时候,数据同时被读到L1,L2中去,而且在L1中是以cache line(通常64)字节为单位的. 每个Core都有自己的L1,L2,所以每个线程在读取自己的项的时候, 也把别人的项读进去, 所以在更新的时候,为了保持数据的一致性, core之间cache要进行同步, 这个会导致严重的性能问题. 这就是所谓的False sharing问题。</p>
+</blockquote>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>打算分成两篇来写，嘿嘿</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://blog.csdn.net/pennyliang/article/details/5766541" target="_blank" rel="external">False Sharing问题</a><br><a href="http://blog.csdn.net/wdzxl198/article/details/11218765" target="_blank" rel="external">由一道淘宝面试题到False sharing问题</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;h3 id=&quot;Cache&quot;&gt;&lt;a href=&quot;#Cache&quot; class=&quot;headerlink&quot; title=&quot;Cache&quot;&gt;&lt;/a&gt;Cach
+    
+    </summary>
+    
+      <category term="多线程" scheme="http://yoursite.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【不简单的Atomic工具】lazySet &amp; set</title>
+    <link href="http://yoursite.com/2016/03/24/atomic1/"/>
+    <id>http://yoursite.com/2016/03/24/atomic1/</id>
+    <published>2016-03-24T14:40:11.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在研究Martin Thompson的演讲<a href="http://www.infoq.com/presentations/Lock-Free-Algorithms" target="_blank" rel="external">终极性能的无锁队列算法</a>时遇到了AtomicLong的lazySet方法，作者用这个方法替代了set。之前在公司设计MulSemaphore类时，我就并没有注意到Atomic类还有这样一个方法。  </p>
+<h2 id="lazySet"><a href="#lazySet" class="headerlink" title="lazySet()"></a>lazySet()</h2><p>经常在维护一个非阻塞的数据结构时，内部显然常常会有volatile成员，而对于通信队列这样的对性能要求极端的数据结构，JMM要维持volatile的内存可见性，在对这样的成员写操作时，会有频繁的cache的读写（save和load？）到主内存。这样的时间耗损队形能而言，其实也十分重要。<br>lazySet()可以让一个线程在没有其他线程volatile写或者synchronized动作发生前，本地缓存的写操作不必刷回主内存。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lazySet</span><span class="params">(<span class="keyword">int</span> newValue)</span> </span>&#123;</div><div class="line">    unsafe.putOrderedInt(<span class="keyword">this</span>, valueOffset, newValue);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>lazySet的本质就是putOrderInt()，该函数是putIntVolatile()方法的延迟实现。  </p>
+<p>正是因为这样的特性，使得lazySet适合于SPSC的数据结构中，对于单Producer单Consumer这样的结构，延迟写并不是什么问题。同时还优化了store-load屏障在性能上的损耗（store-store屏障替代）。 </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在研究Martin Thompson的演讲&lt;a href=&quot;http://www.infoq.com/presentations/Lock-Free-Algorithms&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;终极性能的无锁队列算法&lt;/a&gt;时遇到了
+    
+    </summary>
+    
+      <category term="atomic" scheme="http://yoursite.com/categories/atomic/"/>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+    
+      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【mysql】binlog详解(1)</title>
+    <link href="http://yoursite.com/2016/02/13/mysql_binlog/"/>
+    <id>http://yoursite.com/2016/02/13/mysql_binlog/</id>
+    <published>2016-02-13T08:11:22.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>The binary log contains “events” that describe database changes such as table creation operations or changes to table data. It also contains events for statements that potentially could have made changes (for example, a DELETE which matched no rows), unless row-based logging is used. The binary log also contains information about how long each statement took that updated data.</p>
+</blockquote>
+<p>binlog是mysql的二进制日志，记录了mysql数据的更新或者潜在的更新记录，同时还包含了每条语句的执行耗时和更新时间。<br>注意： binlog主要有<code>statement-based</code>、<code>row-based logging</code>和<code>mixed logging</code> 三种格式，row-based的记录中不包括潜在更新记录。</p>
+<p>binlog有两个主要的功能：</p>
+<ul>
+<li><p>用于复制</p>
+<blockquote>
+<p>master发送了包含了所有events的binary log给slaves，slaves执行binary log中的event来保证和master之间的数据一致性</p>
+</blockquote>
+</li>
+<li><p>一些特定的数据恢复操作，会使用binlog</p>
+</li>
+</ul>
+<h2 id="1-binlog相关的启动参数"><a href="#1-binlog相关的启动参数" class="headerlink" title="1. binlog相关的启动参数"></a>1. binlog相关的启动参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--binlog-row-event-max-size=N</div></pre></td></tr></table></figure>
+<p>指定行格式复制日志event的最大大小，单位为byte，每一行数据会被切分到多个小于该限制的event包中，必须是256byte的倍数。  </p>
+<ul>
+<li>默认值：8192</li>
+<li>min：256</li>
+<li>max：18446744073709551615（64位平台）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--log-bin[=base_name]</div></pre></td></tr></table></figure>
+<p>开启binary log功能（用于复制和备份），指定日志名称的base name，mysql会使用指定的base name作为前缀，连续的数据作为后缀生成一系列的日志文件。默认会使用<code>host_name</code>作为base name。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--log-bin-trust-function-creators[=&#123;0|1&#125;]</div></pre></td></tr></table></figure>
+<p>指定mysql如何处理函数及存储过程的创建，取决于用户是否认为自己的存储过程及函数是否安全（确定的或者不修改数据），默认对于不安全的存储过程及函数不会写入binlog。这也就是，在开启binlog的时候，如果不设置该参数，使用自定义函数时会出现错误的原因。</p>
+<h2 id="2-Statement-selection-options"><a href="#2-Statement-selection-options" class="headerlink" title="2. Statement selection options"></a>2. Statement selection options</h2><p>下面介绍的选项会影响写入到binary log中的记录语句，因此会控制master发送到slaves中的日志的内容。同样，slaves也有相应的参数，在日志选择哪些命令可以执行。</p>
+<h3 id="2-1-binlog-do-db"><a href="#2-1-binlog-do-db" class="headerlink" title="2.1  --binlog-do-db"></a>2.1  <code>--binlog-do-db</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--binlog-do-db=db_name</div></pre></td></tr></table></figure>
+<p>这个参数的影响取决是使用<code>statement-based</code>还是<code>row-based logging</code>格式的日志。<br><strong>statement-based logging</strong><br>只有操作默认数据库（USE语句指定）的语句才会被记录。如果要指定多个数据库，需要重复使用该参数。但是跨数据库的操作<br>不会因此被记录，因为这里的检查原则，mysql为了尽可能的简单，只会去检查最近的<code>USE</code>语句指定的数据库是否在该参数指定的数据库中。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">USE sales;</div><div class="line">UPDATE prices.discounts SET percentage = percentage + 10;</div></pre></td></tr></table></figure></p>
+<p>该语句在参数为<code>--binlog-do-db=sales</code>的情况下<strong>会</strong>被记录进binlog的，虽然看起来不太能理解。<br>再举个例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">USE prices;</div><div class="line">UPDATE sales.january SET amount=amount+1000;</div></pre></td></tr></table></figure></p>
+<p>该语句在参数为<code>--binlog-do-db=sales</code>的情况下是<strong>不会</strong>被记录进binlog的。<br><strong>Row-based logging</strong><br>日志会被严格限定在<code>db_name</code>所指定的数据库上，不再受<code>USE</code>的影响。  </p>
+<p>在跨数据的修改操作上，需要举一个具体的例子来加深说明<code>statement-based</code>和<code>row-based logging</code>两者的区别，假设初始参数为<code>binlog-do-db=db1</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">USE db1;</div><div class="line">UPDATE db1.table1 SET col1 = 10, db2.table2 SET col2 = 20;</div></pre></td></tr></table></figure></p>
+<p>这条操作<code>statement-based</code>的情况下，对两个表的<code>UPDATE</code>操作都被记录，如果是<code>row-based logging</code>，只有针对table1的操作会被记录。<br>现在假设更换默认数据库为db4<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">USE db4;</div><div class="line">UPDATE db1.table1 SET col1 = 10, db2.table2 SET col2 = 20;</div></pre></td></tr></table></figure></p>
+<p><code>statement-based</code>不会记录这条操作，而<code>row-based logging</code>则会记录table1的<code>UPDATE</code>操作日志。</p>
+<h3 id="2-2-binlog-ignore"><a href="#2-2-binlog-ignore" class="headerlink" title="2.2  --binlog-ignore"></a>2.2  <code>--binlog-ignore</code></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--binlog-ignore-db=db_name</div></pre></td></tr></table></figure>
+<p>这个参数看起来很好理解，但是要注意的是，<code>CREATE TABLE</code>和<code>ALTER TABLE</code>不会受其影响都一定会被写入log，一般这个参数影响的是<code>UPDATE</code>操作。  </p>
+<h3 id="2-3-binlog-format"><a href="#2-3-binlog-format" class="headerlink" title="2.3 --binlog-format"></a>2.3 <code>--binlog-format</code></h3><p>指定binlog使用的格式，可选：statement、row、mixed，具体参考下一篇日志</p>
+<blockquote>
+<p>更多的配置参数可以参考[1]中的官方说明。  </p>
+</blockquote>
+<h2 id="相关系统参数和配置"><a href="#相关系统参数和配置" class="headerlink" title="相关系统参数和配置"></a>相关系统参数和配置</h2><h3 id="sync-binlog"><a href="#sync-binlog" class="headerlink" title="sync_binlog"></a><code>sync_binlog</code></h3><p>binlog刷新到磁盘的时机跟sync_binlog参数相关，如果设置为0，则表示MySQL不控制binlog的刷新，由文件系统去控制它缓存的刷新，而如果设置为不为0的值则表示每sync_binlog次事务，MySQL调用文件系统的刷新操作刷新binlog到磁盘中。设为1是最安全的，在系统故障时最多丢失一个事务的更新，但是会对性能有所影响，一般情况下会设置为100或者0，牺牲一定的一致性来获取更好的性能。</p>
+<h3 id="expire-logs-days"><a href="#expire-logs-days" class="headerlink" title="expire_logs_days"></a><code>expire_logs_days</code></h3><p>指定binlog保留时间</p>
+<h3 id="清理binlog"><a href="#清理binlog" class="headerlink" title="清理binlog"></a>清理binlog</h3><p>要手动清理binlog可以通过指定binlog名字或者指定保留的日期  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">purge master logs to BINLOGNAME;</div><div class="line">purge master logs before DATE;</div></pre></td></tr></table></figure>
+<h3 id="查看binlog情况"><a href="#查看binlog情况" class="headerlink" title="查看binlog情况"></a>查看binlog情况</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SHOW MASTER LOGS;</div><div class="line"></div><div class="line">+------------------+-----------+</div><div class="line">| mysql-bin.000018 |       515 |</div><div class="line">| mysql-bin.000019 |       504 |</div><div class="line">| mysql-bin.000020 |       107 |</div><div class="line">+------------------+-----------+</div></pre></td></tr></table></figure>
+<p>第一列是binlog文件名，第二列是binlog文件大小</p>
+<h2 id="binlog和redo-undo-log的区别"><a href="#binlog和redo-undo-log的区别" class="headerlink" title="binlog和redo/undo log的区别"></a>binlog和redo/undo log的区别</h2><p>两者是完全不同的日志，主要有一下2个区别：</p>
+<ul>
+<li>层次不同。redo/undo log是innodb层维护的，而binlog是mysql server层维护的，跟采用何种引擎没有关系，记录的是所有引擎的更新操作的日志记录。</li>
+<li>记录内容不同。redo/undo日志记录的是每个页的修改情况，属于物理日志+逻辑日志结合的方式，目的是保证数据的一致性。binlog记录的都是事务操作内容，格式是二进制的。</li>
+</ul>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ol>
+<li><a href="http://dev.mysql.com/doc/refman/5.7/en/replication-options-binary-log.html" target="_blank" rel="external">mysql文档 18.1.6.4 Binary Logging Options and Variables</a></li>
+<li><a href="http://dev.mysql.com/doc/refman/5.7/en/binary-log.html" target="_blank" rel="external">mysql文档 6.4.4 The Binary Log</a>  </li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;The binary log contains “events” that describe database changes such as table creation operations or changes to table data. 
+    
+    </summary>
+    
+      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【一致性协议02】 3PC</title>
+    <link href="http://yoursite.com/2015/12/13/3PC/"/>
+    <id>http://yoursite.com/2015/12/13/3PC/</id>
+    <published>2015-12-13T03:23:21.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>3PC是在2PC的基础上，将第二阶段的提交协议中“提交事务请求”过程一分为二，形成了由<code>CanCommit</code>、<code>PreCommit</code>和<code>do Commit</code>三个阶段组成的事务处理协议。  </p>
+<p><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/%E4%B8%89%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E5%8D%8F%E8%AE%AE.png" alt="">  </p>
+<h3 id="阶段1：-CanCommit"><a href="#阶段1：-CanCommit" class="headerlink" title="阶段1： CanCommit"></a>阶段1： CanCommit</h3><ol>
+<li>事务询问</li>
+<li>各参与者向协调者反馈事务询问的相应</li>
+</ol>
+<h3 id="阶段2：-PreCommit"><a href="#阶段2：-PreCommit" class="headerlink" title="阶段2： PreCommit"></a>阶段2： PreCommit</h3><p>在阶段2中，协调者会根据参与者的反馈情况来决定是否可以进行事务的PreCommit操作，正常情况下，包含两种可能：</p>
+<ul>
+<li><strong>执行事务预提交</strong><blockquote>
+<p>假如协调者从所有参与者获得的反馈都是YES，就会执行事务的预提交</p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li>发送预提交请求</li>
+<li>事务预提交</li>
+<li>各参与者向协调者反馈事务执行的相应</li>
+</ol>
+<ul>
+<li><strong>中断事务</strong><blockquote>
+<p>假如任何一个参与者向协调者反馈了NO响应，或者在等待超时之后，协调者尚无法接收到所有的参与者反馈，就会中断事务</p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li>发送中断请求：协调者发送abort请求</li>
+<li>中断事务：无论是收到来自协调者的abort请求，或是在等待协调者请求过程中超时，参与者都会中断事务</li>
+</ol>
+<h3 id="阶段3：-doCommit"><a href="#阶段3：-doCommit" class="headerlink" title="阶段3： doCommit"></a>阶段3： doCommit</h3><p>进行真正的事务提交</p>
+<ul>
+<li><strong>执行提交</strong></li>
+</ul>
+<ol>
+<li>发送提交请求： 协调者发送doCommit请求</li>
+<li>事务提交</li>
+<li>反馈事务提交结果</li>
+<li>完成事务</li>
+</ol>
+<ul>
+<li><strong>中断事务</strong></li>
+</ul>
+<ol>
+<li>发送中断请求</li>
+<li>事务回滚：参与者在接收到abort请求后，会利用在第二个阶段记录的undo信息来执行事务回滚操作，并在回滚之后释放在整个事务执行期间占用的资源。  </li>
+<li>反馈事务回滚结果</li>
+<li>中断事务</li>
+</ol>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>阶段3可能会出现两种故障：</p>
+<ul>
+<li>协调者出现问题</li>
+<li>协调者和参与者之间网络出现问题<br>无论那种情况，最终都会导致参与者无法及时收到来协调者的<code>doCommit</code>或是<code>abort</code>请求，参与者在等待超时后，会放弃此次事务再次进行新的事务提交。</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;3PC是在2PC的基础上，将第二阶段的提交协议中“提交事务请求”过程一分为二，形成了由&lt;code&gt;CanCommit&lt;/code&gt;、&lt;code&gt;PreCommit&lt;/code&gt;和&lt;code&gt;do Commit&lt;/code&gt;三个阶段组成的事务处理协议。  &lt;/p&gt;
+&lt;p&gt;&lt;i
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+    
+  </entry>
+  
+</feed>
