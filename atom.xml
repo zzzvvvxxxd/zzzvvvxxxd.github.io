@@ -4,9 +4,9 @@
   <subtitle>最快的外卖小哥</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="http://zzzvvvxxxd.github.io/"/>
   <updated>2017-02-28T03:22:32.000Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>http://zzzvvvxxxd.github.io/</id>
   
   <author>
     <name>zzzvvvxxxd</name>
@@ -17,8 +17,8 @@
   
   <entry>
     <title>【一致性协议05】 ZAB协议详细介绍</title>
-    <link href="http://yoursite.com/2016/08/22/ZAB2/"/>
-    <id>http://yoursite.com/2016/08/22/ZAB2/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/08/22/ZAB2/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/08/22/ZAB2/</id>
     <published>2016-08-21T17:26:47.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -69,19 +69,19 @@
     
     </summary>
     
-      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
     
-      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
-      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+      <category term="一致性协议" scheme="http://zzzvvvxxxd.github.io/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
     
   </entry>
   
   <entry>
     <title>【Linux命令】照看好咱们的进程和线程</title>
-    <link href="http://yoursite.com/2016/08/20/Linux%E8%BF%9B%E7%A8%8B&amp;%E7%BA%BF%E7%A8%8B%E5%91%BD%E4%BB%A4/"/>
-    <id>http://yoursite.com/2016/08/20/Linux进程&amp;线程命令/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/08/20/Linux%E8%BF%9B%E7%A8%8B&amp;%E7%BA%BF%E7%A8%8B%E5%91%BD%E4%BB%A4/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/08/20/Linux进程&amp;线程命令/</id>
     <published>2016-08-20T09:36:53.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -111,17 +111,17 @@
     
     </summary>
     
-      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
+      <category term="Linux" scheme="http://zzzvvvxxxd.github.io/categories/Linux/"/>
     
     
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+      <category term="Linux" scheme="http://zzzvvvxxxd.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>【一致性协议04】 ZAB协议概述</title>
-    <link href="http://yoursite.com/2016/08/09/ZAB/"/>
-    <id>http://yoursite.com/2016/08/09/ZAB/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/08/09/ZAB/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/08/09/ZAB/</id>
     <published>2016-08-09T08:34:47.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -148,19 +148,19 @@
     
     </summary>
     
-      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
     
-      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
-      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+      <category term="一致性协议" scheme="http://zzzvvvxxxd.github.io/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
     
   </entry>
   
   <entry>
     <title>【一致性协议03】 Paxos和分布式系统</title>
-    <link href="http://yoursite.com/2016/08/08/Paxos/"/>
-    <id>http://yoursite.com/2016/08/08/Paxos/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/08/08/Paxos/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/08/08/Paxos/</id>
     <published>2016-08-08T13:43:21.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -265,19 +265,19 @@
     
     </summary>
     
-      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
     
-      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
-      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+      <category term="一致性协议" scheme="http://zzzvvvxxxd.github.io/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
     
   </entry>
   
   <entry>
     <title>【天池比赛日记 - 2】MaxDirectMemorySize和堆外内存</title>
-    <link href="http://yoursite.com/2016/07/22/DirectByteBuffer/"/>
-    <id>http://yoursite.com/2016/07/22/DirectByteBuffer/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/07/22/DirectByteBuffer/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/07/22/DirectByteBuffer/</id>
     <published>2016-07-22T13:03:11.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -303,19 +303,19 @@
     
     </summary>
     
-      <category term="JVM" scheme="http://yoursite.com/categories/JVM/"/>
+      <category term="JVM" scheme="http://zzzvvvxxxd.github.io/categories/JVM/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://zzzvvvxxxd.github.io/tags/Java/"/>
     
-      <category term="JVM" scheme="http://yoursite.com/tags/JVM/"/>
+      <category term="JVM" scheme="http://zzzvvvxxxd.github.io/tags/JVM/"/>
     
   </entry>
   
   <entry>
     <title>【天池比赛日记 - 1】稀疏文件和文件空洞</title>
-    <link href="http://yoursite.com/2016/07/21/%E7%A8%80%E7%96%8F%E6%96%87%E4%BB%B6%E5%92%8C%E6%96%87%E4%BB%B6%E7%A9%BA%E6%B4%9E/"/>
-    <id>http://yoursite.com/2016/07/21/稀疏文件和文件空洞/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/07/21/%E7%A8%80%E7%96%8F%E6%96%87%E4%BB%B6%E5%92%8C%E6%96%87%E4%BB%B6%E7%A9%BA%E6%B4%9E/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/07/21/稀疏文件和文件空洞/</id>
     <published>2016-07-21T13:03:11.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -364,19 +364,19 @@
     
     </summary>
     
-      <category term="JVM" scheme="http://yoursite.com/categories/JVM/"/>
+      <category term="JVM" scheme="http://zzzvvvxxxd.github.io/categories/JVM/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://zzzvvvxxxd.github.io/tags/Java/"/>
     
-      <category term="JVM" scheme="http://yoursite.com/tags/JVM/"/>
+      <category term="JVM" scheme="http://zzzvvvxxxd.github.io/tags/JVM/"/>
     
   </entry>
   
   <entry>
     <title>【mysql】binlog详解(2) binlog格式</title>
-    <link href="http://yoursite.com/2016/06/22/mysql_binlog2/"/>
-    <id>http://yoursite.com/2016/06/22/mysql_binlog2/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/06/22/mysql_binlog2/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/06/22/mysql_binlog2/</id>
     <published>2016-06-22T01:44:17.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -406,19 +406,19 @@
     
     </summary>
     
-      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+      <category term="数据库" scheme="http://zzzvvvxxxd.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
-      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+      <category term="数据库" scheme="http://zzzvvvxxxd.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+      <category term="mysql" scheme="http://zzzvvvxxxd.github.io/tags/mysql/"/>
     
   </entry>
   
   <entry>
     <title>阿里霸面的事</title>
-    <link href="http://yoursite.com/2016/05/12/%E9%9C%B8%E9%9D%A2/"/>
-    <id>http://yoursite.com/2016/05/12/霸面/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/05/12/%E9%9C%B8%E9%9D%A2/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/05/12/霸面/</id>
     <published>2016-05-12T08:12:11.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -437,17 +437,17 @@
     
     </summary>
     
-      <category term="日记" scheme="http://yoursite.com/categories/%E6%97%A5%E8%AE%B0/"/>
+      <category term="日记" scheme="http://zzzvvvxxxd.github.io/categories/%E6%97%A5%E8%AE%B0/"/>
     
     
-      <category term="日记" scheme="http://yoursite.com/tags/%E6%97%A5%E8%AE%B0/"/>
+      <category term="日记" scheme="http://zzzvvvxxxd.github.io/tags/%E6%97%A5%E8%AE%B0/"/>
     
   </entry>
   
   <entry>
     <title>Trie树</title>
-    <link href="http://yoursite.com/2016/04/06/%E7%AE%97%E6%B3%95-trie%E6%A0%91/"/>
-    <id>http://yoursite.com/2016/04/06/算法-trie树/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/04/06/%E7%AE%97%E6%B3%95-trie%E6%A0%91/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/04/06/算法-trie树/</id>
     <published>2016-04-06T05:28:11.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -460,19 +460,19 @@
     
     </summary>
     
-      <category term="多线程系列" scheme="http://yoursite.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97/"/>
+      <category term="多线程系列" scheme="http://zzzvvvxxxd.github.io/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E5%88%97/"/>
     
     
-      <category term="数据结构" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+      <category term="数据结构" scheme="http://zzzvvvxxxd.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
-      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="算法" scheme="http://zzzvvvxxxd.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
   <entry>
     <title>Java包装类与常量池</title>
-    <link href="http://yoursite.com/2016/04/03/%E5%B8%B8%E9%87%8F%E6%B1%A0/"/>
-    <id>http://yoursite.com/2016/04/03/常量池/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/04/03/%E5%B8%B8%E9%87%8F%E6%B1%A0/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/04/03/常量池/</id>
     <published>2016-04-03T13:13:29.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -485,17 +485,17 @@
     
     </summary>
     
-      <category term="笔试" scheme="http://yoursite.com/categories/%E7%AC%94%E8%AF%95/"/>
+      <category term="笔试" scheme="http://zzzvvvxxxd.github.io/categories/%E7%AC%94%E8%AF%95/"/>
     
     
-      <category term="笔试" scheme="http://yoursite.com/tags/%E7%AC%94%E8%AF%95/"/>
+      <category term="笔试" scheme="http://zzzvvvxxxd.github.io/tags/%E7%AC%94%E8%AF%95/"/>
     
   </entry>
   
   <entry>
     <title>【不简单的Atomic工具】getAndAddInt in getAndIncrement</title>
-    <link href="http://yoursite.com/2016/04/02/atomic3-getAndIncrement/"/>
-    <id>http://yoursite.com/2016/04/02/atomic3-getAndIncrement/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/04/02/atomic3-getAndIncrement/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/04/02/atomic3-getAndIncrement/</id>
     <published>2016-04-02T03:44:53.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -519,21 +519,21 @@
     
     </summary>
     
-      <category term="atomic" scheme="http://yoursite.com/categories/atomic/"/>
+      <category term="atomic" scheme="http://zzzvvvxxxd.github.io/categories/atomic/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://zzzvvvxxxd.github.io/tags/Java/"/>
     
-      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
-      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+      <category term="并发" scheme="http://zzzvvvxxxd.github.io/tags/%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
   <entry>
     <title>【不简单的Atomic工具】CAS</title>
-    <link href="http://yoursite.com/2016/03/27/atomic2-CAS/"/>
-    <id>http://yoursite.com/2016/03/27/atomic2-CAS/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/03/27/atomic2-CAS/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/03/27/atomic2-CAS/</id>
     <published>2016-03-27T13:12:33.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -576,21 +576,21 @@
     
     </summary>
     
-      <category term="atomic" scheme="http://yoursite.com/categories/atomic/"/>
+      <category term="atomic" scheme="http://zzzvvvxxxd.github.io/categories/atomic/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://zzzvvvxxxd.github.io/tags/Java/"/>
     
-      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
-      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+      <category term="并发" scheme="http://zzzvvvxxxd.github.io/tags/%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
   <entry>
     <title>两个栈组成队列</title>
-    <link href="http://yoursite.com/2016/03/26/%E7%AE%97%E6%B3%95-%E4%B8%A4%E4%B8%AA%E6%A0%88%E7%BB%84%E6%88%90%E7%9A%84%E9%98%9F%E5%88%97/"/>
-    <id>http://yoursite.com/2016/03/26/算法-两个栈组成的队列/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/03/26/%E7%AE%97%E6%B3%95-%E4%B8%A4%E4%B8%AA%E6%A0%88%E7%BB%84%E6%88%90%E7%9A%84%E9%98%9F%E5%88%97/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/03/26/算法-两个栈组成的队列/</id>
     <published>2016-03-26T11:12:06.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -609,21 +609,21 @@
     
     </summary>
     
-      <category term="算法" scheme="http://yoursite.com/categories/%E7%AE%97%E6%B3%95/"/>
+      <category term="算法" scheme="http://zzzvvvxxxd.github.io/categories/%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="数据结构" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+      <category term="数据结构" scheme="http://zzzvvvxxxd.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
-      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+      <category term="算法" scheme="http://zzzvvvxxxd.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
-      <category term="笔试面试" scheme="http://yoursite.com/tags/%E7%AC%94%E8%AF%95%E9%9D%A2%E8%AF%95/"/>
+      <category term="笔试面试" scheme="http://zzzvvvxxxd.github.io/tags/%E7%AC%94%E8%AF%95%E9%9D%A2%E8%AF%95/"/>
     
   </entry>
   
   <entry>
     <title>OneToOneQueue —— 终极性能的无锁队列算法</title>
-    <link href="http://yoursite.com/2016/03/26/one2oneQueue1/"/>
-    <id>http://yoursite.com/2016/03/26/one2oneQueue1/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/03/26/one2oneQueue1/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/03/26/one2oneQueue1/</id>
     <published>2016-03-26T08:37:41.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -694,21 +694,21 @@
     
     </summary>
     
-      <category term="多线程" scheme="http://yoursite.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://zzzvvvxxxd.github.io/tags/Java/"/>
     
-      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
-      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+      <category term="并发" scheme="http://zzzvvvxxxd.github.io/tags/%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
   <entry>
     <title>False Sharing问题（2）</title>
-    <link href="http://yoursite.com/2016/03/26/false_sharing2/"/>
-    <id>http://yoursite.com/2016/03/26/false_sharing2/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/03/26/false_sharing2/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/03/26/false_sharing2/</id>
     <published>2016-03-26T08:32:38.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -724,21 +724,21 @@
     
     </summary>
     
-      <category term="多线程" scheme="http://yoursite.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://zzzvvvxxxd.github.io/tags/Java/"/>
     
-      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
-      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+      <category term="并发" scheme="http://zzzvvvxxxd.github.io/tags/%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
   <entry>
     <title>False Sharing问题</title>
-    <link href="http://yoursite.com/2016/03/25/false_sharing/"/>
-    <id>http://yoursite.com/2016/03/25/false_sharing/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/03/25/false_sharing/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/03/25/false_sharing/</id>
     <published>2016-03-25T06:37:11.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -813,21 +813,21 @@
     
     </summary>
     
-      <category term="多线程" scheme="http://yoursite.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://zzzvvvxxxd.github.io/tags/Java/"/>
     
-      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
-      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+      <category term="并发" scheme="http://zzzvvvxxxd.github.io/tags/%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
   <entry>
     <title>【不简单的Atomic工具】lazySet &amp; set</title>
-    <link href="http://yoursite.com/2016/03/24/atomic1/"/>
-    <id>http://yoursite.com/2016/03/24/atomic1/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/03/24/atomic1/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/03/24/atomic1/</id>
     <published>2016-03-24T14:40:11.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -844,21 +844,21 @@
     
     </summary>
     
-      <category term="atomic" scheme="http://yoursite.com/categories/atomic/"/>
+      <category term="atomic" scheme="http://zzzvvvxxxd.github.io/categories/atomic/"/>
     
     
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
+      <category term="Java" scheme="http://zzzvvvxxxd.github.io/tags/Java/"/>
     
-      <category term="多线程" scheme="http://yoursite.com/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+      <category term="多线程" scheme="http://zzzvvvxxxd.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
-      <category term="并发" scheme="http://yoursite.com/tags/%E5%B9%B6%E5%8F%91/"/>
+      <category term="并发" scheme="http://zzzvvvxxxd.github.io/tags/%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
   <entry>
     <title>【mysql】binlog详解(1)</title>
-    <link href="http://yoursite.com/2016/02/13/mysql_binlog/"/>
-    <id>http://yoursite.com/2016/02/13/mysql_binlog/</id>
+    <link href="http://zzzvvvxxxd.github.io/2016/02/13/mysql_binlog/"/>
+    <id>http://zzzvvvxxxd.github.io/2016/02/13/mysql_binlog/</id>
     <published>2016-02-13T08:11:22.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -925,19 +925,19 @@
     
     </summary>
     
-      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+      <category term="数据库" scheme="http://zzzvvvxxxd.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
-      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+      <category term="数据库" scheme="http://zzzvvvxxxd.github.io/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+      <category term="mysql" scheme="http://zzzvvvxxxd.github.io/tags/mysql/"/>
     
   </entry>
   
   <entry>
     <title>【一致性协议02】 3PC</title>
-    <link href="http://yoursite.com/2015/12/13/3PC/"/>
-    <id>http://yoursite.com/2015/12/13/3PC/</id>
+    <link href="http://zzzvvvxxxd.github.io/2015/12/13/3PC/"/>
+    <id>http://zzzvvvxxxd.github.io/2015/12/13/3PC/</id>
     <published>2015-12-13T03:23:21.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -1002,19 +1002,19 @@
     
     </summary>
     
-      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
     
-      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
-      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+      <category term="一致性协议" scheme="http://zzzvvvxxxd.github.io/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
     
   </entry>
   
   <entry>
     <title>【一致性协议01】 2PC</title>
-    <link href="http://yoursite.com/2015/12/11/2PC/"/>
-    <id>http://yoursite.com/2015/12/11/2PC/</id>
+    <link href="http://zzzvvvxxxd.github.io/2015/12/11/2PC/"/>
+    <id>http://zzzvvvxxxd.github.io/2015/12/11/2PC/</id>
     <published>2015-12-11T13:43:21.000Z</published>
     <updated>2017-02-28T03:22:32.000Z</updated>
     
@@ -1110,12 +1110,12 @@
     
     </summary>
     
-      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
     
-      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+      <category term="分布式" scheme="http://zzzvvvxxxd.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
-      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+      <category term="一致性协议" scheme="http://zzzvvvxxxd.github.io/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
     
   </entry>
   
