@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-10T03:42:22.000Z</updated>
+  <updated>2017-02-28T03:22:32.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,48 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Future笔记</title>
-    <link href="http://yoursite.com/2017/03/02/Future/"/>
-    <id>http://yoursite.com/2017/03/02/Future/</id>
-    <published>2017-03-02T11:17:21.000Z</published>
-    <updated>2017-08-10T03:42:22.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="1-JDK5"><a href="#1-JDK5" class="headerlink" title="1. JDK5+"></a>1. JDK5+</h2><ul>
-<li><code>Future</code> 只能通过轮询的方式进行查询</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Future</span>&lt;<span class="title">V</span>&gt; </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">cancel</span><span class="params">(<span class="keyword">boolean</span> mayInterruptIfRunning)</span></span>;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isCancelled</span><span class="params">()</span></span>;</div><div class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isDone</span><span class="params">()</span></span>;</div><div class="line">  <span class="function">V <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="2-Guava"><a href="#2-Guava" class="headerlink" title="2. Guava"></a>2. Guava</h2><ul>
-<li><code>ListenableFuture</code>提供<code>addListener()</code>和<code>addCallback()</code>的方式进行回调</li>
-</ul>
-<p><code>ListenableFuture</code>继承自<code>Future</code>，可以通过<code>addListener</code>添加Listener</p>
-<p>Guava还提供了一些Util函数：</p>
-<ol>
-<li><code>addCallback</code>在某个<code>ListenableFuture</code>上添加Callback</li>
-<li><code>transform</code>可以把一个<code>ListenerFuture</code>通过一个Function变成另外一个ListenerFuture</li>
-</ol>
-<h2 id="3-JDK8"><a href="#3-JDK8" class="headerlink" title="3. JDK8"></a>3. JDK8</h2><ul>
-<li><code>CompleteableFuture</code>（提供了较为完整的<code>Future</code>支持）</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;1-JDK5&quot;&gt;&lt;a href=&quot;#1-JDK5&quot; class=&quot;headerlink&quot; title=&quot;1. JDK5+&quot;&gt;&lt;/a&gt;1. JDK5+&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Future&lt;/code&gt; 只能通过轮询的方式进行查询&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="Java,JDK" scheme="http://yoursite.com/categories/Java-JDK/"/>
-    
-    
-      <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
-    
-      <category term="JDK" scheme="http://yoursite.com/tags/JDK/"/>
-    
-  </entry>
   
   <entry>
     <title>【一致性协议05】 ZAB协议详细介绍</title>
@@ -1041,6 +999,114 @@
     
       &lt;p&gt;3PC是在2PC的基础上，将第二阶段的提交协议中“提交事务请求”过程一分为二，形成了由&lt;code&gt;CanCommit&lt;/code&gt;、&lt;code&gt;PreCommit&lt;/code&gt;和&lt;code&gt;do Commit&lt;/code&gt;三个阶段组成的事务处理协议。  &lt;/p&gt;
 &lt;p&gt;&lt;i
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://yoursite.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://yoursite.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+      <category term="一致性协议" scheme="http://yoursite.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【一致性协议01】 2PC</title>
+    <link href="http://yoursite.com/2015/12/11/2PC/"/>
+    <id>http://yoursite.com/2015/12/11/2PC/</id>
+    <published>2015-12-11T13:43:21.000Z</published>
+    <updated>2017-02-28T03:22:32.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.<br>利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  </p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>原理简单，实现方便</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p>同步阻塞</p>
+<blockquote>
+<p>极大的限制了系统的性能</p>
+</blockquote>
+</li>
+<li><p>单点问题</p>
+<blockquote>
+<p>协调者在整个二阶段提交过程中，一旦出现故障（尤其是在阶段二），都会导致系统无法正常运行</p>
+</blockquote>
+</li>
+<li><p>脑裂</p>
+<blockquote>
+<p>也就是数据不一致<br>在阶段二，即执行事务提交的阶段，当协调者向所有参与者发送commit请求之后，发生了局域网络异常或者是协调者在尚未发送完commit请求之前自身崩溃，导致只有部分的参与者接收到了commit请求，这部分参与者就会进行事务的提交，没有收到commit的参与者则无法进行事务的提交。于是，整个分布式系统出现数据不一致的情况。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程:"></a>流程:</h3><p>阶段1: 提交事务请求(投票阶段):</p>
+<ol>
+<li><p>事务询问.</p>
+<blockquote>
+<p>协调者向所有的参与者发送事务内容,询问是否可以执行事务提交操作,并开始等待各参与者的响应.  </p>
+</blockquote>
+</li>
+<li><p>执行事务.</p>
+<blockquote>
+<p>各参与者节点执行事务操作,并将<code>Undo</code>和<code>Redo</code>信息记入事务日志.</p>
+</blockquote>
+</li>
+<li><p>各参与者向协调者反馈事务询问的响应</p>
+<blockquote>
+<p>如果参与者成功执行了事务操作,那么就反馈给协调者<code>Yes</code>信息,表示事务可以执行; 如果参与者没有成功执行事务就反馈给协调者<code>No</code>响应,表示事务不可以执行.  </p>
+</blockquote>
+</li>
+</ol>
+<p>这个阶段可以看成一种投票阶段,即各个参与者投票表明是否要继续执行接下去的事务提交操作.  </p>
+<p>阶段2: 执行事务提交<br>这个阶段,协调者会根据参与者的反馈情况来决定是否最终进行<code>commit</code>.一般,包含两种可能:  </p>
+<h6 id="1-执行事务提交"><a href="#1-执行事务提交" class="headerlink" title="#1 执行事务提交:"></a>#1 执行事务提交:</h6><ol>
+<li><p>发送提交请求</p>
+<blockquote>
+<p>假如协调者从所有的参与者获得的反馈都是<code>YES</code>,那么就执行提交操作,协调者向参与者发送<code>commit</code>请求</p>
+</blockquote>
+</li>
+<li><p>事务提交</p>
+<blockquote>
+<p>参与者接受到<code>Commit</code>请求后,会正式执行事务提交操作,并在完成后释放整个事务执行期间所占用的资源</p>
+</blockquote>
+</li>
+<li><p>反馈事务提交结果</p>
+<blockquote>
+<p>参与者在完成事务提交之后,向协调者发送<code>Ack</code>信息</p>
+</blockquote>
+</li>
+<li><p>完成事务</p>
+<blockquote>
+<p>协调者收到所有参与者的<code>Ack</code>消息后,完成事务</p>
+</blockquote>
+</li>
+</ol>
+<h6 id="2-中断事务"><a href="#2-中断事务" class="headerlink" title="#2 中断事务:"></a>#2 中断事务:</h6><p>如果任何一个参与者返回了<code>No</code>信息，或者等待超时之后，协调者尚无法接受到所有的参与者反馈信息，就会中断事务。  </p>
+<ol>
+<li><p>发送回滚请求</p>
+<blockquote>
+<p>协调者向所有参与者发出Rollback请求</p>
+</blockquote>
+</li>
+<li><p>事务回滚</p>
+<blockquote>
+<p>参与者接收到Rollback请求后，会利用其在阶段一种记录的Undo信息来执行回滚操作，并在完成回滚之后释放在整个事务执行期间占用的资源。  </p>
+</blockquote>
+</li>
+<li><p>反馈事务回滚结果</p>
+<blockquote>
+<p>参与者在完成事务回滚之后，向协调者发送<code>Ack</code>消息</p>
+</blockquote>
+</li>
+<li><p>中断事务</p>
+<blockquote>
+<p>协调者收到所有参与者反馈的<code>Ack</code>消息之后，完成事务中断</p>
+</blockquote>
+</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.&lt;br&gt;利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证
     
     </summary>
     

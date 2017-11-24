@@ -1,12 +1,89 @@
 <!DOCTYPE html>
-<html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
 <head>
-    <!-- so meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="一、消息广播1.1 类似二阶段提交的消息广播ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于2PC。针对客户端的事务请求，Leader服务器会为其是生成对应的事务Proposal，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="分布式,一致性协议," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="zzzvvvxxxd" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="一、消息广播1.1 类似二阶段提交的消息广播ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于2PC。针对客户端的事务请求，Leader服务器会为其是生成对应的事务Proposal，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。
 和2PC略有不同，这里的二阶段提交过程移除了中断（abort）逻辑。所有的Follower要么正常反馈，要么就抛弃Leader">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【一致性协议05】 ZAB协议详细介绍">
@@ -23,127 +100,249 @@
 <meta name="twitter:description" content="一、消息广播1.1 类似二阶段提交的消息广播ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于2PC。针对客户端的事务请求，Leader服务器会为其是生成对应的事务Proposal，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。
 和2PC略有不同，这里的二阶段提交过程移除了中断（abort）逻辑。所有的Follower要么正常反馈，要么就抛弃Leader">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD.JPG">
-    
-    
-        
-          
-              <link rel="shortcut icon" href="/images/favicon.ico">
-          
-        
-        
-          
-            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
-          
-        
-        
-          
-            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-          
-        
-    
-    <!-- title -->
-    <title>【一致性协议05】 ZAB协议详细介绍</title>
-    <!-- styles -->
-    <link rel="stylesheet" href="/css/style.css">
-    <!-- rss -->
-    
-    
-</head>
-
-<body>
-    
-      <div id="header-post">
-  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
-  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
-  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
-  <span id="menu">
-    <span id="nav">
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="https://github.com/zzzvvvxxxd">Projects</a></li>
-        
-      </ul>
-    </span>
-    <br/>
-    <span id="actions">
-      <ul>
-        
-        <li><a class="icon" href="/2017/03/02/Future/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover='$("#i-prev").toggle();' onmouseout='$("#i-prev").toggle();'></i></a></li>
-        
-        
-        <li><a class="icon" href="/2016/08/20/Linux进程&线程命令/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
-        
-        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
-        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
-      </ul>
-      <span id="i-prev" class="info" style="display:none;">Previous post</span>
-      <span id="i-next" class="info" style="display:none;">Next post</span>
-      <span id="i-top" class="info" style="display:none;">Back to top</span>
-      <span id="i-share" class="info" style="display:none;">Share post</span>
-    </span>
-    <br/>
-    <div id="share" style="display: none">
-      <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2016/08/22/ZAB2/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2016/08/22/ZAB2/&text=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2016/08/22/ZAB2/&is_video=false&description=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【一致性协议05】 ZAB协议详细介绍&body=Check out this article: http://yoursite.com/2016/08/22/ZAB2/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2016/08/22/ZAB2/&name=【一致性协议05】 ZAB协议详细介绍&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-    <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、消息广播"><span class="toc-number">1.</span> <span class="toc-text">一、消息广播</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-类似二阶段提交的消息广播"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 类似二阶段提交的消息广播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-ZXID"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 ZXID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-具体流程"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 具体流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、崩溃恢复"><span class="toc-number">2.</span> <span class="toc-text">二、崩溃恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-概述"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-基本特性"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 基本特性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-选举算法"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 选举算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、数据同步"><span class="toc-number">3.</span> <span class="toc-text">三、数据同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-正常的数据恢复流程"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 正常的数据恢复流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-如何处理需要被丢弃的事务Proposal"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 如何处理需要被丢弃的事务Proposal</span></a></li></ol></li></ol>
-    </div>
-  </span>
-</div>
-
-    
-    <div class="content index width mx-auto px2 my4">
-        
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-  <header>
-    
-    <h1 class="posttitle" itemprop="name headline">
-        【一致性协议05】 ZAB协议详细介绍
-    </h1>
 
 
 
-    <div class="meta">
-      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span itemprop="name">zzzvvvxxxd</span>
-      </span>
-      
-    <div class="postdate">
-        <time datetime="2016-08-21T17:26:47.000Z" itemprop="datePublished">2016-08-22</time>
-    </div>
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
 
 
-      
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/一致性协议/">一致性协议</a>, <a class="tag-link" href="/tags/分布式/">分布式</a>
-    </div>
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/22/ZAB2/"/>
 
 
-    </div>
-  </header>
+
+
+
+  <title>【一致性协议05】 ZAB协议详细介绍 | zzzvvvxxxd</title>
   
 
-  <div class="content" itemprop="articleBody">
-    <h2 id="一、消息广播"><a href="#一、消息广播" class="headerlink" title="一、消息广播"></a>一、消息广播</h2><h3 id="1-1-类似二阶段提交的消息广播"><a href="#1-1-类似二阶段提交的消息广播" class="headerlink" title="1.1 类似二阶段提交的消息广播"></a>1.1 类似二阶段提交的消息广播</h3><p>ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于<code>2PC</code>。针对客户端的事务请求，Leader服务器会为其是生成对应的事务<code>Proposal</code>，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。<br><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD.JPG" alt="ZAB协议消息广播流程示意图"></p>
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zzzvvvxxxd</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">最快的外卖小哥</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/22/ZAB2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zzzvvvxxxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zzzvvvxxxd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【一致性协议05】 ZAB协议详细介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-22T01:26:47+08:00">
+                2016-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/08/22/ZAB2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/08/22/ZAB2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、消息广播"><a href="#一、消息广播" class="headerlink" title="一、消息广播"></a>一、消息广播</h2><h3 id="1-1-类似二阶段提交的消息广播"><a href="#1-1-类似二阶段提交的消息广播" class="headerlink" title="1.1 类似二阶段提交的消息广播"></a>1.1 类似二阶段提交的消息广播</h3><p>ZAB协议的消息广播过程本质就是一个简单的原子广播协议，类似于<code>2PC</code>。针对客户端的事务请求，Leader服务器会为其是生成对应的事务<code>Proposal</code>，并将其发送给集群中其余的所有机器，然后再分别收集各自的选票，最后进行事务提交。<br><img src="https://raw.githubusercontent.com/zzzvvvxxxd/Picture/master/hexo/ZAB%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD.JPG" alt="ZAB协议消息广播流程示意图"></p>
 <p>和<code>2PC</code>略有不同，这里的二阶段提交过程移除了中断（abort）逻辑。所有的Follower要么正常反馈，要么就抛弃Leader服务器。同时ZAB协议将二阶段提交中的中断逻辑移除意味着我们可以在过半的Follower服务器已经反馈<code>Ack</code>之后就开始提交<code>Proposal</code>了，而不需要等待集群中的所有Follower服务器都反馈响应。    </p>
 <p>在这种简化的二阶段提交模型下，无法处理Leader服务器崩溃带来的数据不一致问题，因此引入了<strong>崩溃回复模式</strong>。  </p>
 <h3 id="1-2-ZXID"><a href="#1-2-ZXID" class="headerlink" title="1.2 ZXID"></a>1.2 ZXID</h3><p>Leader会为每个事物Proposal分配一个全局唯一的单调递增ID：<code>ZXID</code>（事务ID）。由于ZAB协议要保证每一个消息严格的因果关系，因此必须将每一个事务Proposal按照其<code>ZXID</code>先后顺序来进行排序与处理：</p>
@@ -183,107 +382,416 @@
 </ul>
 <p>基于这样的策略，当一个包含了上一个Leader周期中没有提交的事务Proposal的服务器启动时，其肯定无法成为Leader，则以Follower角色连上当前的Leader服务器。Leader会根据自己服务器上最后提交的Proposal和Follower的Proposal进行比较，Leader会要求Follower进行一定的回退操作，回退到最后一个确认已经被过半机器提交的事务。</p>
 
-  </div>
-</article>
-
-
-
+      
     </div>
     
-      <div id="footer-post-container">
-  <div id="footer-post">
+    
+    
 
-    <div id="nav-footer" style="display: none">
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="https://github.com/zzzvvvxxxd">Projects</a></li>
-        
-      </ul>
-    </div>
+    
 
-    <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、消息广播"><span class="toc-number">1.</span> <span class="toc-text">一、消息广播</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-类似二阶段提交的消息广播"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 类似二阶段提交的消息广播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-ZXID"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 ZXID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-具体流程"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 具体流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、崩溃恢复"><span class="toc-number">2.</span> <span class="toc-text">二、崩溃恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-概述"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-基本特性"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 基本特性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-选举算法"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 选举算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、数据同步"><span class="toc-number">3.</span> <span class="toc-text">三、数据同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-正常的数据恢复流程"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 正常的数据恢复流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-如何处理需要被丢弃的事务Proposal"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 如何处理需要被丢弃的事务Proposal</span></a></li></ol></li></ol>
-    </div>
+    
 
-    <div id="share-footer" style="display: none">
-      <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2016/08/22/ZAB2/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2016/08/22/ZAB2/&text=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2016/08/22/ZAB2/&is_video=false&description=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【一致性协议05】 ZAB协议详细介绍&body=Check out this article: http://yoursite.com/2016/08/22/ZAB2/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2016/08/22/ZAB2/&title=【一致性协议05】 ZAB协议详细介绍"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2016/08/22/ZAB2/&name=【一致性协议05】 ZAB协议详细介绍&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-</ul>
+    
 
-    </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式/" rel="tag"># 分布式</a>
+          
+            <a href="/tags/一致性协议/" rel="tag"># 一致性协议</a>
+          
+        </div>
+      
 
-    <div id="actions-footer">
-      <ul>
-        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
-        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
-        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
-        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
-      </ul>
-    </div>
+      
+      
+      
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/20/Linux进程&线程命令/" rel="next" title="【Linux命令】照看好咱们的进程和线程">
+                <i class="fa fa-chevron-left"></i> 【Linux命令】照看好咱们的进程和线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">zzzvvvxxxd</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">Artikel</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">Kategorien</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">Tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、消息广播"><span class="nav-number">1.</span> <span class="nav-text">一、消息广播</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-类似二阶段提交的消息广播"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 类似二阶段提交的消息广播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-ZXID"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 ZXID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-具体流程"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 具体流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、崩溃恢复"><span class="nav-number">2.</span> <span class="nav-text">二、崩溃恢复</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-概述"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-基本特性"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 基本特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-选举算法"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 选举算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、数据同步"><span class="nav-number">3.</span> <span class="nav-text">三、数据同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-正常的数据恢复流程"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 正常的数据恢复流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-如何处理需要被丢弃的事务Proposal"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 如何处理需要被丢弃的事务Proposal</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zzzvvvxxxd</span>
+
+  
 </div>
 
-    
-    <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy; 2017 zzzvvvxxxd
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-         
-          <li><a href="/">Home</a></li>
-         
-          <li><a href="/about/">About</a></li>
-         
-          <li><a href="/archives/">Writing</a></li>
-         
-          <li><a href="https://github.com/zzzvvvxxxd">Projects</a></li>
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
         
-      </ul>
-    </nav>
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
   </div>
-</footer>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zzzvvvxxxd.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2016/08/22/ZAB2/';
+          this.page.identifier = '2016/08/22/ZAB2/';
+          this.page.title = '【一致性协议05】 ZAB协议详细介绍';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zzzvvvxxxd.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
 
 </body>
 </html>
-<!-- styles -->
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
-<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
-
-
-<!-- jquery -->
-<script src="/lib/jquery/jquery.min.js"></script>
-<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
-<script src="/js/main.js"></script>
-<!-- Google Analytics -->
-
-    <script type="text/javascript">
-        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-86660611-1', 'auto');
-        ga('send', 'pageview');
-    </script>
-
-<!-- Disqus Comments -->
-
-
