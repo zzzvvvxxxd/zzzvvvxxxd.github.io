@@ -81,16 +81,40 @@
 
 
 
-<meta name="description" content="可以指定三种binary log的格式（启动时指定）：1234567891011121314151617181920212223242526--binlog-format=STATEMENT--binlog-format=ROW--binlog-format=MIXED```  * `statement-based logging`： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID">
+<meta name="description" content="可以指定三种binary log的格式（启动时指定）：  
+
+binlog-format=STATEMENT
+binlog-format=ROW
+binlog-format=MIXED
+
+
+statement-based logging： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID, LOAD DATA INFILE等在复制过程可能导致数据不一致甚至出错。  
+row-base">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【mysql】binlog详解(2) binlog格式">
 <meta property="og:url" content="http://zzzvvvxxxd.github.io/2016/06/22/mysql_binlog2/index.html">
 <meta property="og:site_name" content="zzzvvvxxxd">
-<meta property="og:description" content="可以指定三种binary log的格式（启动时指定）：1234567891011121314151617181920212223242526--binlog-format=STATEMENT--binlog-format=ROW--binlog-format=MIXED```  * `statement-based logging`： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID">
-<meta property="og:updated_time" content="2017-11-24T08:57:08.000Z">
+<meta property="og:description" content="可以指定三种binary log的格式（启动时指定）：  
+
+binlog-format=STATEMENT
+binlog-format=ROW
+binlog-format=MIXED
+
+
+statement-based logging： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID, LOAD DATA INFILE等在复制过程可能导致数据不一致甚至出错。  
+row-base">
+<meta property="og:updated_time" content="2017-11-24T09:03:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【mysql】binlog详解(2) binlog格式">
-<meta name="twitter:description" content="可以指定三种binary log的格式（启动时指定）：1234567891011121314151617181920212223242526--binlog-format=STATEMENT--binlog-format=ROW--binlog-format=MIXED```  * `statement-based logging`： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID">
+<meta name="twitter:description" content="可以指定三种binary log的格式（启动时指定）：  
+
+binlog-format=STATEMENT
+binlog-format=ROW
+binlog-format=MIXED
+
+
+statement-based logging： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID, LOAD DATA INFILE等在复制过程可能导致数据不一致甚至出错。  
+row-base">
 
 
 
@@ -186,7 +210,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -196,7 +220,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            About
+            Über
           </a>
         </li>
       
@@ -206,7 +230,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -270,7 +294,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-22T09:44:17+08:00">
                 2016-06-22
@@ -291,7 +315,7 @@
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">In</span>
+                <span class="post-meta-item-text">in</span>
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
@@ -343,7 +367,23 @@
       
 
       
-        <p>可以指定三种binary log的格式（启动时指定）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">--binlog-format=STATEMENT</div><div class="line">--binlog-format=ROW</div><div class="line">--binlog-format=MIXED</div><div class="line">```  </div><div class="line"></div><div class="line"></div><div class="line">* `statement-based logging`： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID, LOAD DATA INFILE等在复制过程可能导致数据不一致甚至出错。  </div><div class="line">* `row-based logging`：基于行，记录影响table中每一行的事务，很安全，很安全。但是binlog会比其他两种模式大很多，在一些大表中清除大量数据时在binlog中会生成很多条语句，可能导致从库延迟变大。  </div><div class="line">* `mixed logging`：使用statement-based logging作为默认，但是日志模式可能会在某些情况下自动切换到row-based logging。</div><div class="line"></div><div class="line">`statement-based logging`可能回带来复制上的安全问题：</div><div class="line">&gt; With statement-based replication, there may be issues with replicating nondeterministic statements. In deciding whether or not a given statement is safe for statement-based replication, MySQL determines whether it can guarantee that the statement can be replicated using statement-based logging. If MySQL cannot make this guarantee, it marks the statement as potentially unreliable and issues the warning, Statement may not be safe to log in statement format.  </div><div class="line">You can avoid these issues by using MySQL&apos;s row-based replication instead.</div><div class="line"></div><div class="line">除了开头提到的启动参数，binlog的格式还可以在运行时切换：  </div><div class="line"></div><div class="line">```shell</div><div class="line">// GLOBAL</div><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;STATEMENT&apos;;</div><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;ROW&apos;;</div><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;MIXED&apos;;</div><div class="line"></div><div class="line">// SESSION</div><div class="line">mysql&gt; SET SESSION binlog_format = &apos;STATEMENT&apos;;</div><div class="line">mysql&gt; SET SESSION binlog_format = &apos;ROW&apos;;</div><div class="line">mysql&gt; SET SESSION binlog_format = &apos;MIXED&apos;;</div></pre></td></tr></table></figure></p>
+        <p>可以指定三种binary log的格式（启动时指定）：  </p>
+<ul>
+<li><code>binlog-format=STATEMENT</code></li>
+<li><code>binlog-format=ROW</code></li>
+<li><code>binlog-format=MIXED</code></li>
+</ul>
+<ul>
+<li><code>statement-based logging</code>： 基于SQL语句，Mysql5.6默认，某些语句和函数如UUID, LOAD DATA INFILE等在复制过程可能导致数据不一致甚至出错。  </li>
+<li><code>row-based logging</code>：基于行，记录影响table中每一行的事务，很安全，很安全。但是binlog会比其他两种模式大很多，在一些大表中清除大量数据时在binlog中会生成很多条语句，可能导致从库延迟变大。  </li>
+<li><code>mixed logging</code>：使用statement-based logging作为默认，但是日志模式可能会在某些情况下自动切换到row-based logging。</li>
+</ul>
+<p><code>statement-based logging</code>可能回带来复制上的安全问题：</p>
+<blockquote>
+<p>With statement-based replication, there may be issues with replicating nondeterministic statements. In deciding whether or not a given statement is safe for statement-based replication, MySQL determines whether it can guarantee that the statement can be replicated using statement-based logging. If MySQL cannot make this guarantee, it marks the statement as potentially unreliable and issues the warning, Statement may not be safe to log in statement format.<br>You can avoid these issues by using MySQL’s row-based replication instead.</p>
+</blockquote>
+<p>除了开头提到的启动参数，binlog的格式还可以在运行时切换：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// GLOBAL</div><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;STATEMENT&apos;;</div><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;ROW&apos;;</div><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;MIXED&apos;;</div><div class="line"></div><div class="line">// SESSION</div><div class="line">mysql&gt; SET SESSION binlog_format = &apos;STATEMENT&apos;;</div><div class="line">mysql&gt; SET SESSION binlog_format = &apos;ROW&apos;;</div><div class="line">mysql&gt; SET SESSION binlog_format = &apos;MIXED&apos;;</div></pre></td></tr></table></figure>
 <p>一般基于以下几个理由会设置<code>SESSION</code>级别的binlog format切换：</p>
 <ul>
 <li>在对数据库做出了很多小的改变时，可能会需要使用 row-based logging  </li>
@@ -482,7 +522,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">29</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -493,7 +533,7 @@
               <div class="site-state-item site-state-categories">
                 
                   <span class="site-state-item-count">11</span>
-                  <span class="site-state-item-name">categories</span>
+                  <span class="site-state-item-name">Kategorien</span>
                 
               </div>
             
@@ -504,7 +544,7 @@
               <div class="site-state-item site-state-tags">
                 
                   <span class="site-state-item-count">14</span>
-                  <span class="site-state-item-name">tags</span>
+                  <span class="site-state-item-name">Tags</span>
                 
               </div>
             
@@ -559,7 +599,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
