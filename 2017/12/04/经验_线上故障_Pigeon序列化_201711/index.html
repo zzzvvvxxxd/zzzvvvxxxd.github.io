@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="分布式,一致性协议," />
+  <meta name="keywords" content="经验," />
 
 
 
@@ -81,46 +81,19 @@
 
 
 
-<meta name="description" content="Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  
-优点原理简单，实现方便
-缺点
-同步阻塞
-
-极大的限制了系统的性能
-
-
-单点问题
-
-协调者在整个二阶段提交过程中">
+<meta name="description" content="前因后果外卖某需求在上线前，有同学反馈测试环境机器每次部署完几分钟后就会进入无响应状态，显然是因为某种原因，应用发生了僵死。由于发生在上线前 \所以立即进行排查，并找出Pigeon（大众点评自研RPC框架）的一个bug，并提前避免了严重的线上故障。
+排障流程1. 更换测试环境机器由于僵死现象之前开发和测试过程中一直没有发生，第一时间先选择相信代码质量，同时，由于beta环境中一台宿主机会运行超过1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【一致性协议01】 2PC">
-<meta property="og:url" content="http://zzzvvvxxxd.github.io/2015/12/11/2PC/index.html">
+<meta property="og:title" content="【排查日记】Pigeon序列化错误死循环错误引起的应用僵死">
+<meta property="og:url" content="http://zzzvvvxxxd.github.io/2017/12/04/经验_线上故障_Pigeon序列化_201711/index.html">
 <meta property="og:site_name" content="zzzvvvxxxd">
-<meta property="og:description" content="Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  
-优点原理简单，实现方便
-缺点
-同步阻塞
-
-极大的限制了系统的性能
-
-
-单点问题
-
-协调者在整个二阶段提交过程中">
-<meta property="og:updated_time" content="2017-02-28T03:22:32.000Z">
+<meta property="og:description" content="前因后果外卖某需求在上线前，有同学反馈测试环境机器每次部署完几分钟后就会进入无响应状态，显然是因为某种原因，应用发生了僵死。由于发生在上线前 \所以立即进行排查，并找出Pigeon（大众点评自研RPC框架）的一个bug，并提前避免了严重的线上故障。
+排障流程1. 更换测试环境机器由于僵死现象之前开发和测试过程中一直没有发生，第一时间先选择相信代码质量，同时，由于beta环境中一台宿主机会运行超过1">
+<meta property="og:updated_time" content="2017-12-04T03:54:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【一致性协议01】 2PC">
-<meta name="twitter:description" content="Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  
-优点原理简单，实现方便
-缺点
-同步阻塞
-
-极大的限制了系统的性能
-
-
-单点问题
-
-协调者在整个二阶段提交过程中">
+<meta name="twitter:title" content="【排查日记】Pigeon序列化错误死循环错误引起的应用僵死">
+<meta name="twitter:description" content="前因后果外卖某需求在上线前，有同学反馈测试环境机器每次部署完几分钟后就会进入无响应状态，显然是因为某种原因，应用发生了僵死。由于发生在上线前 \所以立即进行排查，并找出Pigeon（大众点评自研RPC框架）的一个bug，并提前避免了严重的线上故障。
+排障流程1. 更换测试环境机器由于僵死现象之前开发和测试过程中一直没有发生，第一时间先选择相信代码质量，同时，由于beta环境中一台宿主机会运行超过1">
 
 
 
@@ -150,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://zzzvvvxxxd.github.io/2015/12/11/2PC/"/>
+  <link rel="canonical" href="http://zzzvvvxxxd.github.io/2017/12/04/经验_线上故障_Pigeon序列化_201711/"/>
 
 
 
 
 
-  <title>【一致性协议01】 2PC | zzzvvvxxxd</title>
+  <title>【排查日记】Pigeon序列化错误死循环错误引起的应用僵死 | zzzvvvxxxd</title>
   
 
 
@@ -273,7 +246,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zzzvvvxxxd.github.io/2015/12/11/2PC/">
+    <link itemprop="mainEntityOfPage" href="http://zzzvvvxxxd.github.io/2017/12/04/经验_线上故障_Pigeon序列化_201711/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zzzvvvxxxd">
@@ -290,7 +263,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【一致性协议01】 2PC</h1>
+          <h1 class="post-title" itemprop="name headline">【排查日记】Pigeon序列化错误死循环错误引起的应用僵死</h1>
         
 
         <div class="post-meta">
@@ -302,8 +275,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-12-11T21:43:21+08:00">
-                2015-12-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-04T11:06:24+08:00">
+                2017-12-04
               </time>
             
 
@@ -325,8 +298,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式</span>
+                  <a href="/categories/经验/" itemprop="url" rel="index">
+                    <span itemprop="name">经验</span>
                   </a>
                 </span>
 
@@ -343,9 +316,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2015/12/11/2PC/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/04/经验_线上故障_Pigeon序列化_201711/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2015/12/11/2PC/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/12/04/经验_线上故障_Pigeon序列化_201711/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -373,90 +346,11 @@
       
 
       
-        <p>Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.<br>利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  </p>
-<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>原理简单，实现方便</p>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
-<li><p>同步阻塞</p>
-<blockquote>
-<p>极大的限制了系统的性能</p>
-</blockquote>
-</li>
-<li><p>单点问题</p>
-<blockquote>
-<p>协调者在整个二阶段提交过程中，一旦出现故障（尤其是在阶段二），都会导致系统无法正常运行</p>
-</blockquote>
-</li>
-<li><p>脑裂</p>
-<blockquote>
-<p>也就是数据不一致<br>在阶段二，即执行事务提交的阶段，当协调者向所有参与者发送commit请求之后，发生了局域网络异常或者是协调者在尚未发送完commit请求之前自身崩溃，导致只有部分的参与者接收到了commit请求，这部分参与者就会进行事务的提交，没有收到commit的参与者则无法进行事务的提交。于是，整个分布式系统出现数据不一致的情况。</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程:"></a>流程:</h3><p>阶段1: 提交事务请求(投票阶段):</p>
-<ol>
-<li><p>事务询问.</p>
-<blockquote>
-<p>协调者向所有的参与者发送事务内容,询问是否可以执行事务提交操作,并开始等待各参与者的响应.  </p>
-</blockquote>
-</li>
-<li><p>执行事务.</p>
-<blockquote>
-<p>各参与者节点执行事务操作,并将<code>Undo</code>和<code>Redo</code>信息记入事务日志.</p>
-</blockquote>
-</li>
-<li><p>各参与者向协调者反馈事务询问的响应</p>
-<blockquote>
-<p>如果参与者成功执行了事务操作,那么就反馈给协调者<code>Yes</code>信息,表示事务可以执行; 如果参与者没有成功执行事务就反馈给协调者<code>No</code>响应,表示事务不可以执行.  </p>
-</blockquote>
-</li>
-</ol>
-<p>这个阶段可以看成一种投票阶段,即各个参与者投票表明是否要继续执行接下去的事务提交操作.  </p>
-<p>阶段2: 执行事务提交<br>这个阶段,协调者会根据参与者的反馈情况来决定是否最终进行<code>commit</code>.一般,包含两种可能:  </p>
-<h6 id="1-执行事务提交"><a href="#1-执行事务提交" class="headerlink" title="#1 执行事务提交:"></a>#1 执行事务提交:</h6><ol>
-<li><p>发送提交请求</p>
-<blockquote>
-<p>假如协调者从所有的参与者获得的反馈都是<code>YES</code>,那么就执行提交操作,协调者向参与者发送<code>commit</code>请求</p>
-</blockquote>
-</li>
-<li><p>事务提交</p>
-<blockquote>
-<p>参与者接受到<code>Commit</code>请求后,会正式执行事务提交操作,并在完成后释放整个事务执行期间所占用的资源</p>
-</blockquote>
-</li>
-<li><p>反馈事务提交结果</p>
-<blockquote>
-<p>参与者在完成事务提交之后,向协调者发送<code>Ack</code>信息</p>
-</blockquote>
-</li>
-<li><p>完成事务</p>
-<blockquote>
-<p>协调者收到所有参与者的<code>Ack</code>消息后,完成事务</p>
-</blockquote>
-</li>
-</ol>
-<h6 id="2-中断事务"><a href="#2-中断事务" class="headerlink" title="#2 中断事务:"></a>#2 中断事务:</h6><p>如果任何一个参与者返回了<code>No</code>信息，或者等待超时之后，协调者尚无法接受到所有的参与者反馈信息，就会中断事务。  </p>
-<ol>
-<li><p>发送回滚请求</p>
-<blockquote>
-<p>协调者向所有参与者发出Rollback请求</p>
-</blockquote>
-</li>
-<li><p>事务回滚</p>
-<blockquote>
-<p>参与者接收到Rollback请求后，会利用其在阶段一种记录的Undo信息来执行回滚操作，并在完成回滚之后释放在整个事务执行期间占用的资源。  </p>
-</blockquote>
-</li>
-<li><p>反馈事务回滚结果</p>
-<blockquote>
-<p>参与者在完成事务回滚之后，向协调者发送<code>Ack</code>消息</p>
-</blockquote>
-</li>
-<li><p>中断事务</p>
-<blockquote>
-<p>协调者收到所有参与者反馈的<code>Ack</code>消息之后，完成事务中断</p>
-</blockquote>
-</li>
-</ol>
+        <h2 id="前因后果"><a href="#前因后果" class="headerlink" title="前因后果"></a>前因后果</h2><p>外卖某需求在上线前，有同学反馈测试环境机器每次部署完几分钟后就会进入无响应状态，显然是因为某种原因，应用发生了僵死。由于发生在上线前 \<br>所以立即进行排查，并找出Pigeon（大众点评自研RPC框架）的一个bug，并提前避免了严重的线上故障。</p>
+<h2 id="排障流程"><a href="#排障流程" class="headerlink" title="排障流程"></a>排障流程</h2><h3 id="1-更换测试环境机器"><a href="#1-更换测试环境机器" class="headerlink" title="1. 更换测试环境机器"></a>1. 更换测试环境机器</h3><p>由于僵死现象之前开发和测试过程中一直没有发生，第一时间先选择相信代码质量，同时，由于beta环境中一台宿主机会运行超过100台的虚拟机，所以 \<br>出现宿主机资源不足导致虚拟机僵死是有可能发生的。所以第一步是更换测试环境机器来排除这个原因，遗憾的是应用依然会进入僵死状态。</p>
+<h3 id="2-进行初步分析，并收集机器状态"><a href="#2-进行初步分析，并收集机器状态" class="headerlink" title="2. 进行初步分析，并收集机器状态"></a>2. 进行初步分析，并收集机器状态</h3><p>僵死的出现，显然是CPU出现了瓶颈，因此在机器上使用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">top -H</div><div class="line">```  </div><div class="line">发现机器的`us`和应用的java进程的`%CPU`都已经打满了四核。对于Java应用而言一般出现这种情况，可能有两种原因：</div><div class="line">1. 大量线程频繁执行无阻塞、循环、正则或纯粹的计算等动作造成</div><div class="line">2. 频繁的GC。如每次请求都需要单配较多内存，当访问量过高时就导致不断的进行GC，系统响应速度下降，进而造成堆积的请求过多，消耗的内存严重不足，最严重的情况会使系统不断进行Full GC，对频繁的gc需要通过分析jvm内存的消耗来查找原因</div><div class="line">  </div><div class="line">  </div><div class="line">因此我立马拉下了监控上该机器的GC报表，发现确实进入了频繁的GC状态，每秒的GC数量高的吓人。一般GC较高的处理也没有更多的办法，只能拉下服务器dump进行观察。但是这里有一点需要注意的是，在文中的场景下，\</div><div class="line">dump分析不仅仅是在观察内存中内存占用情况，也是需要通过内存对象来校验GC的源自**频繁的内存分配还是内存泄露**。  </div><div class="line">分析的结果倒是出人意料的简单，内存中大多数都是log4j2和char。显然是日志打爆了机器，也引出了更多的结论：  </div><div class="line">1. 日志疯狂打印多半是程序进入了无阻塞的循环或者某种现象不断发生</div><div class="line">2. 排查一下服务器日志文件，找到日志应该就可以解决问题</div><div class="line"></div><div class="line">### 3. 查找日志</div><div class="line">首先，这么大量的日志肯定会在磁盘容量上会有体现。</div></pre></td></tr></table></figure></p>
+<p>df -H<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">发现inf文件夹下的日志文件都接近16GB。立马打开文件夹发现了pigeon正在风控打印encode相关的日志，然后观察stack strce，立马发现了重复的循环日志。至此基本定位到了问题，上报给了Pigeon。</div><div class="line"></div><div class="line">### 4. 根因</div><div class="line">首先，Pigeon作为RPC框架在遇到异常时的处理逻辑是Server的异常会上抛Client来进行处理。这次的业务开发，我们提供了Pigeon的Server端，供给给外卖某thrift client调用。在这种服务模式下pigeon</div><div class="line">需要对server response进行thrift编码，问题就发生在如果Server抛出异常，Pigeon会将异常作为reponse上抛。在对Exception进行thrift编码bug导致又出现了异常，此时还没有走出pigeon的发送逻辑，pigeon会再次捕捉这个异常并将其认定为Server</div><div class="line">端的异常，重新作为reponse尝试进行thrift编码。这样这个Exception就触发了这样的循环过程。</div></pre></td></tr></table></figure></p>
+<p>Exception -&gt; 编码 -&gt; new Exception -&gt; 编码 -&gt; new Exception -&gt; …<br>```<br>值得一提的，是这样的异常只会在服务返回值为void的情况下发生，代码分析就略过。只能说Pigeon的同学确实疏忽了这里的测试，这种稳定必现的bug实在是不应该。  </p>
 
       
     </div>
@@ -474,9 +368,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/分布式/" rel="tag"># 分布式</a>
-          
-            <a href="/tags/一致性协议/" rel="tag"># 一致性协议</a>
+            <a href="/tags/经验/" rel="tag"># 经验</a>
           
         </div>
       
@@ -489,8 +381,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/06/14/zmalloc1/" rel="next" title="【Redis源码】zmalloc">
-                <i class="fa fa-chevron-left"></i> 【Redis源码】zmalloc
+              <a href="/2016/08/22/ZAB2/" rel="next" title="【一致性协议05】 ZAB协议详细介绍">
+                <i class="fa fa-chevron-left"></i> 【一致性协议05】 ZAB协议详细介绍
               </a>
             
           </div>
@@ -498,10 +390,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/13/3PC/" rel="prev" title="【一致性协议02】 3PC">
-                【一致性协议02】 3PC <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -652,7 +540,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">2.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">3.</span> <span class="nav-text">流程:</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-执行事务提交"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">#1 执行事务提交:</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-中断事务"><span class="nav-number">3.0.0.2.</span> <span class="nav-text">#2 中断事务:</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前因后果"><span class="nav-number">1.</span> <span class="nav-text">前因后果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排障流程"><span class="nav-number">2.</span> <span class="nav-text">排障流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-更换测试环境机器"><span class="nav-number">2.1.</span> <span class="nav-text">1. 更换测试环境机器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-进行初步分析，并收集机器状态"><span class="nav-number">2.2.</span> <span class="nav-text">2. 进行初步分析，并收集机器状态</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -815,9 +703,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://zzzvvvxxxd.github.io/2015/12/11/2PC/';
-          this.page.identifier = '2015/12/11/2PC/';
-          this.page.title = '【一致性协议01】 2PC';
+          this.page.url = 'http://zzzvvvxxxd.github.io/2017/12/04/经验_线上故障_Pigeon序列化_201711/';
+          this.page.identifier = '2017/12/04/经验_线上故障_Pigeon序列化_201711/';
+          this.page.title = '【排查日记】Pigeon序列化错误死循环错误引起的应用僵死';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zzzvvvxxxd.disqus.com/embed.js';

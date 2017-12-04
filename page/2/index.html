@@ -240,6 +240,394 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zzzvvvxxxd.github.io/2015/12/11/2PC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zzzvvvxxxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zzzvvvxxxd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/12/11/2PC/" itemprop="url">【一致性协议01】 2PC</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-12-11T21:43:21+08:00">
+                2015-12-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/12/11/2PC/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/12/11/2PC/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Two-Phase Commit,二阶段提交,作为最基础的一致性协议,保证了分布式系统数据的一致性.目前绝大多数的关系型数据库都是使用2PC来完成分布式事务处理的.<br>利用2PC协议能够非常方便地完成所有数据库事务参与者的协调,统一决定事务的提交或回滚,从而能有效地保证分布式数据一致性.  </p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>原理简单，实现方便</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li><p>同步阻塞</p>
+<blockquote>
+<p>极大的限制了系统的性能</p>
+</blockquote>
+</li>
+<li><p>单点问题</p>
+<blockquote>
+<p>协调者在整个二阶段提交过程中，一旦出现故障（尤其是在阶段二），都会导致系统无法正常运行</p>
+</blockquote>
+</li>
+<li><p>脑裂</p>
+<blockquote>
+<p>也就是数据不一致<br>在阶段二，即执行事务提交的阶段，当协调者向所有参与者发送commit请求之后，发生了局域网络异常或者是协调者在尚未发送完commit请求之前自身崩溃，导致只有部分的参与者接收到了commit请求，这部分参与者就会进行事务的提交，没有收到commit的参与者则无法进行事务的提交。于是，整个分布式系统出现数据不一致的情况。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程:"></a>流程:</h3><p>阶段1: 提交事务请求(投票阶段):</p>
+<ol>
+<li><p>事务询问.</p>
+<blockquote>
+<p>协调者向所有的参与者发送事务内容,询问是否可以执行事务提交操作,并开始等待各参与者的响应.  </p>
+</blockquote>
+</li>
+<li><p>执行事务.</p>
+<blockquote>
+<p>各参与者节点执行事务操作,并将<code>Undo</code>和<code>Redo</code>信息记入事务日志.</p>
+</blockquote>
+</li>
+<li><p>各参与者向协调者反馈事务询问的响应</p>
+<blockquote>
+<p>如果参与者成功执行了事务操作,那么就反馈给协调者<code>Yes</code>信息,表示事务可以执行; 如果参与者没有成功执行事务就反馈给协调者<code>No</code>响应,表示事务不可以执行.  </p>
+</blockquote>
+</li>
+</ol>
+<p>这个阶段可以看成一种投票阶段,即各个参与者投票表明是否要继续执行接下去的事务提交操作.  </p>
+<p>阶段2: 执行事务提交<br>这个阶段,协调者会根据参与者的反馈情况来决定是否最终进行<code>commit</code>.一般,包含两种可能:  </p>
+<h6 id="1-执行事务提交"><a href="#1-执行事务提交" class="headerlink" title="#1 执行事务提交:"></a>#1 执行事务提交:</h6><ol>
+<li><p>发送提交请求</p>
+<blockquote>
+<p>假如协调者从所有的参与者获得的反馈都是<code>YES</code>,那么就执行提交操作,协调者向参与者发送<code>commit</code>请求</p>
+</blockquote>
+</li>
+<li><p>事务提交</p>
+<blockquote>
+<p>参与者接受到<code>Commit</code>请求后,会正式执行事务提交操作,并在完成后释放整个事务执行期间所占用的资源</p>
+</blockquote>
+</li>
+<li><p>反馈事务提交结果</p>
+<blockquote>
+<p>参与者在完成事务提交之后,向协调者发送<code>Ack</code>信息</p>
+</blockquote>
+</li>
+<li><p>完成事务</p>
+<blockquote>
+<p>协调者收到所有参与者的<code>Ack</code>消息后,完成事务</p>
+</blockquote>
+</li>
+</ol>
+<h6 id="2-中断事务"><a href="#2-中断事务" class="headerlink" title="#2 中断事务:"></a>#2 中断事务:</h6><p>如果任何一个参与者返回了<code>No</code>信息，或者等待超时之后，协调者尚无法接受到所有的参与者反馈信息，就会中断事务。  </p>
+<ol>
+<li><p>发送回滚请求</p>
+<blockquote>
+<p>协调者向所有参与者发出Rollback请求</p>
+</blockquote>
+</li>
+<li><p>事务回滚</p>
+<blockquote>
+<p>参与者接收到Rollback请求后，会利用其在阶段一种记录的Undo信息来执行回滚操作，并在完成回滚之后释放在整个事务执行期间占用的资源。  </p>
+</blockquote>
+</li>
+<li><p>反馈事务回滚结果</p>
+<blockquote>
+<p>参与者在完成事务回滚之后，向协调者发送<code>Ack</code>消息</p>
+</blockquote>
+</li>
+<li><p>中断事务</p>
+<blockquote>
+<p>协调者收到所有参与者反馈的<code>Ack</code>消息之后，完成事务中断</p>
+</blockquote>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zzzvvvxxxd.github.io/2015/06/14/zmalloc1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zzzvvvxxxd">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zzzvvvxxxd">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2015/06/14/zmalloc1/" itemprop="url">【Redis源码】zmalloc</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-06-14T09:13:21+08:00">
+                2015-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/06/14/zmalloc1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/06/14/zmalloc1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://zzzvvvxxxd.github.io/2015/06/14/mt4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -398,158 +786,6 @@
 <p>在遇到多个线程共享的变量时都加上volatile，但是不要将其看成是线程安全的</p>
 </blockquote>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zzzvvvxxxd.github.io/2015/06/14/zmalloc1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="zzzvvvxxxd">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zzzvvvxxxd">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/06/14/zmalloc1/" itemprop="url">【Redis源码】zmalloc</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-06-14T09:13:21+08:00">
-                2015-06-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog/" itemprop="url" rel="index">
-                    <span itemprop="name">blog</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2015/06/14/zmalloc1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2015/06/14/zmalloc1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
           
         
       
@@ -2013,7 +2249,7 @@ stativ <span class="keyword">void</span> <span class="title">yield</span><span c
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2024,7 +2260,7 @@ stativ <span class="keyword">void</span> <span class="title">yield</span><span c
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -2035,7 +2271,7 @@ stativ <span class="keyword">void</span> <span class="title">yield</span><span c
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
