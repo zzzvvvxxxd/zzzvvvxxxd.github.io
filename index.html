@@ -344,11 +344,26 @@
       
         
           
-            <h2 id="前因后果"><a href="#前因后果" class="headerlink" title="前因后果"></a>前因后果</h2><p>外卖某需求在上线前，有同学反馈测试环境机器每次部署完几分钟后就会进入无响应状态，显然是因为某种原因，应用发生了僵死。由于发生在上线前 \<br>所以立即进行排查，并找出Pigeon（大众点评自研RPC框架）的一个bug，并提前避免了严重的线上故障。</p>
-<h2 id="排障流程"><a href="#排障流程" class="headerlink" title="排障流程"></a>排障流程</h2><h3 id="1-更换测试环境机器"><a href="#1-更换测试环境机器" class="headerlink" title="1. 更换测试环境机器"></a>1. 更换测试环境机器</h3><p>由于僵死现象之前开发和测试过程中一直没有发生，第一时间先选择相信代码质量，同时，由于beta环境中一台宿主机会运行超过100台的虚拟机，所以 \<br>出现宿主机资源不足导致虚拟机僵死是有可能发生的。所以第一步是更换测试环境机器来排除这个原因，遗憾的是应用依然会进入僵死状态。</p>
-<h3 id="2-进行初步分析，并收集机器状态"><a href="#2-进行初步分析，并收集机器状态" class="headerlink" title="2. 进行初步分析，并收集机器状态"></a>2. 进行初步分析，并收集机器状态</h3><p>僵死的出现，显然是CPU出现了瓶颈，因此在机器上使用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">top -H</div><div class="line">```  </div><div class="line">发现机器的`us`和应用的java进程的`%CPU`都已经打满了四核。对于Java应用而言一般出现这种情况，可能有两种原因：</div><div class="line">1. 大量线程频繁执行无阻塞、循环、正则或纯粹的计算等动作造成</div><div class="line">2. 频繁的GC。如每次请求都需要单配较多内存，当访问量过高时就导致不断的进行GC，系统响应速度下降，进而造成堆积的请求过多，消耗的内存严重不足，最严重的情况会使系统不断进行Full GC，对频繁的gc需要通过分析jvm内存的消耗来查找原因</div><div class="line">  </div><div class="line">  </div><div class="line">因此我立马拉下了监控上该机器的GC报表，发现确实进入了频繁的GC状态，每秒的GC数量高的吓人。一般GC较高的处理也没有更多的办法，只能拉下服务器dump进行观察。但是这里有一点需要注意的是，在文中的场景下，\</div><div class="line">dump分析不仅仅是在观察内存中内存占用情况，也是需要通过内存对象来校验GC的源自**频繁的内存分配还是内存泄露**。  </div><div class="line">分析的结果倒是出人意料的简单，内存中大多数都是log4j2和char。显然是日志打爆了机器，也引出了更多的结论：  </div><div class="line">1. 日志疯狂打印多半是程序进入了无阻塞的循环或者某种现象不断发生</div><div class="line">2. 排查一下服务器日志文件，找到日志应该就可以解决问题</div><div class="line"></div><div class="line">### 3. 查找日志</div><div class="line">首先，这么大量的日志肯定会在磁盘容量上会有体现。</div></pre></td></tr></table></figure></p>
-<p>df -H<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">发现inf文件夹下的日志文件都接近16GB。立马打开文件夹发现了pigeon正在风控打印encode相关的日志，然后观察stack strce，立马发现了重复的循环日志。至此基本定位到了问题，上报给了Pigeon。</div><div class="line"></div><div class="line">### 4. 根因</div><div class="line">首先，Pigeon作为RPC框架在遇到异常时的处理逻辑是Server的异常会上抛Client来进行处理。这次的业务开发，我们提供了Pigeon的Server端，供给给外卖某thrift client调用。在这种服务模式下pigeon</div><div class="line">需要对server response进行thrift编码，问题就发生在如果Server抛出异常，Pigeon会将异常作为reponse上抛。在对Exception进行thrift编码bug导致又出现了异常，此时还没有走出pigeon的发送逻辑，pigeon会再次捕捉这个异常并将其认定为Server</div><div class="line">端的异常，重新作为reponse尝试进行thrift编码。这样这个Exception就触发了这样的循环过程。</div></pre></td></tr></table></figure></p>
-<p>Exception -&gt; 编码 -&gt; new Exception -&gt; 编码 -&gt; new Exception -&gt; …<br>```<br>值得一提的，是这样的异常只会在服务返回值为void的情况下发生，代码分析就略过。只能说Pigeon的同学确实疏忽了这里的测试，这种稳定必现的bug实在是不应该。  </p>
+            <h2 id="前因后果"><a href="#前因后果" class="headerlink" title="前因后果"></a>前因后果</h2><p>外卖某需求在上线前，有同学反馈测试环境机器每次部署完几分钟后就会进入无响应状态，显然是因为某种原因，应用发生了僵死。由于发生在上线前所以立即进行排查，并找出Pigeon（大众点评自研RPC框架）的一个bug，并提前避免了严重的线上故障。</p>
+<h2 id="排障流程"><a href="#排障流程" class="headerlink" title="排障流程"></a>排障流程</h2><h3 id="1-更换测试环境机器"><a href="#1-更换测试环境机器" class="headerlink" title="1. 更换测试环境机器"></a>1. 更换测试环境机器</h3><p>由于僵死现象之前开发和测试过程中一直没有发生，第一时间先选择相信代码质量，同时，由于beta环境中一台宿主机会运行超过100台的虚拟机，所以出现宿主机资源不足导致虚拟机僵死是有可能发生的。所以第一步是更换测试环境机器来排除这个原因，遗憾的是应用依然会进入僵死状态。</p>
+<h3 id="2-进行初步分析，并收集机器状态"><a href="#2-进行初步分析，并收集机器状态" class="headerlink" title="2. 进行初步分析，并收集机器状态"></a>2. 进行初步分析，并收集机器状态</h3><p>僵死的出现，显然是CPU出现了瓶颈，因此在机器上使用:  </p>
+<pre><code>top -H
+</code></pre><p>发现机器的<code>us</code>和应用的java进程的<code>%CPU</code>都已经打满了四核。对于Java应用而言一般出现这种情况，可能有两种原因：</p>
+<ol>
+<li>大量线程频繁执行无阻塞、循环、正则或纯粹的计算等动作造成</li>
+<li>频繁的GC。如每次请求都需要单配较多内存，当访问量过高时就导致不断的进行GC，系统响应速度下降，进而造成堆积的请求过多，消耗的内存严重不足，最严重的情况会使系统不断进行Full GC，对频繁的gc需要通过分析jvm内存的消耗来查找原因</li>
+</ol>
+<p>因此我立马拉下了监控上该机器的GC报表，发现确实进入了频繁的GC状态，每秒的GC数量高的吓人。一般GC较高的处理也没有更多的办法，只能拉下服务器dump进行观察。但是这里有一点需要注意的是，在文中的场景下, dump分析不仅仅是在观察内存中内存占用情况，也是需要通过内存对象来校验GC的源自<strong>频繁的内存分配还是内存泄露</strong>。<br>分析的结果倒是出人意料的简单，内存中大多数都是log4j2和char。显然是日志打爆了机器，也引出了更多的结论：  </p>
+<ol>
+<li>日志疯狂打印多半是程序进入了无阻塞的循环或者某种现象不断发生</li>
+<li>排查一下服务器日志文件，找到日志应该就可以解决问题</li>
+</ol>
+<h3 id="3-查找日志"><a href="#3-查找日志" class="headerlink" title="3. 查找日志"></a>3. 查找日志</h3><p>首先，这么大量的日志肯定会在磁盘容量上会有体现。</p>
+<pre><code>df -H
+</code></pre><p>发现inf文件夹下的日志文件都接近16GB。立马打开文件夹发现了pigeon正在风控打印encode相关的日志，然后观察stack strce，立马发现了重复的循环日志。至此基本定位到了问题，上报给了Pigeon。</p>
+<h3 id="4-根因"><a href="#4-根因" class="headerlink" title="4. 根因"></a>4. 根因</h3><p>首先，Pigeon作为RPC框架在遇到异常时的处理逻辑是Server的异常会上抛Client来进行处理。这次的业务开发，我们提供了Pigeon的Server端，供给给外卖某thrift client调用。在这种服务模式下pigeon<br>需要对server response进行thrift编码，问题就发生在如果Server抛出异常，Pigeon会将异常作为reponse上抛。在对Exception进行thrift编码bug导致又出现了异常，此时还没有走出pigeon的发送逻辑，pigeon会再次捕捉这个异常并将其认定为Server<br>端的异常，重新作为reponse尝试进行thrift编码。这样这个Exception就触发了这样的循环过程。</p>
+<pre><code>Exception -&gt; 编码 -&gt; new Exception -&gt; 编码 -&gt; new Exception -&gt; ...
+</code></pre><p>值得一提的，是这样的异常只会在服务返回值为void的情况下发生，代码分析就略过。只能说Pigeon的同学确实疏忽了这里的测试，这种稳定必现的bug实在是不应该。  </p>
 
           
         
